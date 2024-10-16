@@ -1,0 +1,31 @@
+// Century Gothic
+@font-face {
+  font-family: 'Century Gothic';
+  src: url('@/assets/fonts/CenturyGothic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Century Gothic';
+  src: url('@/assets/fonts/CenturyGothic_bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+// Raleway
+@font-face {
+  font-family: 'Raleway';
+  src: url('@/assets/fonts/Raleway.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Century Gothic';
+  src: url('@/assets/fonts/Raleway_italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
