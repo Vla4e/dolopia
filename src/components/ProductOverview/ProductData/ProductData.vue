@@ -1,12 +1,72 @@
 
 <script setup>
 import NutritionChevron from './NutritionChevron.vue';
-import {ref, watch, onMounted } from 'vue';
+import { computed } from 'vue';
 
-let allergens = [1,2,3,4]
-let stats = [1,2,3,4, 5]
-let ingredients = ['test', 'test2', 'test3', 'test4', 'test5']
+import { useProductStore } from '@/store/product';
+const productStore = useProductStore()
 
+let localProductData = computed(() => {
+  return productStore.productData
+})
+function splitNumberAndUnit(input){
+  const number = input.match(/\d+/g)[0];  // Extract digits
+  const unit = input.match(/[a-zA-Z]+/g)[0];
+  return {
+    number,
+    unit
+  }
+}
+let energy = computed(() => {
+  let energyValue = localProductData.value.properties['Energy']
+  let { number, unit } = splitNumberAndUnit(energyValue)
+  return {
+    number,
+    unit
+  }
+})
+let productStatistics = computed(() => [
+  {
+    type: 'Energy',
+    chevronValue: `${Math.round(parseInt(energy.value.number) * 4.184)}`, //kj formula
+    chevronUnit: 'kj',
+    note: '',
+    outsideChevronValue: energy.value.number,
+    outsideChevronUnit: energy.value.unit
+  },
+  {
+    type: 'Protein',
+    chevronValue: '',
+    chevronUnit: '',
+    note: '',
+    outsideChevronValue: localProductData.value.properties['Protein'],
+    outsideChevronUnit: ''
+  },
+  {
+    type: 'Sodium',
+    chevronValue: '',
+    chevronUnit: '',
+    note: '',
+    outsideChevronValue: localProductData.value.properties['Sodium'],
+    outsideChevronUnit: ''
+  },
+  {
+    type: 'Carbs',
+    chevronValue: localProductData.value.properties['Carbs'],
+    chevronUnit: '',
+    note: 'of which sugar',
+    outsideChevronValue: localProductData.value.properties['of which sugar'],
+    outsideChevronUnit: ''
+  },
+  {
+    type: 'Total fat',
+    chevronValue: localProductData.value.properties['Total fat'],
+    chevronUnit: '',
+    note: 'of which saturated fat',
+    outsideChevronValue: localProductData.value.properties['saturated fat'],
+    outsideChevronUnit: ''
+  },
+]);
 
 </script>
 
@@ -19,7 +79,8 @@ let ingredients = ['test', 'test2', 'test3', 'test4', 'test5']
           Ingredients
         </h2>
         <p class="ingredients-list">
-          1 cup of all-purpose flour, 2 tablespoons of sugar, 1 teaspoon of baking powder, 1/2 teaspoon of baking soda, 1/4 teaspoon of salt, 1 cup of buttermilk (or milk with a tablespoon of vinegar or lemon juice as a substitute), 1 large egg, 2 tablespoons of melted butter or oil, and 1/2 teaspoon of vanilla extract.
+          <!-- 1 cup of all-purpose flour, 2 tablespoons of sugar, 1 teaspoon of baking powder, 1/2 teaspoon of baking soda, 1/4 teaspoon of salt, 1 cup of buttermilk (or milk with a tablespoon of vinegar or lemon juice as a substitute), 1 large egg, 2 tablespoons of melted butter or oil, and 1/2 teaspoon of vanilla extract. -->
+          {{localProductData.properties['Ingredients EN']}}
         </p>
       </section>
 
@@ -28,7 +89,8 @@ let ingredients = ['test', 'test2', 'test3', 'test4', 'test5']
           Allergens
         </h2>
         <p class="allergens-list">
-          Wheat (from all-purpose flour), eggs, dairy (from buttermilk or milk and butter), and sometimes nuts or soy (depending on the type of oil or additional ingredients used).
+          <!-- Wheat (from all-purpose flour), eggs, dairy (from buttermilk or milk and butter), and sometimes nuts or soy (depending on the type of oil or additional ingredients used). -->
+          {{localProductData.properties['Allergens EN']}}
         </p>
       </section>
 
@@ -41,8 +103,11 @@ let ingredients = ['test', 'test2', 'test3', 'test4', 'test5']
         <span>per 100g</span>
       </h2>
       <ul class="chevron-list">
-        <li v-for="(stat,idx) in stats" :key="idx" >
-          <NutritionChevron :productId="stat"/>
+        <li v-for="(statistic, idx) in productStatistics" :key="statistic.type" >
+          <NutritionChevron 
+            :productId="idx"
+            :statistic="statistic"
+          />
         </li>
       </ul>
     </section>

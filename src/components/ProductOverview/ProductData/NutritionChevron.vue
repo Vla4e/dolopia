@@ -2,10 +2,20 @@
   import { onMounted, ref, useTemplateRef, watch, computed } from 'vue';
   import chevron from '@/assets/product_overview/nutrition-chevron.png'
   import lightChevron from '@/assets/product_overview/nutrition-chevron-light.png'
-  
+
+  import { useProductStore } from '@/store/product';
+  const productStore = useProductStore()
+  let localProductData = computed(() => {
+    return productStore.productData
+  })
+
   let props = defineProps({
     productId: {
       type: String,
+      required: true
+    },
+    statistic: {
+      type: Object,
       required: true
     }
   })
@@ -35,15 +45,26 @@
       <label :class="isInLowerHalf ? 'black' : 'white'" class="inside-chevron-data">
         <!-- <span class="type">{{ product.inside_chevron.type }}</span>
         <span class="value">{{ product.inside_chevron.value }}</span> -->
-        <span class="type">Type</span>
-        <span class="value">200 kcal</span>
+        <span class="type">
+          <!-- Type -->
+          {{ statistic.type }}
+        </span>
+        <span class="value">
+          {{ statistic.chevronValue }} <span class="value-unit">{{ statistic.chevronUnit }}</span>
+        </span>
       </label>
     </div>
     <div class="outside-chevron-data">
       <!-- <span>{{stat}}</span>
       <span>{{product[stat].value}}</span> -->
-      <span class="statistic-value">250 <span class="statistic-units">units</span></span>
-      <label class="statistic-note">of which sugars</label>
+      <span class="statistic-value">
+        <!-- 250 <span class="statistic-units">units</span> -->
+        {{ statistic.outsideChevronValue }} <span class="statistic-unit">{{ statistic.outsideChevronUnit }}</span>
+      </span>
+      <label class="statistic-note">
+        <!-- of which sugars -->
+        {{ statistic.note }}
+      </label>
     </div>
   </div>
 </template>
@@ -128,7 +149,7 @@
       line-height: normal;
       margin-bottom: -20px;
     }
-    .statistic-units{
+    .statistic-unit{
       color: #3D3D3D;
       font-family: "Century Gothic";
       font-size: 12.353px;
@@ -138,6 +159,7 @@
       margin-bottom: -20px;
     }
     .statistic-note{
+      min-width: 110px;
       position: absolute;
       top: 10px;
       color: #3D3D3D;
@@ -146,6 +168,7 @@
       font-style: normal;
       font-weight: 700;
       line-height: normal;
+      text-align: right;
     }
   }
 }

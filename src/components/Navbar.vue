@@ -35,6 +35,7 @@
   padding-top: 2vh;
   padding-bottom: 2vh;
   padding-right: 2vw;
+  z-index: 2;
   .navbar-logo{
     max-height: 62px;
     margin-right: 20px;
@@ -43,7 +44,7 @@
     display: flex;
     .navbar-link{
       font-family: 'Century Gothic';
-      font-size: 20px;
+      font-size: 18px;
       font-style: normal;
       font-weight: 400;
       color: #000000;

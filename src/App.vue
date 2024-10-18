@@ -45,7 +45,7 @@ let floatingNavbar = ref(true);
 watch(
   () => route.name,
   (newVal) => {
-    console.log("VAL", route.meta);
+    // console.log("VAL", route.meta);
     showFooter.value = route.meta.hasFooter;
     showNavbar.value = route.meta.hasNavbar;
     floatingFooter.value = route.meta.floatingFooter;
@@ -62,21 +62,31 @@ console.log("RouterView", route);
 </script>
 
 <style lang="scss" scoped>
+footer{
+  z-index: 2;
+}
+header{
+  z-index: 2;
+}
 .view-container {
   flex: 1;
-  position: relative;
+  position: absolute;
   overflow: hidden;
   width: 100%;
+  height: 100vh !important;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 .page-container {
   height: 100%; /* Ensure the content fills the parent container */
+  width: 100%;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  width: 90%;
+  // width: 90%;
   margin: auto;
+  transition: width 0.2s ease;
   &.full-width {
     width: 100%;
     margin: 0;

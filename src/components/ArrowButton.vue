@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import Dropdown from './Dropdown.vue';
+import Dropdown from './Dropdown/Dropdown.vue';
 import { onMounted, ref } from 'vue';
 
 let buttonText = ref('')

@@ -3,8 +3,9 @@ import HomeView from '../views/HomeView.vue'
 
 import { areParamsValid, adjustParamStore, isAllowedRoute } from './categoryParamHandlers.js'
 import { useRouteParamsStore } from '@/store/routeParams.js'
+import { useProductStore } from '@/store/product';
 let routeParamsStore = null;
-
+let productStore = null
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,7 +19,8 @@ const router = createRouter({
         hasFooter: true,
         floatingNavbar: false,
         floatingFooter: false,
-        fullWidthPage: false
+        fullWidthPage: false,
+        showRouterArrow: true
       }
     },
     {
@@ -29,7 +31,7 @@ const router = createRouter({
         this generates a separate chunk (CatalogView.[hash].js) for this route
         which is lazy-loaded when the route is visited. 
       */
-      component: () => import('../views/CatalogView.vue'),
+      component: () => import('../views/ProjectsView.vue'),
       meta: { 
         hasNavbar: false,
         hasFooter: false,
@@ -41,14 +43,15 @@ const router = createRouter({
     {
       path: '/projects/:category/:subcategory',
       name: 'projects',
-      component: () => import('../views/CategoryView.vue'),
+      component: () => import('../views/SubcategoryProductView.vue'),
       meta: { 
         hasNavbar: true,
         hasFooter: true,
         floatingNavbar: true,
         floatingFooter: true,
         fullWidthPage: true,
-        showDropdownRouter: true
+        showRouterArrow: false,
+        showDropdown: true
       }
     },
     {
@@ -59,18 +62,45 @@ const router = createRouter({
   ]
 })
 
-
+function adjustProductStore(params, query) {
+  console.log("adjusting productstore", params, query)
+  console.log("cat", productStore.categoryByIdentifier)
+  console.log("subcat", productStore.subcategoryByIdentifier)
+  console.log("product", productStore.productName)
+  if(productStore.categoryByIdentifier !== params.category){
+    console.log("adjusting categoryIdentifier: ", params.category)
+    productStore.categoryByIdentifier = params.category
+  }
+  if(productStore.subcategoryByIdentifier !== params.subcategory){
+    console.log("adjusting subcategoryIdentifier: ", params.subcategory)
+    productStore.subcategoryByIdentifier = params.subcategory
+  }
+  if(query.productName && (productStore.productName !== query.productName)){
+    console.log("adjusting productName: ", query.productName)
+    productStore.productName = query.productName
+    
+  }
+}
 router.beforeEach((to, from, next) => {
   try{
     console.log("ROUTE FROM:", from)
     console.log("ROUTE TO:", to, to.name, to.name === 'projects')
-    if(!routeParamsStore){ // NOT NECESSARY, STORE IS INSTANTIATED ONCE AND CACHED, returned with lookup upon subsequent calls.
-      routeParamsStore = useRouteParamsStore()
-    }
+
+    //Singletons by design - no worry about reinstancing
+    routeParamsStore = useRouteParamsStore()
+    productStore  = useProductStore()
+    console.log("productstore", productStore)
+
     if(to.name === 'projects'){
       console.log("will check for allowed route")
       let parametersValidity = isAllowedRoute(to.params, to.query, routeParamsStore)
       console.log("areParamsValid", parametersValidity)
+      if(!parametersValidity){
+        next({ name : 'projects', params: {category: "tomato-project", subcategory: "pasta-sauces"} })
+      } else {
+        adjustProductStore(to.params, to.query)
+        productStore.selectedCategory = to.params.category
+      }
       // routeParamsStore.updateParams(structuredClone(to.params))
     }
     console.log("should go to next")

@@ -1,12 +1,13 @@
 
 <script setup>
-import OverviewSolution from '@/components/ProductOverview/OverviewSolution.vue';
-import CurrentlyViewing from '@/components/ProductOverview/CurrentlyViewing.vue';
+import ProductEmbeddedView from '@/components/ProductOverview/ProductEmbeddedView.vue';
+import CurrentSelectionInfo from '@/components/ProductOverview/CurrentSelectionInfo.vue';
 
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue';
 
 import { useRoute, useRouter } from 'vue-router';
 import { useRouteParamsStore } from '@/store/routeParams.js'
+import { useProductStore } from '@/store/product';
 
 const routeParamsStore = useRouteParamsStore();
 const route = useRoute();
@@ -30,13 +31,13 @@ let currentOverviewPhase = ref('none')
 <template>
   <div class="page-category">
     <Transition name="slide-text" mode="out-in">
-      <CurrentlyViewing v-if="currentOverviewPhase === 'description' || currentOverviewPhase === 'none'"/>
+      <CurrentSelectionInfo v-if="currentOverviewPhase === 'description' || currentOverviewPhase === 'none'"/>
     </Transition>
     <div :class="isOverviewActive ? 'inactive': ''"class="left-panel">
     </div>
     <div @click="triggerOverview()" class="right-panel" :class="isOverviewActive ? 'active' : ''">
       <div class="panel-half right">
-        <OverviewSolution @phaseChange="(newPhase) => {currentOverviewPhase = newPhase}" :isOverviewActive="isOverviewActive"/>
+        <ProductEmbeddedView @phaseChange="(newPhase) => {currentOverviewPhase = newPhase}" :isOverviewActive="isOverviewActive"/>
       </div>
     </div>
     <!-- <div :class="isOverviewActive ? 'overview' : ''" class="panel-container">

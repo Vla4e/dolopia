@@ -76,7 +76,7 @@
       subcategories: [
         {
           name:'Milk pasta',
-          route: 'milk-pasta',
+          route: 'traditional-pasta',
         },
         {
           name:'vegan pasta',

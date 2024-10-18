@@ -1,8 +1,13 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted, reactive, computed } from 'vue';
 import ProductData from './ProductData/ProductData.vue';
 import PhaseCarousel from '../PhaseCarousel.vue';
 
+import { useProductStore } from '@/store/product';
+const productStore = useProductStore();
+let localProductData = computed(() => {
+  return productStore.productData
+})
 const props = defineProps({
   isOverviewActive: {
     type: Boolean,
@@ -71,22 +76,32 @@ watch(() => props.isOverviewActive, (isActive) => { //initial expansion of compo
 })
 
 import { useScrollDirection } from '@/composables/useScrollDirection'; //Enable scrolling through phases using composable.
+import Dropdown from '../Dropdown/Dropdown.vue';
+import ProductImage from './ProductImage.vue';
+import ArrowButton from '../ArrowButton.vue';
 useScrollDirection(
   () => cyclePhase(Backward), //onScrollUp
   () => cyclePhase(Forward) //onScrollDown
 )
+
+function selectProduct(id){
+  console.log(productStore.productCodeByIdentifier)
+  productStore.productCodeByIdentifier = id
+}
 
 </script>
 
 <template>
   <div class="product-overview">
 
-
+    <!-- <div style="position: absolute; right: 10%; top: 15%; width: 200px; height: 400px; background: #13131330; display: flex; flex-direction: column;">
+      <span @click="selectProduct(product)" style="color: black; margin-bottom: 20px;" v-for="product in productStore.subcategoryData.productIdentifiers" :key="product" >
+        {{ product }}
+      </span>
+    </div> -->
     <!-- Product Image + Half-circle around product in Wheel phase -->
     <img src="@/assets/product_overview/ellipse.png" class="half-circle" :class="`half-circle-${currentPhaseName}`">
-    <div class="image-container" :class="[`image-container-${currentPhaseName}`, { 'transitioning': isTransitioning }]">
-      <img class="placeholder" src="@/assets/product_overview/apricot-front-transparent.png" alt="Product Jar"/>
-    </div>
+    <ProductImage class="image-container" :class="[`image-container-${currentPhaseName}`, { 'transitioning': isTransitioning }]"/>
 
     <div class="dynamic-container" :class="currentPhaseName">
       <Transition name="fade-slide" mode="out-in">
@@ -96,24 +111,36 @@ useScrollDirection(
           class="description"
         >
           <p>
-            This sauce brings together the bright, bold flavor of sun-ripened tomatoes with creamy Feta cheese and aromatic savory, handpicked from the mountains of Greece. Its rich and tangy taste makes it the perfect partner for your favorite pasta dishes or an ideal addition to fried shrimp and dakos. 
+            {{ localProductData.properties['Description EN'] }}
           </p>
         </div>
 
         <div v-else-if="currentPhaseName === 'wheel'" key="wheel" class="information-wheel">
           <div class="info serving">
             <h2 class="heading">Serving Suggestion</h2>
-            <p class="text">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip</p>
+            <p class="text">
+              {{ localProductData.properties['Serving suggestion EN'] }}
+            </p>
           </div>
 
-          <div class="info awards">
+          <div v-if="localProductData.properties['Award']" class="info awards">
             <h2 class="heading">Awards</h2>
-            <p class="text">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip</p>
+            <p class="text">
+              {{ localProductData.properties['Award'] }}
+            </p>
+          </div>
+          <div v-if="localProductData.properties['consumers comments']" class="info awards review">
+            <h2 class="heading">User Reviews</h2>
+            <p class="text">
+              {{ localProductData.properties['consumers comments'] }}
+            </p>
           </div>
 
           <div class="info vegetarian-tags">
             <h2 class="heading">Tags</h2>
-            <p class="text">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip</p>
+            <p class="text">
+              {{ localProductData.properties['Tags Eng'] }}
+            </p>
           </div>
         </div>
 
@@ -122,6 +149,7 @@ useScrollDirection(
       </Transition>
     </div>
 
+    <!-- <Dropdown class=""/> -->
     <PhaseCarousel 
       @selectedPhaseFromCarousel="selectedPhaseFromCarousel"
       @cyclePhase="cyclePhase"
@@ -134,14 +162,6 @@ useScrollDirection(
 </template>
 
 <style scoped lang="scss">
-// .abs{
-//   position: absolute;
-//   z-index: 10000;
-//   padding: 15px;
-//   background: red;
-//   top: 10%;
-//   right: 10%;
-// }
 .phase-carousel{
   position: absolute;
   right: 1%;
@@ -182,7 +202,9 @@ useScrollDirection(
 
 }
 .image-container {
-  width: 40%;
+  // width: 40%;
+  width: 70vh;
+  height: 70vh;
   border-radius: 200%;
   position: absolute;
   transition: all 1s ease;

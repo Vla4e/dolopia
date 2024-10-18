@@ -1,7 +1,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import downChevron from '@/assets/dropdown/down-arrow.png'
+import downChevron from '@/assets/dropdown/down-arrow-white.png'
 
 let currentPhase = ref(1)
 let props = defineProps({
@@ -27,7 +27,7 @@ let props = defineProps({
 const Backward = false; //scrollUp
 const Forward = true; //scrollDown
 let emit = defineEmits('selectedPhaseFromCarousel', 'cyclePhase')
-function selectPhase(phase){ //OverviewSolution localPhases.length = 4, phasesShownOnCarousel.length = 3 ("none" is not passed), thus +1 to val
+function selectPhase(phase){ //ProductEmbeddedView.vue localPhases.length = 4, phasesShownOnCarousel.length = 3 ("none" is not passed), thus +1 to val
   emit('selectedPhaseFromCarousel', phase + 1)
 }
 function emitCyclePhase(direction){
@@ -37,7 +37,7 @@ function emitCyclePhase(direction){
 
 <template>
   <ul class="phase-carousel">
-    <img @click="emitCyclePhase(Backward)" class="up-chevron" :src="downChevron"/>
+    <!-- <img @click="emitCyclePhase(Backward)" class="up-chevron" :src="downChevron"/> -->
     <li 
       v-for="(item, idx) in phasesShownOnCarousel"
       :class="currentPhaseName === item ? 'selected':''"
@@ -47,7 +47,7 @@ function emitCyclePhase(direction){
       <div class="inner-circle"/>
       <!-- <span style="position: absolute; left: 10px;">{{item}}</span> -->
     </li>
-    <img @click="emitCyclePhase(Forward)" class="down-chevron" :src="downChevron"/>
+    <!-- <img @click="emitCyclePhase(Forward)" class="down-chevron" :src="downChevron"/> -->
   </ul>
 </template>
 
@@ -74,13 +74,13 @@ function emitCyclePhase(direction){
       height: 15px;
       transition: all ease 0.5s;
       background-color: transparent;
-      border: 2px solid black;
+      border: 1px solid #131313;
     }
     &.selected{
       .inner-circle{
         transform: scale(130%);
         border: 2px solid transparent;
-        background-color: black;
+        background-color: #131313;
       }
     }
   }
@@ -88,7 +88,7 @@ function emitCyclePhase(direction){
 
 .up-chevron, .down-chevron{
   width: 15px;
-  height: 15px;
+  // height: 15px;
   transition: transform 0.2s ease;
 }
 .up-chevron{
