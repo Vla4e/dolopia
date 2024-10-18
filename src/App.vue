@@ -1,4 +1,6 @@
 <template>
+
+  <!-- <img class="mobile-background" v-if="isMobile" src="@/assets/landing/landing-mobile-edited.png"/> -->
   <Transition name="slide-down">
     <header v-show="showNavbar" :class="floatingNavbar || !showNavbar ? 'floating-navbar' : ''">
       <div class="wrapper">
@@ -7,6 +9,10 @@
         </nav>
       </div>
     </header>
+  </Transition>
+
+  <Transition name="sidebar">
+    <Sidebar v-if="showSidebar"/>
   </Transition>
 
   <main class="view-container"> 
@@ -21,9 +27,10 @@
       </Transition>
     </RouterView>
   </main>
+  <ProjectCatalogMobile v-if="isMobile && route.name === 'home'"/>
 
   <Transition name="slide-up">
-    <footer v-show="showFooter" :class="floatingFooter || !showFooter ? 'floating-footer' : ''">
+    <footer v-show="showFooter && !isMobile" :class="floatingFooter || !showFooter ? 'floating-footer' : ''">
       <Footer />
     </footer>
   </Transition>
@@ -31,13 +38,24 @@
 
 
 <script setup>
-import { ref, watch, computed } from "vue";
+import { ref, watch, computed, provide, onMounted, inject } from "vue";
 import { RouterLink, RouterView, useRoute } from "vue-router";
 import Navbar from "./components/Navbar.vue";
 import Footer from "./components/Footer.vue";
+import Sidebar from "./components/Sidebar/Sidebar.vue";
+import ProjectCatalogMobile from "./components/ProjectCatalogMobile.vue";
+
+import { useMenuStore } from "./store/menu";
+const menuStore = useMenuStore()
+let showSidebar = computed(() => {
+  return menuStore.showSidebar
+})
+
+import { useScreenSize } from './composables/useScreenSize'
+const { isMobile, isTablet, isDesktop } = useScreenSize()
+provide('screenSize', { isMobile, isTablet, isDesktop })
 
 let route = useRoute();
-
 let showFooter = ref(true);
 let showNavbar = ref(true);
 let floatingFooter = ref(true);
@@ -46,22 +64,36 @@ watch(
   () => route.name,
   (newVal) => {
     // console.log("VAL", route.meta);
+    if(isMobile.value){
+      showNavbar.value = route.meta.hasNavbarMobile;
+      floatingNavbar.value = route.meta.floatingNavbarMobile;
+
+    } else {
+      showNavbar.value = route.meta.hasNavbar;
+      floatingNavbar.value = route.meta.floatingNavbar;
+    }
     showFooter.value = route.meta.hasFooter;
-    showNavbar.value = route.meta.hasNavbar;
     floatingFooter.value = route.meta.floatingFooter;
-    floatingNavbar.value = route.meta.floatingNavbar;
+    
+    if(isMobile.value){
+      floatingNavbar.value = true;
+    }
   }
 );
-// const mainContentStyle = computed(() => {
-//   return {
-//     paddingTop: showNavbar.value && floatingNavbar.value ? '60px' : '0',
-//     paddingBottom: showFooter.value && floatingFooter.value ? '60px' : '0',
-//   };
-// });
-console.log("RouterView", route);
+
 </script>
 
 <style lang="scss" scoped>
+// .mobile-background{
+//   height: 100%;
+//   max-width: 100%;
+//   position: absolute;
+// }
+.project-cards-container{
+  @media(max-width:450px){
+    margin-top: 20px;
+  }
+}
 footer{
   z-index: 2;
 }
@@ -70,13 +102,19 @@ header{
 }
 .view-container {
   flex: 1;
-  position: absolute;
   overflow: hidden;
   width: 100%;
   height: 100vh !important;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  @media(min-width: 451px){
+    position: absolute;
+  }
+  @media(max-width: 450px){
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 .page-container {
   height: 100%; /* Ensure the content fills the parent container */
@@ -112,11 +150,13 @@ header{
   /* Adjust padding-bottom on .view-container when footer is floating */
 }
 /* Transition styles */
+
+//Page Slide
 .slide-enter-active,
 .slide-leave-active {
   position: absolute;
   width: 100%;
-  height: 100%; /* Fill the height of the .view-container */
+  height: 100%;
   top: 0;
   left: 0;
   transition: transform 0.7s ease;
@@ -137,6 +177,7 @@ header{
 .slide-leave-to {
   transform: translateX(-100%);
 }
+
 // HEADER
 .slide-down-enter-active,
 .slide-down-leave-active {
@@ -171,5 +212,27 @@ header{
 .slide-up-leave-from {
   transform: translateY(0);
   opacity: 1;
+}
+
+// Sidebar
+.sidebar-enter-active, 
+.sidebar-leave-active{
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.sidebar-enter-from {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.sidebar-enter-to, 
+.sidebar-leave-from {
+  transform: translateX(0%);
+  opacity: 1;
+}
+
+.sidebar-leave-to {
+  transform: translateX(-100%);
+  opacity: 0;
 }
 </style>

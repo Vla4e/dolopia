@@ -1,14 +1,21 @@
 <template>
   <div class="footer">
     <img src="@/assets/awards-icon.png" class="awards"/>
-    <button style="color: black;" @click="logsomething()">OKAY</button>
-
     <div class="socials-container">
-      <img src="@/assets/facebook-icon.png" class="social facebook"/>
-      <img src="@/assets/instagram-icon.png" class="social instagram"/>
-      <img src="@/assets/linkedin-icon.png" class="social linkedin"/>
+      <a href="https://www.facebook.com/Dolopia/" target="_blank">
+        <img  src="@/assets/facebook-icon.png" class="social facebook"/>
+      </a>
+      <a href="https://www.instagram.com/dolopia/" target="_blank">
+        <img  src="@/assets/instagram-icon.png" class="social instagram"/>
+      </a>
+      <a href="https://www.linkedin.com/company/dolopia" target="_blank">
+        <img src="@/assets/linkedin-icon.png" class="social linkedin"/>
+      </a>
     </div>
-    <ArrowButton v-if="computeShowArrow" class="footer-arrow" :routePath="'catalog'" :showDropdown="false" :buttonText="'Explore'"/>
+    <!-- <a href="mailto:info@dolopia.eu" target="_blank" class="mail-link">
+      info@dolopia.eu
+    </a> -->
+    <ArrowButton v-if="computeShowArrow" class="footer-arrow" :routePath="'/catalog'" :showDropdown="false" :buttonText="'Explore'"/>
     <Dropdown v-if="computeShowDropdown" :forType="'product'" :dropdownAlignment="'left'" class="product-dropdown" />
   </div>
 </template>
@@ -47,6 +54,11 @@ let computeShowDropdown = computed(() => {
   background: none;
   align-items: center;
   z-index: 2;
+  @media(min-width: 451px){
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
   .awards{
     max-height: 115px;
   }
@@ -57,7 +69,23 @@ let computeShowDropdown = computed(() => {
     margin-left: 10%;
     .social{ 
       max-height: 22px;
+      transition: transform 0.3s ease;
+      &:hover{
+        transform: scale(110%);
+      }
     }
+  }
+  
+  .mail-link{
+    color: #000;
+    text-align: center;
+    font-family: "Raleway";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 18px; /* 128.571% */
+    letter-spacing: 1.26px;
+    margin-left: 25px;
   }
   .arrow-button{
     margin-left: auto;

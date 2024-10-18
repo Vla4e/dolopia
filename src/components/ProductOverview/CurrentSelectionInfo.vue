@@ -200,6 +200,7 @@ onMounted(() => {
         font-weight: 400;
         font-style: normal;
         font-size: 50px;
+        line-height: 55px;
         color: black; 
         transition: height 0.3s ease;
       }

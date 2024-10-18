@@ -1,101 +1,113 @@
 
 <script setup>
-  const panels = [
-    {
-      category: {
-        name: 'the tomato project',
-        description: 'Savor the taste of tradition with Dolopias Finest Tomato Creations',
-        route: 'tomato-project'
-      },
-      subcategories: [
-        {
-          name:'PASTA SAUCES',
-          route: 'pasta-sauces',
-        },
-        {
-          name:'TOMATO CREATIONS',
-          route: 'tomato-creations',
-        },
-        {
-          name:'HOMEMADE KETCHUP',
-          route: 'ketchup',
-        }
-      ],
-      imageUrl: new URL('@/assets/tomato-project.png', import.meta.url).href
+import ProjectsViewMobile from '@/components/ProjectsViewMobile/ProjectsViewMobile.vue';
+import ArrowButton from '@/components/ArrowButton.vue';
+import { inject } from 'vue';
+const { isMobile } = inject('screenSize')
+const panels = [
+  {
+    category: {
+      name: 'the tomato project',
+      description: 'Savor the taste of tradition with Dolopias Finest Tomato Creations',
+      route: 'tomato-project'
     },
-    {
-      category: {
-        name: 'the vegetable project',
-        description: 'Authentic Mediterranean flavors, rooted in heritage, perfected for modern palates.',
-        route: 'vegetable-project'
+    subcategories: [
+      {
+        name:'PASTA SAUCES',
+        route: 'pasta-sauces',
       },
-      subcategories: [
-        {
-          name:'appetizer',
-          route: 'appetizer',
-        },
-        {
-          name:'VEGETABLEs in OIL',
-          route: 'vegetable-in-oil',
-        },
-        {
-          name:'Red pepper pate',
-          route: 'red-pepper-pate',
-        }
-      ],
-      imageUrl: new URL('@/assets/vegetable-project.png', import.meta.url).href
-    },
-    {
-      category: {
-        name: 'The FRUIT Project',
-        description: 'Authentic fruit delights with a creative modern twist',
-        route: 'fruit-project',
+      {
+        name:'TOMATO CREATIONS',
+        route: 'tomato-creations',
       },
-      subcategories: [
-        {
-          name:'jams',
-          route: 'jams',
-        },
-        {
-          name:'marmalades',
-          route: 'marmalades',
-        },
-        {
-          name:'candied fruits in syrup',
-          route: 'candied-fruit',
-        },
-      ],
-      imageUrl: new URL('@/assets/fruit-project.png', import.meta.url).href
+      {
+        name:'HOMEMADE KETCHUP',
+        route: 'ketchup',
+      }
+    ],
+    imageUrl: new URL('@/assets/tomato-project.png', import.meta.url).href
+  },
+  {
+    category: {
+      name: 'the vegetable project',
+      description: 'Authentic Mediterranean flavors, rooted in heritage, perfected for modern palates.',
+      route: 'vegetable-project'
     },
-    {
-      category: {
-        name: 'The PASTA Project',
-        description: 'Crafted with care: artisanal pasta, naturally dried, richly flavored',
-        route: 'pasta-project',
+    subcategories: [
+      {
+        name:'appetizer',
+        route: 'appetizer',
       },
-      subcategories: [
-        {
-          name:'Milk pasta',
-          route: 'traditional-pasta',
-        },
-        {
-          name:'vegan pasta',
-          route: 'vegan-pasta',
-        },
-        {
-          name:'Seafood pasta',
-          route: 'seafood-pasta',
-        },
-      ],
-      imageUrl: new URL('@/assets/pasta-project.png', import.meta.url).href
+      {
+        name:'VEGETABLEs in OIL',
+        route: 'vegetable-in-oil',
+      },
+      {
+        name:'Red pepper pate',
+        route: 'red-pepper-pate',
+      }
+    ],
+    imageUrl: new URL('@/assets/vegetable-project.png', import.meta.url).href
+  },
+  {
+    category: {
+      name: 'The FRUIT Project',
+      description: 'Authentic fruit delights with a creative modern twist',
+      route: 'fruit-project',
     },
-  ]
-  let test = ['vegetable', 'fruit', 'pasta']
+    subcategories: [
+      {
+        name:'jams',
+        route: 'jam',
+      },
+      {
+        name:'marmalades',
+        route: 'marmalade',
+      },
+      {
+        name:'candied fruits in syrup',
+        route: 'candied-fruit',
+      },
+    ],
+    imageUrl: new URL('@/assets/fruit-project.png', import.meta.url).href
+  },
+  {
+    category: {
+      name: 'The PASTA Project',
+      description: 'Crafted with care: artisanal pasta, naturally dried, richly flavored',
+      route: 'pasta-project',
+    },
+    subcategories: [
+      {
+        name:'Milk pasta',
+        route: 'traditional-pasta',
+      },
+      {
+        name:'vegan pasta',
+        route: 'vegan-pasta',
+      },
+      {
+        name:'Seafood pasta',
+        route: 'seafood-pasta',
+      },
+    ],
+    imageUrl: new URL('@/assets/pasta-project.png', import.meta.url).href
+  },
+]
 </script>
 
 <template>
   <div class="page-catalog">
-    <div class="panel-container">
+    
+    <ArrowButton 
+    :routePath="'/home'" 
+    :buttonText="''" 
+    :showArrow="true"
+    :arrowDirection="'left'"
+    :showDropdown="false"
+    v-if="!isMobile"
+    />
+    <div v-if="!isMobile" class="panel-container">
       <div v-for="(panel, idx) in panels" :key="idx" class="panel" :class="`panel-${idx}`">
         <div class="panel-half text-panel">
           <div class="category">
@@ -118,14 +130,24 @@
         </div>
       </div>
     </div>
+    <ProjectsViewMobile v-if="isMobile"/>
   </div>
 </template>
 
 
 <style lang="scss" scoped>
+.arrow-button{
+  position: absolute;
+  z-index: 2;
+  top: 5vh;
+  left: 5vh;
+}
 .page-catalog{
   width: 100%;
   height: 100%;
+  @media(max-width: 450px){
+    margin-bottom: 40px !important;
+  }
   .panel-container{
     display: grid;
     grid-template-rows: 50% 50%;
@@ -146,7 +168,7 @@
         // background: #CEEAEC;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        justify-content: center;
         align-items: center;
         // border: 1px solid black;
         .category-image{
@@ -160,6 +182,7 @@
           max-width: 80%;
           margin-left: auto;
           margin-right: auto;
+          margin-bottom: 5%;
           &-name{
             font-family: "Century Gothic";
             font-size: 24px;

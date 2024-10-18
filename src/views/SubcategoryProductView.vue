@@ -2,9 +2,12 @@
 <script setup>
 import ProductEmbeddedView from '@/components/ProductOverview/ProductEmbeddedView.vue';
 import CurrentSelectionInfo from '@/components/ProductOverview/CurrentSelectionInfo.vue';
+import ArrowButton from '@/components/ArrowButton.vue';
+import ProductsViewMobile from '@/components/ProductsViewMobile/ProductsViewMobile.vue';
 
-import { ref, watch, onMounted, onUnmounted, computed } from 'vue';
+import { ref, watch, onMounted, onUnmounted, computed, inject } from 'vue';
 
+const { isMobile } = inject('screenSize');
 import { useRoute, useRouter } from 'vue-router';
 import { useRouteParamsStore } from '@/store/routeParams.js'
 import { useProductStore } from '@/store/product';
@@ -16,8 +19,7 @@ let isOverviewActive = ref(false);
 function triggerOverview(){
   if(isOverviewActive.value){
     return
-  }
-  else {
+  } else {
     isOverviewActive.value = true;
   }
 }
@@ -30,28 +32,40 @@ let currentOverviewPhase = ref('none')
 
 <template>
   <div class="page-category">
+  
+    <ArrowButton 
+    :routePath="'/catalog'" 
+    :buttonText="''" 
+    :showArrow="true"
+    :arrowDirection="'left'"
+    :showDropdown="false"
+    v-if="!isMobile"
+    />
+
     <Transition name="slide-text" mode="out-in">
-      <CurrentSelectionInfo v-if="currentOverviewPhase === 'description' || currentOverviewPhase === 'none'"/>
+      <CurrentSelectionInfo v-if="!isMobile && (currentOverviewPhase === 'description' || currentOverviewPhase === 'none')"/>
     </Transition>
-    <div :class="isOverviewActive ? 'inactive': ''"class="left-panel">
+    <div v-if="!isMobile" :class="isOverviewActive ? 'inactive': ''"class="left-panel">
     </div>
-    <div @click="triggerOverview()" class="right-panel" :class="isOverviewActive ? 'active' : ''">
+
+    <div v-if="!isMobile" @click="triggerOverview()" class="right-panel" :class="isOverviewActive ? 'active' : ''">
       <div class="panel-half right">
         <ProductEmbeddedView @phaseChange="(newPhase) => {currentOverviewPhase = newPhase}" :isOverviewActive="isOverviewActive"/>
       </div>
     </div>
-    <!-- <div :class="isOverviewActive ? 'overview' : ''" class="panel-container">
-
-      <div class="panel-half left">
-
-      </div>
-
-    </div> -->
+    
+    <ProductsViewMobile v-if="isMobile"/>
   </div>
 </template>
 
 
 <style lang="scss" scoped>
+.arrow-button{
+  position: absolute;
+  top: 20vh;
+  z-index: 4;
+  left: 5%;
+}
 .left-panel{
   width: 50%;
   height: 100%;
@@ -78,6 +92,11 @@ let currentOverviewPhase = ref('none')
   max-height: 100vh;
   // display: flex;
   position: relative;
+  @media(max-width: 450px){
+    background-image: url('@/assets/product_overview/background-mobile.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
   // .left-content{
   //   display: flex;
   //   flex-direction: column;

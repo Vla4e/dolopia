@@ -63,7 +63,7 @@ body {
   color: var(--color-text);
   background: url("@/assets/landing/landing.png");
   @media(max-width: 450px){
-    background: url("@/assets/landing/landing-mobile.png");
+    background: none;
     background-size: cover;
   }
   background-size: cover;

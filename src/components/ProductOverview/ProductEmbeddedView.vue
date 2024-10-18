@@ -2,6 +2,7 @@
 import { ref, watch, onMounted, reactive, computed } from 'vue';
 import ProductData from './ProductData/ProductData.vue';
 import PhaseCarousel from '../PhaseCarousel.vue';
+import ProductImage from './ProductImage.vue';
 
 import { useProductStore } from '@/store/product';
 const productStore = useProductStore();
@@ -25,6 +26,9 @@ const Backward = false; //scrollUp
 const Forward = true; //scrollDown
 function cyclePhase(direction) {
   console.log("CurrentPHASEINDEx", currentPhaseIndex, "direction", direction, localPhases.length)
+  if(!props.isOverviewActive){
+    return
+  }
   if (!currentPhaseIndex) {
     currentPhaseIndex = 1;
     currentPhaseName.value = localPhases[currentPhaseIndex];
@@ -76,9 +80,7 @@ watch(() => props.isOverviewActive, (isActive) => { //initial expansion of compo
 })
 
 import { useScrollDirection } from '@/composables/useScrollDirection'; //Enable scrolling through phases using composable.
-import Dropdown from '../Dropdown/Dropdown.vue';
-import ProductImage from './ProductImage.vue';
-import ArrowButton from '../ArrowButton.vue';
+
 useScrollDirection(
   () => cyclePhase(Backward), //onScrollUp
   () => cyclePhase(Forward) //onScrollDown
@@ -93,7 +95,6 @@ function selectProduct(id){
 
 <template>
   <div class="product-overview">
-
     <!-- <div style="position: absolute; right: 10%; top: 15%; width: 200px; height: 400px; background: #13131330; display: flex; flex-direction: column;">
       <span @click="selectProduct(product)" style="color: black; margin-bottom: 20px;" v-for="product in productStore.subcategoryData.productIdentifiers" :key="product" >
         {{ product }}

@@ -8,6 +8,8 @@ import { subcategoryToProductCodes, subcategoryToProducts, subcategoryToProducts
 
 console.log("subcategory")
 export const useProductStore = defineStore('product', () => {
+
+  let isScrollActive = ref(false)
   // State variables
   const category = ref(null);
   const subcategory = ref(null);
@@ -70,7 +72,7 @@ export const useProductStore = defineStore('product', () => {
   })
   watch(() => categoryData.name, (value) => {
     console.log("===============!WATCHER! categoryData", value)
-    subcategoryByIdentifier.value = categoryData.subcategories[0] // default to first subcategory of array
+    // subcategoryByIdentifier.value = categoryData.subcategories[0] // default to first subcategory of array
 
   })
 
@@ -104,6 +106,7 @@ export const useProductStore = defineStore('product', () => {
     console.log("===============!WATCHER! productCodeByIdentifier", newValue)
     if(newValue !== oldValue){
       let fetchProduct = subcategoryData.products.get(newValue)
+      console.log("Fetchproduct", subcategoryData.products)
       productData.code = newValue
       productData.properties = fetchProduct
       productData.name = fetchProduct['Product name EN']
@@ -126,6 +129,8 @@ export const useProductStore = defineStore('product', () => {
     if(type === 'category'){
       console.log("trying to set cat")
       categoryByIdentifier.value = itemIdentifier
+      let glue = categoryToSubcategory.get(itemIdentifier)
+      subcategoryByIdentifier.value = glue[0]
     } else if (type === 'subcategory') {
       console.log("trying to set subcat")
       subcategoryByIdentifier.value = itemIdentifier
@@ -277,6 +282,6 @@ export const useProductStore = defineStore('product', () => {
     subcategoryData,
     productData,
     selectItemFromDropdown,
-
+    isScrollActive
   }
 });

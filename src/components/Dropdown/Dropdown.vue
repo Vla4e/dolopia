@@ -52,11 +52,13 @@ let selectedNameArray = computed(() => { // returns array names
 })
 
 let selectedTypeData = computed(() => {
+  console.log("Computing type data", props.forType)
   if(props.forType === 'category'){
     return productStore.categoryData
   } else if(props.forType === 'subcategory'){
     return productStore.subcategoryData
   } else if(props.forType === 'product'){
+    console.log("Returning product:", productStore.productData)
     return productStore.productData
   }
 })
@@ -77,7 +79,7 @@ const selectItem = (itemIdentifier) => {
   isOpen.value = !isOpen.value;
   setTimeout(() => {
     isSelecting = false
-  }, 700)
+  }, 1000)
 }
 
 //Visual functionalities

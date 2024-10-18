@@ -18,6 +18,7 @@ function isAllowedRoute(params, query, store) {
     let productRoute = query.product || null
     console.log("going to category", categoryRoute, " / ", subcategoryRoute, " and product", productRoute)
     if (!categoryToSubcategory.has(categoryRoute)) return false;
+    console.log("get throws false")
     if (!categoryToSubcategory.get(categoryRoute).includes(subcategoryRoute)) return false;
     if (productRoute) {
         return subcategoryToProductsMap.get(routeSubcat)?.has(productRoute) || false;

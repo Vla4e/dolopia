@@ -7,10 +7,13 @@ const productData = computed(() => productStore.productData);
 const subcategoryData = computed(() => productStore.subcategoryData);
 const categoryByIdentifier = computed(() => productStore.categoryByIdentifier)
 
+import candiedFruitsPlaceholder from "@/assets/products/product-images/candied-fruits-placeholder/candied-fruits.png"
+import placeholderImage from '@/assets/products/product-images/placeholder/placeholder.png'
+let fallbackImage = ref('placeholder')
+let usePlaceholder = ref(false)
+
 const images = import.meta.glob('@/assets/products/product-images/projects/**/*.png', { eager: true, as: 'url' });
 const shadowsOverlaysImages = import.meta.glob('@/assets/products/product-images/shadows-overlay/**/*.png', { eager: true, as: 'url' });
-const candiedFruitsPlaceholder = import.meta.glob('@/assets/products/product-images/candied-fruits/*.png', { eager: true, as: 'url' });
-import placeholderImage from '@/assets/products/product-images/placeholder/placeholder.png'
 
 const productImageMap = ref({});
 const imagesParsed = ref(false);
@@ -95,23 +98,31 @@ const preloadImages = (imageUrls) => {
 
 async function preloadWrapper(code) {
   isLoading.value = true;
-  console.log("getting images")
-  nextImages.value = await getProductImages(code);
-  console.log("got images")
-  if (nextImages.value && nextImages.preload) {
-    console.log("preloading")
-    try {
+  try{
+    if(subcategoryData.value.isCandiedFruit){
+      fallbackImage.value = candiedFruitsPlaceholder
+      usePlaceholder.value = true
+      isLoading.value = false
+      return
+    }
+    console.log("getting images")
+    nextImages.value = await getProductImages(code);
+    console.log("got images")
+    if (nextImages.value && nextImages.preload) {
+      console.log("preloading")
       await preloadImages([nextImages.value.mainImage, nextImages.value.shadow, nextImages.value.overlay]);
       console.log("finished preloading")
       currentImages.value = nextImages.value;
       nextImages.value = null;
-    } catch (error) {
-      console.error("Error preloading images:", error);
+    } else {
+      currentImages.value = nextImages.value
     }
-  } else {
-    currentImages.value = nextImages.value
+    isLoading.value = false;
+  } catch (e) {
+    usePlaceholder.value = true;
+    fallbackImage.value = 'placeholder'
+    isLoading.value = false
   }
-  isLoading.value = false;
 }
 
 watch(() => productData.value.code, async (newCode) => {
@@ -133,7 +144,8 @@ onMounted(async () => {
     <div v-if="imagesParsed && currentImages && !isLoading" :key="currentImages.code" class="product-image">
       <div class="space"/>
       <img v-if="categoryByIdentifier !== 'pasta-project'" :src="currentImages.shadow" class="silhouette-shadow"/>
-      <img :src="currentImages.mainImage" class="product" alt="Product image" />
+      <img v-if="usePlaceholder" :src="fallbackImage === 'placeholder' ? placeholderImage : candiedFruitsPlaceholder" class="product" alt="Product image"/>
+      <img v-else :src="currentImages.mainImage" class="product" alt="Product image" />
       <img v-if="categoryByIdentifier !== 'pasta-project'" :src="currentImages.overlay" class="highlight"/>
     </div>
     <div v-else-if="isLoading" class="loading-placeholder">
@@ -152,10 +164,13 @@ onMounted(async () => {
     left: 0;
     width: 100%;
     height: 100%;
+    @media(max-width: 450px){
+      height: auto !important;
+    }
   }
-  .silhouette-shadow { z-index: 1; }
+  .silhouette-shadow { z-index: 1; opacity: 0.8;}
   .product { z-index: 2; }
-  .highlight { z-index: 3; }
+  .highlight { z-index: 3; opacity: 0.8;}
 }
 
 .loading-placeholder {

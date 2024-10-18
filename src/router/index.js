@@ -3,10 +3,9 @@ import HomeView from '../views/HomeView.vue'
 
 import { areParamsValid, adjustParamStore, isAllowedRoute } from './categoryParamHandlers.js'
 import { useRouteParamsStore } from '@/store/routeParams.js'
-import { useProductStore } from '@/store/product';
+import { useProductStore } from '@/store/product.js';
 let routeParamsStore = null;
 let productStore = null
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -17,6 +16,8 @@ const router = createRouter({
       meta: { 
         hasNavbar: true,
         hasFooter: true,
+        hasNavbarMobile: true,
+        floatingNavbarMobile: false,
         floatingNavbar: false,
         floatingFooter: false,
         fullWidthPage: false,
@@ -35,6 +36,8 @@ const router = createRouter({
       meta: { 
         hasNavbar: false,
         hasFooter: false,
+        hasNavbarMobile: true,
+        floatingNavbarMobile: true,
         floatingNavbar: false,
         floatingFooter: false,
         fullWidthPage: true
@@ -47,6 +50,8 @@ const router = createRouter({
       meta: { 
         hasNavbar: true,
         hasFooter: true,
+        hasNavbarMobile: true,
+        floatingNavbarMobile: true,
         floatingNavbar: true,
         floatingFooter: true,
         fullWidthPage: true,
@@ -58,6 +63,11 @@ const router = createRouter({
       path: '/about',
       name: 'about',
       component: () => import('../views/AboutView.vue')
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      redirect: { name: 'home' }
     }
   ]
 })
@@ -81,33 +91,36 @@ function adjustProductStore(params, query) {
     
   }
 }
+
 router.beforeEach((to, from, next) => {
-  try{
+  try {
     console.log("ROUTE FROM:", from)
     console.log("ROUTE TO:", to, to.name, to.name === 'projects')
 
-    //Singletons by design - no worry about reinstancing
+    // Singletons by design - no worry about reinstancing
     routeParamsStore = useRouteParamsStore()
-    productStore  = useProductStore()
+    productStore = useProductStore()
     console.log("productstore", productStore)
 
-    if(to.name === 'projects'){
+    if (to.name === 'projects') {
       console.log("will check for allowed route")
       let parametersValidity = isAllowedRoute(to.params, to.query, routeParamsStore)
       console.log("areParamsValid", parametersValidity)
-      if(!parametersValidity){
-        next({ name : 'projects', params: {category: "tomato-project", subcategory: "pasta-sauces"} })
+      if (!parametersValidity) {
+        next({ name: 'projects', params: { category: "tomato-project", subcategory: "pasta-sauces" } })
       } else {
         adjustProductStore(to.params, to.query)
         productStore.selectedCategory = to.params.category
       }
-      // routeParamsStore.updateParams(structuredClone(to.params))
+    } else if (to.name === 'not-found') {
+      // If the route doesn't exist, redirect to home
+      next({ name: 'home' })
+    } else {
+      next()
     }
-    console.log("should go to next")
-    next()
   } catch (e) {
     console.log("Failed attempt to route", e)
-    next({name: ''})
+    next({ name: 'home' })
   }
 })
 

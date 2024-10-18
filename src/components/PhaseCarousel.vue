@@ -60,6 +60,12 @@ function emitCyclePhase(direction){
   align-items: center;
   width: 50px;
   cursor: pointer;
+  @media (max-width: 450px){
+    flex-direction: row;
+    .phase-item{
+      margin-right: 30px;
+    }
+  }
   .phase-item{
     width: 50px;
     height: 50px;
@@ -74,13 +80,13 @@ function emitCyclePhase(direction){
       height: 15px;
       transition: all ease 0.5s;
       background-color: transparent;
-      border: 1px solid #131313;
+      border: 1px solid white;
     }
     &.selected{
       .inner-circle{
         transform: scale(130%);
         border: 2px solid transparent;
-        background-color: #131313;
+        background-color: white;
       }
     }
   }
