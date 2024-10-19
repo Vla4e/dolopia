@@ -6,6 +6,9 @@ import router from './router'
 
 import './assets/main.scss'
 
+//remove console logs from prod
+console.log = () => {};
+
 const app = createApp(App)
 
 app.use(createPinia())
