@@ -17,11 +17,6 @@ import { subcategoryToProductCodes, subcategoryToProductsMap, subcategoryToProdu
 import { useProductStore } from '@/store/product';
 const productStore = useProductStore()
 
-onBeforeMount(() => {
-  console.log("IS THIS ACTUALLY HAPPENING ===================================================================================")
-  productStore.categoryByIdentifier = 'tomato-project'
-})
-
 let categoryData = computed(() => {
   return productStore.categoryData
 })
@@ -31,11 +26,20 @@ let subcategoryData = computed(() => {
 let productData = computed(() => {
   return productStore.productData
 })
-let categoryIdentifier = ref(null)
+let categoryIdentifier = ref(0)
 let subcategoryIdentifier = ref(null)
 let productIdentifier = ref(null)
-
+watch(() => categoryData.value.name, (value) => {
+  console.log("LALALALLAL", value)
+  productStore.subcategoryByIdentifier = categoryData.value.subcategories[0]
+})
 let currentCategoryIndex = 0
+onMounted(() => {
+  if(categoryData.value.name === 'tomato-project') currentCategoryIndex = 0
+  else if (categoryData.value.name === 'vegetable-project') currentCategoryIndex = 1
+  else if (categoryData.value.name === 'fruit-project') currentCategoryIndex = 2
+  else currentCategoryIndex = 3
+})
 function cycleCategory(direction){
   console.log("DIRECTION", direction, currentCategoryIndex)
   if(direction === 'right'){
@@ -53,6 +57,7 @@ function cycleCategory(direction){
   }
   productStore.categoryByIdentifier = productStore.categoriesByIdentifier[currentCategoryIndex]
 }
+
 function selectSubcategory(value){
   productStore.subcategoryByIdentifier = value
   console.log("value", value)
@@ -175,7 +180,7 @@ watch(() => subcategoryData.value.productIdentifiers, () => {
         v-for="([key, value], idx) in subcategoryData.products" 
         :key="key" 
         class="product-card"
-        @click="goToRoute(categoryData.name, subcategoryData.name, value.productKey)"
+        @click="goToRoute(categoryData.name, subcategoryData.name, key)"
       >
         <div  class="image-container">
           <img class="background" :src="cardBackgroundPlaceholder"/>
@@ -187,6 +192,9 @@ watch(() => subcategoryData.value.productIdentifiers, () => {
         <!-- <CurrentSelectionInfo class="current-selection-info"/> -->
 
         <div class="product-texts">
+        <span>{{ categoryData.name }}</span>
+        <span>{{ subcategoryData.name }}</span>
+        <span>{{ key }}</span>
           <div class="category-subcategory">
             <span class="category"> {{ categoryData.fullName }}</span>
             <span class="vertical-line"/>

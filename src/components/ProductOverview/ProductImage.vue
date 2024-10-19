@@ -97,12 +97,22 @@ const preloadImages = (imageUrls) => {
 };
 
 async function preloadWrapper(code) {
+  console.log("PLW", code)
+  console.log("SDICF", subcategoryData.value.isCandiedFruit)
   isLoading.value = true;
   try{
     if(subcategoryData.value.isCandiedFruit){
+      currentImages.value = {
+        mainImage: candiedFruitsPlaceholder,
+        shadow: shadowsOverlaysImages[`/src/assets/products/product-images/shadows-overlay/shadows/250.png`],
+        overlay: shadowsOverlaysImages[`/src/assets/products/product-images/shadows-overlay/overlays/250.png`],
+        code: code,
+        preload: true
+      }
       fallbackImage.value = candiedFruitsPlaceholder
       usePlaceholder.value = true
       isLoading.value = false
+      console.log("ok now:", usePlaceholder.value, fallbackImage.value, isLoading.value)
       return
     }
     console.log("getting images")
@@ -148,7 +158,8 @@ onMounted(async () => {
       <img v-else :src="currentImages.mainImage" class="product" alt="Product image" />
       <img v-if="categoryByIdentifier !== 'pasta-project'" :src="currentImages.overlay" class="highlight"/>
     </div>
-    <div v-else-if="isLoading" class="loading-placeholder">
+    <div v-else-if="!isLoading" class="loading-placeholder">
+      IP:{{ imagesParsed }} | CI {{ currentImages }} | IL{{ isLoading }} | UP{{ usePlaceholder }} | FI{{ fallbackImage }}
       <!-- Add a loading spinner or placeholder here -->
       Loading...
     </div>
@@ -165,7 +176,14 @@ onMounted(async () => {
     width: 100%;
     height: 100%;
     @media(max-width: 450px){
-      height: auto !important;
+      height: auto;
+    }
+    @media(max-width: 390px){
+      height: 100% !important;
+      width: auto !important;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
   }
   .silhouette-shadow { z-index: 1; opacity: 0.8;}

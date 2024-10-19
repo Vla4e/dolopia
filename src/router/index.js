@@ -71,7 +71,19 @@ const router = createRouter({
     }
   ]
 })
+function catalogProductStore(query){
+  console.log("QUERY")
+  if(query?.category){
+    productStore.categoryByIdentifier = query.category
+    if(query?.subcategory){
+      productStore.subcategoryByIdentifier = query.subcategory
+    }
+  } else {
+    productStore.categoryByIdentifier = "tomato-project"
+    productStore.subcategoryByIdentifier = "pasta-sauces"
+  }
 
+}
 function adjustProductStore(params, query) {
   console.log("adjusting productstore", params, query)
   console.log("cat", productStore.categoryByIdentifier)
@@ -85,9 +97,9 @@ function adjustProductStore(params, query) {
     console.log("adjusting subcategoryIdentifier: ", params.subcategory)
     productStore.subcategoryByIdentifier = params.subcategory
   }
-  if(query.productName && (productStore.productName !== query.productName)){
-    console.log("adjusting productName: ", query.productName)
-    productStore.productName = query.productName
+  if(query.productCode && (productStore.code !== query.productCode)){
+    console.log("adjusting productName: ", query.productCode)
+    productStore.productCodeByIdentifier = query.productCode
     
   }
 }
@@ -113,6 +125,9 @@ router.beforeEach((to, from, next) => {
         productStore.selectedCategory = to.params.category
         next()
       }
+    } else if (to.name === 'catalog'){ 
+      catalogProductStore(to.query)
+      next()
     } else if (to.name === 'not-found') {
       // If the route doesn't exist, redirect to home
       next({ name: 'home' })

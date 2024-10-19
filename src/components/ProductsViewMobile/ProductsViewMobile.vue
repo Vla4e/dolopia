@@ -14,30 +14,33 @@ const productStore = useProductStore();
 let productData = computed(() => {
   return productStore.productData
 })
-let productsIdentifiers = computed(() => {
+let productIdentifiers = computed(() => {
   return productStore.subcategoryData.productIdentifiers
 })
 let processedProductName = computed(() => {
   return splitIntoParts(productData.value.name)
 })
 let iterator = 0
+onMounted(() => {
+  iterator = productIdentifiers.value.indexOf(productData.value.code)
+})
 function cycleProduct(direction){
   console.log("DIRECTION", direction, iterator)
   if(direction === 'right'){
-    if(iterator === productsIdentifiers.value.length - 1){
+    if(iterator === productIdentifiers.value.length - 1){
       iterator = 0
     } else {
       iterator++
     }
   } else {
     if(iterator === 0){
-      iterator = productsIdentifiers.value.length - 1
+      iterator = productIdentifiers.value.length - 1
     } else {
       iterator--
     }
   }
-  console.log("switching product", productsIdentifiers.value[iterator])
-  productStore.productCodeByIdentifier = productsIdentifiers.value[iterator]
+  console.log("switching product", productIdentifiers.value[iterator])
+  productStore.productCodeByIdentifier = productIdentifiers.value[iterator]
 }
 
 let currentPhaseName = ref('description')
@@ -124,7 +127,9 @@ const phasesShownOnCarousel = ['description', 'wheel', 'data']
         <img @click="cycleProduct('right')" :src="rightChevron" class="chevron right">
       </div>
     </div>
+
     <ProductImage class="product-image"/>
+    
     <div class="dynamic-container">
 
       <div 
@@ -166,6 +171,7 @@ const phasesShownOnCarousel = ['description', 'wheel', 'data']
     max-height: 45%;
   }
   .dynamic-container{
+    margin-top: 20px;
     .description{
       width: 95%;
       margin-left: auto;
@@ -178,6 +184,9 @@ const phasesShownOnCarousel = ['description', 'wheel', 'data']
         font-style: normal;
         font-weight: 400;
         line-height: 24px; /* 150% */
+        @media(max-width: 390px){
+          font-size: 12px;
+        }
       }
     }
   }
@@ -188,12 +197,15 @@ const phasesShownOnCarousel = ['description', 'wheel', 'data']
     justify-content: flex-end;
     align-items: center;
     width: 100%;
-    height: 200px;
+    min-height: 20%;
+    max-height: 25%;
+    @media(max-width: 390px){
+      min-height: 20%;
+    }
     .products{
       display: flex;
       justify-content: space-between;
       align-items: center;
-      min-height: 25%;
       width: 95%;
       margin-left: auto;
       margin-right: auto;

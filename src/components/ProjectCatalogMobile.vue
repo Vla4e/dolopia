@@ -19,7 +19,7 @@ const panels = [
         description: 'Authentic Mediterranean flavors, rooted in heritage, perfected for modern palates.',
         route: 'vegetable-project',
         subcategoryRoute: 'jam',
-        imageUrl: new URL('@/assets/project_showcase_images/mobile/vegetable-project.png', import.meta.url).href
+        imageUrl: new URL('@/assets/project_showcase_images/mobile/vegetable-project.png', import.meta.url).href,
       },
     },
     {
@@ -50,7 +50,7 @@ const panels = [
       :class="`project-card-${idx}`" 
       v-for="(panel, idx) in panels"
       :key="idx"
-      :to="{ name : 'catalog'}"
+      :to="{ name : 'catalog', query: { category: panel.category.route, subcategory: panel.category.subcategoryRoute }}"
     >
       <div class="image-container">
         <img :src="panel.category.imageUrl" :alt="panel.category.name">
