@@ -111,6 +111,7 @@ router.beforeEach((to, from, next) => {
       } else {
         adjustProductStore(to.params, to.query)
         productStore.selectedCategory = to.params.category
+        next()
       }
     } else if (to.name === 'not-found') {
       // If the route doesn't exist, redirect to home
