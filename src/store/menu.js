@@ -12,7 +12,8 @@ export const useMenuStore = defineStore('menu', () => {
     showSidebar.value = value
   }
   function setContactFormFlag(value){
-    showContactForm.value
+    showContactForm.value = value
+    console.log("value set to:", showContactForm.value)
   }
   return {
     showSidebar,

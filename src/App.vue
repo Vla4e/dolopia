@@ -15,6 +15,10 @@
     <Sidebar v-if="showSidebar"/>
   </Transition>
 
+  <Transition name="contact-form">
+    <ContactForm v-if="showContactForm"/>
+  </Transition>
+
   <main class="view-container"> 
     <RouterView v-slot="{ Component, route }">
       <Transition name="slide">
@@ -27,7 +31,8 @@
       </Transition>
     </RouterView>
   </main>
-  <ProjectCatalogMobile v-if="isMobile && route.name === 'home'"/>
+  <ProjectCatalogMobile v-if="isMobile && route.name === 'home' && mountFinished"/>
+
 
   <Transition name="slide-up">
     <footer v-show="showFooter && !isMobile" :class="floatingFooter || !showFooter ? 'floating-footer' : ''">
@@ -38,23 +43,41 @@
 
 
 <script setup>
-import { ref, watch, computed, provide, onMounted, inject } from "vue";
+import { ref, watch, computed, provide, onMounted, inject, onBeforeMount, onBeforeUnmount } from "vue";
 import { RouterLink, RouterView, useRoute } from "vue-router";
+
 import Navbar from "./components/Navbar.vue";
 import Footer from "./components/Footer.vue";
 import Sidebar from "./components/Sidebar/Sidebar.vue";
 import ProjectCatalogMobile from "./components/ProjectCatalogMobile.vue";
+import ContactForm from "./components/ContactForm/ContactForm.vue";
 
 import { useMenuStore } from "./store/menu";
 const menuStore = useMenuStore()
 let showSidebar = computed(() => {
   return menuStore.showSidebar
 })
+let showContactForm = computed(() => {
+  console.log("COMPUTING", menuStore.showContactForm)
+  return menuStore.showContactForm
+})
 
 import { useScreenSize } from './composables/useScreenSize'
 const { isMobile, isTablet, isDesktop } = useScreenSize()
 provide('screenSize', { isMobile, isTablet, isDesktop })
 
+const emitter = inject('emitter')
+let mountFinished = ref(false)
+emitter.on('mountFinished', (e) => {
+  console.log("Mount finished")
+  setTimeout(() => {
+    mountFinished.value = true
+
+  }, 700)
+})
+onBeforeUnmount(() => {
+  emitter.off('mountFinished')
+})
 let route = useRoute();
 let showFooter = ref(true);
 let showNavbar = ref(true);
@@ -232,6 +255,26 @@ header{
 }
 
 .sidebar-leave-to {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+// Contact Form
+.contact-form-enter-active, .contact-form-leave-active{
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.contact-form-enter-from {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.contact-form-enter-to, .contact-form-leave-from {
+  transform: translateX(0%);
+  opacity: 1;
+}
+
+.contact-form-leave-to {
   transform: translateX(-100%);
   opacity: 0;
 }

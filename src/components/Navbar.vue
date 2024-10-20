@@ -2,10 +2,15 @@
 <script setup>
 import BurgerIcon from './BurgerIcon.vue';
 
-
 import {inject} from 'vue';
 const { isMobile } = inject('screenSize')
 
+import { useMenuStore } from '@/store/menu';
+const menuStore = useMenuStore()
+function toggleContactForm(){
+  console.log("clicked")
+  menuStore.setContactFormFlag(true)
+}
 </script>
 
 <template>
@@ -24,9 +29,9 @@ const { isMobile } = inject('screenSize')
       <router-link to="/about" class="navbar-link disabled">
         About
       </router-link>
-      <router-link to="/contact" class="navbar-link disabled">
+      <div @click="toggleContactForm()" class="navbar-link">
         Contact
-      </router-link>
+      </div>
       <!-- <a href="mailto:info@dolopia.eu" target="_blank" class="navbar-link">
         contact: info@dolopia.eu
       </a> -->

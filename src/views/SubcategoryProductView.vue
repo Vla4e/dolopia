@@ -26,7 +26,14 @@ function triggerOverview(){
 let currentOverviewPhase = ref('none')
 
 // When product list is finalized, include it.
-
+onMounted(() => {
+  if(isMobile.value){
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
+})
 
 </script>
 

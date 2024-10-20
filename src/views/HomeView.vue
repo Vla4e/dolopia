@@ -3,8 +3,14 @@
 import LandingHero from '../components/LandingHero.vue'
 import ProjectCatalogMobile from '@/components/ProjectCatalogMobile.vue';
 
-import { inject } from 'vue';
+import { inject, onMounted, ref } from 'vue';
 const { isMobile } = inject('screenSize')
+const emitter = inject('emitter')
+
+onMounted(() => {
+  console.log("Emitting mount finished")
+  emitter.emit('mountFinished', true)
+})
 </script>
 
 <template>
@@ -15,7 +21,7 @@ const { isMobile } = inject('screenSize')
     </div>
 
     <!-- Mobile only -->
-    <img class="landing-mobile" v-if="isMobile" src="@/assets/landing/landing-mobile-edited.png"/>
+    <img class="landing-mobile" v-if="isMobile" src="@/assets/landing/landing-mobile-smallest.png"/>
 
     <!-- <ProjectCatalogMobile v-if="isMobile"/> -->
 

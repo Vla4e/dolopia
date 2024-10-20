@@ -1,7 +1,9 @@
 
 <script setup>
 import NutritionChevron from './NutritionChevron.vue';
-import { computed } from 'vue';
+import { computed, inject } from 'vue';
+
+const { isMobile } = inject('screenSize');
 
 import { useProductStore } from '@/store/product';
 const productStore = useProductStore()
@@ -72,7 +74,7 @@ let productStatistics = computed(() => [
 
 <template>
   <section class="product-data">
-    <section class="left-column column">
+    <section v-if="!isMobile" class="left-column column">
 
       <section class="ingredients">
         <h2>
@@ -84,7 +86,7 @@ let productStatistics = computed(() => [
         </p>
       </section>
 
-      <section class="alergens">
+      <section class="allergens">
         <h2>
           Allergens
         </h2>
@@ -97,7 +99,7 @@ let productStatistics = computed(() => [
     </section>
 
     <section class="right-column column">
-      <h2>
+      <h2 v-if="!isMobile">
         Nutritional Facts 
         <br/>
         <span>per 100g</span>
@@ -178,6 +180,22 @@ let productStatistics = computed(() => [
         height: 85%;
         li{
           height: 20%;
+        }
+      }
+    }
+    
+  }
+  
+      
+  @media(max-width: 450px){
+    height: auto;
+    width: 100%;
+    .right-column{
+      width: 100%;
+      .chevron-list{
+        height: 100% !important;
+        li{
+          margin-bottom: 15px;
         }
       }
     }

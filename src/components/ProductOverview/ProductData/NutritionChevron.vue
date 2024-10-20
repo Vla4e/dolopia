@@ -171,5 +171,21 @@
       text-align: right;
     }
   }
+  @media(max-width: 450px){
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: space-between;
+    .chevron-image-container{
+      width: 80%;
+      .chevron{
+        width: 100%;
+        max-height: 60px;
+      }
+    }
+    .outside-chevron-data{
+      height: 60px;
+    }
+  }
 }
 </style>

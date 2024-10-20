@@ -4,7 +4,7 @@ import leftChevron from "@/assets/project-catalog/left-chevron.png"
 import rightChevron from "@/assets/project-catalog/right-chevron.png"
 
 import ProductImage from "../ProductOverview/ProductImage.vue";
-import PhaseCarousel from "../PhaseCarousel.vue";
+import ProductEmbeddedMobile from "./ProductEmbeddedMobile.vue";
 
 import { ref, computed, onMounted } from 'vue';
 
@@ -131,7 +131,6 @@ const phasesShownOnCarousel = ['description', 'wheel', 'data']
     <ProductImage class="product-image"/>
     
     <div class="dynamic-container">
-
       <div 
         v-if="currentPhaseName === 'description'" 
         key="description" 
@@ -142,7 +141,8 @@ const phasesShownOnCarousel = ['description', 'wheel', 'data']
         </p>
       </div>
     </div>
-
+    
+    <ProductEmbeddedMobile />
     
     <!-- <PhaseCarousel 
       @selectedPhaseFromCarousel="selectedPhaseFromCarousel"
@@ -172,6 +172,7 @@ const phasesShownOnCarousel = ['description', 'wheel', 'data']
   }
   .dynamic-container{
     margin-top: 20px;
+    margin-bottom: 20px;
     .description{
       width: 95%;
       margin-left: auto;
@@ -179,7 +180,7 @@ const phasesShownOnCarousel = ['description', 'wheel', 'data']
       p{
         color: #000;
         text-align: center;
-        font-family: Raleway;
+        font-family: "Raleway";
         font-size: 16px;
         font-style: normal;
         font-weight: 400;

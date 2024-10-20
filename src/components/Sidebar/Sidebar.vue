@@ -17,7 +17,7 @@
         <span class="link-heading">About</span>
       </router-link>
 
-      <router-link @click="handleClick()" class="sidebar-link disabled" disabled to="/contact">
+      <router-link @click="toggleContactForm()" class="sidebar-link" disabled to="/contact">
         <span class="link-heading">Contact</span>
       </router-link>
 
@@ -49,18 +49,13 @@ const emitter = inject('emitter')
 
 import { useMenuStore } from '@/store/menu';
 const menuStore = useMenuStore()
+
 function handleClick(){
   menuStore.setSidebarFlag(false)
 }
-let toggledContact = ref(false)
-function toggleContactAccordion(){
-  if(isMobile.value){
-    toggledContact.value = !toggledContact.value
-  }
-}
+
 function toggleContactForm(){
-  // console.log("Called toggle contact form")
-  emitter.emit('toggleContactForm')
+  menuStore.setContactFormFlag(true)
 }
 </script>
 

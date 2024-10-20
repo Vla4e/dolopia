@@ -53,7 +53,7 @@ const panels = [
       :to="{ name : 'catalog', query: { category: panel.category.route, subcategory: panel.category.subcategoryRoute }}"
     >
       <div class="image-container">
-        <img :src="panel.category.imageUrl" :alt="panel.category.name">
+        <img loading="lazy" :src="panel.category.imageUrl" :alt="panel.category.name">
       </div>
       <div class="text-container">
         <h2>{{ panel.category.name }}</h2>

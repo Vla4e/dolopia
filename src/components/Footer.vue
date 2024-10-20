@@ -15,6 +15,18 @@
     <!-- <a href="mailto:info@dolopia.eu" target="_blank" class="mail-link">
       info@dolopia.eu
     </a> -->
+    
+    <!-- <div class="recaptcha-disclaimer" style="text-align: center; margin-top: 10px;">
+      <span class="disclaimer-text">
+        This site is protected by reCAPTCHA and the Google
+      </span>
+      <div class="links">
+        <a href="https://policies.google.com/privacy">Privacy Policy</a>
+        <span>&nbsp;and&nbsp;</span>
+        <a href="https://policies.google.com/terms">Terms of Service</a>
+        <span>&nbsp;apply&nbsp;</span>
+      </div>
+    </div> -->
     <ArrowButton v-if="computeShowArrow" class="footer-arrow" :routePath="'/catalog'" :showDropdown="false" :buttonText="'Explore'"/>
     <Dropdown v-if="computeShowDropdown" :forType="'product'" :dropdownAlignment="'left'" class="product-dropdown" />
   </div>
@@ -46,6 +58,39 @@ let computeShowDropdown = computed(() => {
 </script>
 
 <style lang="scss" scoped>
+
+// .recaptcha-disclaimer{
+//   display:flex;
+//   flex-direction: column;
+//   width: 100%;
+//   margin-top: 0px;
+//   .disclaimer-text{
+//     font-size: 12px;
+//     color: black;
+//   }
+//   .links{
+//     display: flex;
+//     justify-content: center;
+//     color: black;
+//     font-size: 12px;
+//     a{
+//       text-decoration: underline;
+//       color: black;
+//     }
+//     span{
+//       display: flex;
+//       align-items: center;
+//     }
+//   }
+//   @media(max-width: 450px){
+//     .disclaimer-text{
+//       font-size:11px;
+//     }
+//     .links{
+//       font-size:11px;
+//     }
+//   }
+// }
 .footer{
   display: flex;
   justify-content: flex-start;
