@@ -59,11 +59,22 @@ const router = createRouter({
         showDropdown: true
       }
     },
-    {
-      path: '/about',
-      name: 'about',
-      component: () => import('../views/AboutView.vue')
-    },
+    // {
+    //   path: '/about',
+    //   name: 'about',
+    //   component: () => import('../views/AboutView.vue'),
+    //   meta: { 
+    //     hasNavbar: true,
+    //     hasFooter: true,
+    //     hasNavbarMobile: true,
+    //     floatingNavbarMobile: true,
+    //     floatingNavbar: true,
+    //     floatingFooter: true,
+    //     fullWidthPage: true,
+    //     showRouterArrow: false,
+    //     showDropdown: false
+    //   }
+    // },
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',

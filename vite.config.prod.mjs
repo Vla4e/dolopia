@@ -8,19 +8,19 @@ import compression from 'vite-plugin-compression';
 export default defineConfig({
   logLevel: 'silent',
   plugins: [
-    vue(),
+    vue()
     // Generate .gz files
-    compression({
-      algorithm: 'gzip',
-      ext: '.gz',
-      deleteOriginFile: false, // Keep the original uncompressed files
-    }),
-    // Generate .br files
-    compression({
-      algorithm: 'brotliCompress',
-      ext: '.br',
-      deleteOriginFile: false,
-    }),
+    // compression({
+    //   algorithm: 'gzip',
+    //   ext: '.gz',
+    //   deleteOriginFile: false, // Keep the original uncompressed files
+    // }),
+    // // Generate .br files
+    // compression({
+    //   algorithm: 'brotliCompress',
+    //   ext: '.br',
+    //   deleteOriginFile: false,
+    // }),
   ],
   resolve: {
     alias: {

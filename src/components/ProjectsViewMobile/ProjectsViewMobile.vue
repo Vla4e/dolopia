@@ -192,9 +192,6 @@ watch(() => subcategoryData.value.productIdentifiers, () => {
         <!-- <CurrentSelectionInfo class="current-selection-info"/> -->
 
         <div class="product-texts">
-        <span>{{ categoryData.name }}</span>
-        <span>{{ subcategoryData.name }}</span>
-        <span>{{ key }}</span>
           <div class="category-subcategory">
             <span class="category"> {{ categoryData.fullName }}</span>
             <span class="vertical-line"/>
