@@ -26,7 +26,7 @@ function toggleContactForm(){
       <router-link to="/catalog" class="navbar-link">
         Projects
       </router-link>
-      <router-link to="/about" class="navbar-link disabled">
+      <router-link to="/about" class="navbar-link">
         About
       </router-link>
       <div @click="toggleContactForm()" class="navbar-link">

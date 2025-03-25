@@ -29,3 +29,21 @@
   font-style: italic;
   font-display: swap;
 }
+
+// Kugile
+@font-face {
+  font-family: 'Kugile';
+  src: url('@/assets/fonts/Kugile.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+// Belleza
+@font-face {
+  font-family: 'Belleza';
+  src: url('@/assets/fonts/Belleza.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
