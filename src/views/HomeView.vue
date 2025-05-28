@@ -1,6 +1,7 @@
 
 <script setup>
 import LandingHero from '../components/LandingHero.vue'
+import AboutProjects from '@/components/AboutPage/AboutProjects.vue';
 import ProjectCatalogMobile from '@/components/ProjectCatalogMobile.vue';
 
 import { inject, onMounted, ref } from 'vue';
@@ -19,10 +20,23 @@ onMounted(() => {
     <div class="hero-container">
       <LandingHero />
     </div>
-
+    
     <!-- Mobile only -->
     <img class="landing-mobile" v-if="isMobile" src="@/assets/landing/landing-mobile-smallest.png"/>
 
+    <!-- Phase 3 - 6 -->
+    <!-- <div class="phase phase-3" key="phase-3">
+      <AboutProjects :project="'pasta'"/>
+    </div>
+    <div class="phase phase-4" key="phase-4">
+      <AboutProjects :project="'tomato'"/>
+    </div>
+    <div class="phase phase-5" key="phase-5">
+      <AboutProjects :project="'vegetable'"/>
+    </div>
+    <div class="phase phase-6" key="phase-6">
+      <AboutProjects :project="'fruit'"/>
+    </div> -->
     <!-- <ProjectCatalogMobile v-if="isMobile"/> -->
 
   </div>

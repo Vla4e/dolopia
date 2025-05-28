@@ -10,6 +10,10 @@
       </div>
     </header>
   </Transition>
+    <!-- Uses emitter 'showErrorPopup' for v-if flag within ErrorPopup component -->
+  <Transition name="fade">
+    <ErrorPopup />
+  </Transition>
 
   <Transition name="sidebar">
     <Sidebar v-if="showSidebar"/>
@@ -51,6 +55,7 @@ import Footer from "./components/Footer.vue";
 import Sidebar from "./components/Sidebar/Sidebar.vue";
 import ProjectCatalogMobile from "./components/ProjectCatalogMobile.vue";
 import ContactForm from "./components/ContactForm/ContactForm.vue";
+import ErrorPopup from "./components/ErrorPopup/ErrorPopup.vue";
 
 import { useMenuStore } from "./store/menu";
 const menuStore = useMenuStore()
@@ -276,6 +281,23 @@ header{
 
 .contact-form-leave-to {
   transform: translateX(-100%);
+  opacity: 0;
+}
+
+//Modal animation
+.fade-enter-active, .fade-leave-active{
+  transition: opacity 0.3s ease-out;
+}
+
+.fade-enter-from {
+  opacity: 0;
+}
+
+.fade-enter-to, .fade-leave-from {
+  opacity: 1;
+}
+
+.fade-leave-to {
   opacity: 0;
 }
 </style>

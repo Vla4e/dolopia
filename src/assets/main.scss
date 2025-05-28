@@ -1,6 +1,7 @@
-@import './tailwind.scss';
-@import './base.scss';
-@import './fonts/fonts.scss';
+@use './tailwind.scss';
+@use './base.scss';
+@use './fonts/fonts.scss';
+@use './styles/form.scss';
 
 #app {
   // max-width: 1280px;
