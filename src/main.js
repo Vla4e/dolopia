@@ -8,7 +8,7 @@ import './assets/main.scss'
 import mitt from 'mitt'
 const emitter = mitt();
 //remove console logs from prod
-// console.log = () => {};
+console.log = () => {};
 
 const app = createApp(App)
 
