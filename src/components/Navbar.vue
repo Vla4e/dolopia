@@ -67,6 +67,10 @@ function toggleContactForm(){
       margin-right: 30px;
       padding: 0px;
       cursor:pointer;
+      transition: transform ease 0.3s;
+      &:hover{
+        transform: scale(1.05);
+      }
       &.disabled{
         pointer-events: none;
       }

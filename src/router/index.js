@@ -18,7 +18,7 @@ const router = createRouter({
         hasFooter: true,
         hasNavbarMobile: true,
         floatingNavbarMobile: false,
-        floatingNavbar: false,
+        floatingNavbar: true,
         floatingFooter: false,
         fullWidthPage: false,
         showRouterArrow: true

@@ -1,6 +1,8 @@
 <template>
   <div class="footer">
-    <img src="@/assets/awards-icon.png" class="awards"/>
+    <router-link to="/awards">
+      <img src="@/assets/awards-icon.png" class="awards"/>
+    </router-link>
     <div class="socials-container">
       <a href="https://www.facebook.com/Dolopia/" target="_blank">
         <img  src="@/assets/facebook-icon.png" class="social facebook"/>
@@ -95,7 +97,7 @@ let computeShowDropdown = computed(() => {
   display: flex;
   justify-content: flex-start;
   padding: 0vw 5% 0vw 5%;
-  min-height: 150px;
+  min-height: 130px;
   background: none;
   align-items: center;
   z-index: 2;
@@ -111,9 +113,10 @@ let computeShowDropdown = computed(() => {
     display: flex;
     justify-content: space-between;
     min-width: 15%;
-    margin-left: 10%;
+    margin-left: 5%;
+    margin-top: 5vh;
     .social{ 
-      max-height: 22px;
+      max-height: 16px;
       transition: transform 0.3s ease;
       &:hover{
         transform: scale(110%);

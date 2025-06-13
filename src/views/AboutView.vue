@@ -152,7 +152,7 @@ let currentTransition = computed(() => {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .controls{
   display: flex;
   position: fixed;

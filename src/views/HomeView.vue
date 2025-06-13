@@ -1,10 +1,14 @@
 
 <script setup>
+import Pasta from '@/components/HomePage/FeaturedProjects/Pasta.vue';
 import LandingHero from '../components/LandingHero.vue'
 import AboutProjects from '@/components/AboutPage/AboutProjects.vue';
+import Tomato from '@/components/HomePage/FeaturedProjects/Tomato.vue';
 import ProjectCatalogMobile from '@/components/ProjectCatalogMobile.vue';
 
 import { inject, onMounted, ref } from 'vue';
+import Vegetable from '@/components/HomePage/FeaturedProjects/Vegetable.vue';
+import Fruit from '@/components/HomePage/FeaturedProjects/Fruit.vue';
 const { isMobile } = inject('screenSize')
 const emitter = inject('emitter')
 
@@ -18,26 +22,27 @@ onMounted(() => {
   <div class="home-container">
 
     <div class="hero-container">
-      <LandingHero />
+      <LandingHero class="text-container" />
     </div>
     
     <!-- Mobile only -->
     <img class="landing-mobile" v-if="isMobile" src="@/assets/landing/landing-mobile-smallest.png"/>
 
     <!-- Phase 3 - 6 -->
-    <!-- <div class="phase phase-3" key="phase-3">
-      <AboutProjects :project="'pasta'"/>
+    <div class="project-section" key="phase-4">
+      <Tomato/>
     </div>
-    <div class="phase phase-4" key="phase-4">
-      <AboutProjects :project="'tomato'"/>
+    <div class="project-section gradient" key="phase-3">
+      <Vegetable :project="'pasta'"/>
     </div>
-    <div class="phase phase-5" key="phase-5">
-      <AboutProjects :project="'vegetable'"/>
+    <div class="project-section" key="phase-5">
+      <Pasta :project="'vegetable'"/>
     </div>
-    <div class="phase phase-6" key="phase-6">
-      <AboutProjects :project="'fruit'"/>
-    </div> -->
+    <div class="project-section gradient" key="phase-6">
+      <Fruit :project="'fruit'"/>
+    </div>
     <!-- <ProjectCatalogMobile v-if="isMobile"/> -->
+    <div class="featured-products-disclaimer">Featured products</div>
 
   </div>
 </template>
@@ -45,11 +50,30 @@ onMounted(() => {
 <style lang="scss" scoped>
 .home-container{
   justify-content: flex-start;
-  padding-top: 10vh;
+  // padding-top: 10vh;
   .hero-container{
-    width: 90%;
-    margin-left: auto;
-    margin-right: auto;
+    .text-container{
+      width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+      padding-top: 10vh;
+    }
+    height: 100vh;
+    background: url("@/assets/landing/landing.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  .about-singular-project{
+    padding-top: 5vh;
+    padding-bottom: 5vh;
+  }
+  .project-section{
+    background: #CEEBEC;
+    &.gradient{
+      background: url("@/assets/landing/gradient-background.png");
+      background-size: cover;
+    }
   }
 }
 @media(max-width: 450px){
@@ -72,5 +96,23 @@ onMounted(() => {
   .project-cards-container{
     z-index: 2;
   }
+}
+.featured-products-disclaimer{
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translateY(-50%);
+  min-width: 150px;
+  min-height: 100px;
+  border-radius: 0px 50px 50px 50px;
+  background: rgba(255, 255, 255, 0.50);
+  color: #039EA2;
+  text-align: center;
+  font-family: "Century Gothic";
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 30px; /* 83.333% */
+  z-index: 2000;
 }
 </style>

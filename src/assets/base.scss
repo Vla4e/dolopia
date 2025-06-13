@@ -61,14 +61,10 @@
 body {
   min-height: 100vh;
   color: var(--color-text);
-  background: url("@/assets/landing/landing.jpg");
   @media(max-width: 450px){
     background: none;
     background-size: cover;
   }
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
   transition:
     color 0.5s,
     background-color 0.5s;

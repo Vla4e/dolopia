@@ -6,7 +6,7 @@ import { categoryToSubcategory, categoryToSubcategoryNames, subcategoryFullNames
 import { subcategoryToProductCodes, subcategoryToProducts, subcategoryToProductsMap } from '@/assets/products/subcategoryToProducts.js';
 
 
-console.log("subcategory")
+// console.log("subcategory")
 export const useProductStore = defineStore('product', () => {
 
   let isScrollActive = ref(false)
@@ -63,7 +63,7 @@ export const useProductStore = defineStore('product', () => {
   })
   
   watch(() => categoryByIdentifier.value, (value) => {
-    console.log("===============!WATCHER! categoryByIdentifier w", value)
+    // console.log("===============!WATCHER! categoryByIdentifier w", value)
     categoryData.subcategories = categoryToSubcategory.get(value) //fetch the subcategory identifiers array
     categoryData.subcategoryNames = categoryToSubcategoryNames.get(value)
     categoryData.name = value
@@ -71,19 +71,19 @@ export const useProductStore = defineStore('product', () => {
   
   })
   watch(() => categoryData.name, (value) => {
-    console.log("===============!WATCHER! categoryData", value)
+    // console.log("===============!WATCHER! categoryData", value)
     // subcategoryByIdentifier.value = categoryData.subcategories[0] // default to first subcategory of array
 
   })
 
   watch(() => subcategoryByIdentifier.value, (value) => {
-    console.log("===============!WATCHER! subcategoryByIdentifier w:", value)
+    // console.log("===============!WATCHER! subcategoryByIdentifier w:", value)
     subcategoryData.products = subcategoryToProductsMap.get(value) // populate with product map
     subcategoryData.productIdentifiers = subcategoryToProductCodes.get(value) // populate with product map
     subcategoryData.productNames = subcategoryData.productIdentifiers.map(identifier => {
       let foundProduct = subcategoryData.products.get(identifier)
       let fetchedName = foundProduct['Product name EN']
-      // console.log("fetchedname --- ", fetchedName)
+      // // console.log("fetchedname --- ", fetchedName)
       return fetchedName
     })
     if(value === 'candied-fruit'){
@@ -91,52 +91,56 @@ export const useProductStore = defineStore('product', () => {
     }
     subcategoryData.name = value
     subcategoryData.fullName = subcategoryFullNames[value]
-    console.log("subcatData", value)
+    // console.log("subcatData", value)
   })
+
   watch(() => subcategoryData.name, (value) => {
-    console.log("===============!WATCHER! subcategoryData w:", value)
+    // console.log("===============!WATCHER! subcategoryData w:", value)
     let fetchFirstProduct = subcategoryToProductsMap.get(value).entries().next() //default to first product of map
-    // console.log("first product:", fetchFirstProduct)
+    // // console.log("first product:", fetchFirstProduct)
     productData.properties= fetchFirstProduct.value[1]
     productData.name = productName.value = fetchFirstProduct.value[1]['Product name EN']
     productData.code = productCodeByIdentifier.value = fetchFirstProduct.value[0]
   })
 
   watch(() => productCodeByIdentifier.value, (newValue, oldValue) => {
-    console.log("===============!WATCHER! productCodeByIdentifier", newValue)
+    // console.log("===============!WATCHER! productCodeByIdentifier", newValue)
     if(newValue !== oldValue){
       let fetchProduct = subcategoryData.products.get(newValue)
-      console.log("Fetchproduct", subcategoryData.products)
+      // console.log("Fetchproduct", subcategoryData.products)
       productData.code = newValue
       productData.properties = fetchProduct
       productData.name = fetchProduct['Product name EN']
     }
   })
+
   watch(() => productName.value, (value) => {
-    console.log("===============!WATCHER! productName w:", value)
+    // console.log("===============!WATCHER! productName w:", value)
     
   })
+
   watch(() => productData.name, (value) => {
-    console.log("===============!WATCHER! productData w:", productData)
+    // console.log("===============!WATCHER! productData w:", productData)
   })
+  
   function selectItemFromDropdown(type, itemIdentifier){
-    console.log('Type:', type)
-    // console.log("Item name", item.name)
-    console.log("Item:", itemIdentifier)
-    console.log("catid", categoryByIdentifier.value)
-    console.log("subcatid", subcategoryByIdentifier.value)
-    console.log("productid", productCodeByIdentifier.value)
+    // console.log('Type:', type)
+    // // console.log("Item name", item.name)
+    // console.log("Item:", itemIdentifier)
+    // console.log("catid", categoryByIdentifier.value)
+    // console.log("subcatid", subcategoryByIdentifier.value)
+    // console.log("productid", productCodeByIdentifier.value)
     if(type === 'category'){
-      console.log("trying to set cat")
+      // console.log("trying to set cat")
       categoryByIdentifier.value = itemIdentifier
       let glue = categoryToSubcategory.get(itemIdentifier)
       subcategoryByIdentifier.value = glue[0]
     } else if (type === 'subcategory') {
-      console.log("trying to set subcat")
+      // console.log("trying to set subcat")
       subcategoryByIdentifier.value = itemIdentifier
 
     } else if (type === 'product') {
-      console.log("trying to set product")
+      // console.log("trying to set product")
       productCodeByIdentifier.value = itemIdentifier
     }
   }
@@ -157,7 +161,7 @@ export const useProductStore = defineStore('product', () => {
   let selectedProductCode = ref('')
 
   watch(() => selectedCategory.value, (newCategory)=>{
-    // console.log("new category selected", newCategory)
+    // // console.log("new category selected", newCategory)
     subcategories.value = categoryToSubcategory.get(newCategory)
     subcategoryNames.value = categoryToSubcategoryNames.get(newCategory)
     let subcategoryName = subcategories.value[0]
@@ -165,7 +169,7 @@ export const useProductStore = defineStore('product', () => {
     selectedSubcategory.name = subcategoryName
   })
   watch(() => selectedSubcategory.name, ( newSubcategoryName )=>{
-    // console.log("subcat watcher triggered", newSubcategoryName)
+    // // console.log("subcat watcher triggered", newSubcategoryName)
     //retrieve first map entry of subcategory's products map.
     let productMapEntry = subcategoryToProductsMap.get(newSubcategoryName).entries().next().value
     selectedProductCode = productMapEntry[0] //might be redundant
@@ -177,17 +181,17 @@ export const useProductStore = defineStore('product', () => {
     selectedProduct.productCode = productMapEntry[0];
     selectedProduct.productName = productMapEntry[1]['Product name EN'];
     selectedProduct.properties = productMapEntry[1]
-    // console.log("CURRENT PRODUCT:", selectedProduct)
+    // // console.log("CURRENT PRODUCT:", selectedProduct)
   })
 
   watch(selectedProduct, ( newProduct) => {
-    // console.log("CHANGE IN SPRODUCT", newProduct)
+    // // console.log("CHANGE IN SPRODUCT", newProduct)
   }, {
     immediate: true
   })
   //Setters
   function changeCategory(newCategory){
-    // console.log("changing cat", newCategory)
+    // // console.log("changing cat", newCategory)
     selectedCategory.value = newCategory
   }
   function changeSubcategory(newSubcategory){
@@ -200,7 +204,7 @@ export const useProductStore = defineStore('product', () => {
     selectedProductCode.value = newProductCode
   }
   function changeByType(identifier, name, type){
-    // console.log("Will change", type, "of id", identifier, "and name", name, "------------ !")
+    // // console.log("Will change", type, "of id", identifier, "and name", name, "------------ !")
     if(type === 'category'){
       changeCategory(identifier)
     } else if( type === 'subcategory'){
@@ -235,7 +239,7 @@ export const useProductStore = defineStore('product', () => {
 
   // Actions
   function updateParams(params) {
-    // console.log('Adjusting params', params);
+    // // console.log('Adjusting params', params);
     category.value = params.category;
     subcategory.value = params.subcategory;
     // Update other params as needed
@@ -247,10 +251,10 @@ export const useProductStore = defineStore('product', () => {
     // Set other default params
   }
 
-  console.log("PRODUCT STORE INSTANCE FINISHED =================================================")
-  console.log(categoryByIdentifier.value)
-  console.log(subcategoryByIdentifier.value)
-  console.log(productCodeByIdentifier.value)
+  // console.log("PRODUCT STORE INSTANCE FINISHED =================================================")
+  // console.log(categoryByIdentifier.value)
+  // console.log(subcategoryByIdentifier.value)
+  // console.log(productCodeByIdentifier.value)
   // Return state and actions
   return {
     category,

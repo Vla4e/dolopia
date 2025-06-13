@@ -25,7 +25,7 @@
 
   <main class="view-container"> 
     <RouterView v-slot="{ Component, route }">
-      <Transition name="slide">
+      <Transition :name="computedTransition">
         <component
           :is="Component"
           :key="route.path"
@@ -80,6 +80,9 @@ emitter.on('mountFinished', (e) => {
 
   }, 700)
 })
+onMounted(() => {
+  console.log("Window =================", window.innerWidth, window.innerHeight)
+})
 onBeforeUnmount(() => {
   emitter.off('mountFinished')
 })
@@ -88,6 +91,7 @@ let showFooter = ref(true);
 let showNavbar = ref(true);
 let floatingFooter = ref(true);
 let floatingNavbar = ref(true);
+let computedTransition = ref('');
 watch(
   () => route.name,
   (newVal) => {
@@ -105,6 +109,10 @@ watch(
     
     if(isMobile.value){
       floatingNavbar.value = true;
+    }
+    console.log("Route name", route.name)
+    if(route.name !== 'home'){
+      computedTransition.value = 'slide'
     }
   }
 );
@@ -137,7 +145,7 @@ header{
   flex-direction: column;
   justify-content: center;
   @media(min-width: 451px){
-    position: absolute;
+    // position: absolute;
   }
   @media(max-width: 450px){
     overflow-y: auto;

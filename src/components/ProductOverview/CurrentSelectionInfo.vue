@@ -1,5 +1,6 @@
 <template>
   <div class="left-content">
+  
     <h1 class="current-selection">
       <span class="category">
         <!-- {{ productStore.selectedCategory }} -->
