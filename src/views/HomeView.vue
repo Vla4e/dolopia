@@ -98,11 +98,13 @@ onMounted(() => {
   }
 }
 .featured-products-disclaimer{
-  position: absolute;
+  position: fixed;
   left: 0;
-  top: 0;
+  top: 50%;
+  writing-mode: vertical-rl;
   transform: translateY(-50%);
-  min-width: 150px;
+  padding: 15px 25px;
+  // min-width: 150px;
   min-height: 100px;
   border-radius: 0px 50px 50px 50px;
   background: rgba(255, 255, 255, 0.50);
@@ -114,5 +116,9 @@ onMounted(() => {
   font-weight: 700;
   line-height: 30px; /* 83.333% */
   z-index: 2000;
+  @media(max-width: 1600px){
+    font-size: 28px;
+    line-height: 28px;
+  }
 }
 </style>

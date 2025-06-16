@@ -76,13 +76,13 @@ onMounted( async () => {
           A bold twist on <b>classic sweetness</b>
         </span>
         <p>
-          Dolopia’s Strawberry with Mint and Pepper Jam blends ripe 
+          Dolopia's Strawberry with Mint and Pepper Jam blends ripe 
           <br/>
           strawberries with fresh mint and a subtle hint of pepper, creating a 
           <br/>
           vibrant balance of sweet, fresh, and spicy notes. Perfect on its own 
           <br/>
-          or paired with cheeses, it’s equally delicious as a regular jam or a 
+          or paired with cheeses, it's equally delicious as a regular jam or a 
           <br/>
           creative filling for pastries and desserts.
         </p>
@@ -135,6 +135,16 @@ onMounted( async () => {
       font-style: normal;
       font-weight: 700;
       letter-spacing: 6px;
+      // New media query for laptop screens with limited height
+      @media(min-width: 1400px) and (max-height: 800px){
+        font-size: clamp(2.1rem, 4.2vw, 4.2rem); // 30% reduction from original
+        line-height: clamp(2.1rem, 4.2vw, 4.2rem);
+        letter-spacing: 4px;
+        .small-text{
+          font-size: clamp(0.875rem, 1.75vw, 1.75rem); // 30% reduction
+          line-height: clamp(0.875rem, 1.75vw, 1.75rem);
+        }
+      }
       .small-text {
         color: #FFF;
         text-align: right;
@@ -182,7 +192,6 @@ onMounted( async () => {
         display: flex;
         flex-direction: column;
         &.lt-1{
-
           font-size: clamp(1.5rem, 2.25vw, 2.25rem);
           line-height: clamp(1.5rem, 2.25vw, 2.25rem);
           b{
@@ -201,6 +210,28 @@ onMounted( async () => {
         &.no-break{
           display: inline;
         }
+        
+        // New media query for laptop screens with limited height
+        @media(min-width: 1400px) and (max-height: 800px){
+          &.lt-1{
+            font-size: clamp(1.05rem, 1.875vw, 1.575rem); // 30% reduction
+            line-height: clamp(1.05rem, 1.875vw, 1.575rem);
+            b{
+              font-size: clamp(1.05rem, 1.875vw, 1.575rem);
+              line-height: clamp(1.05rem, 1.875vw, 1.575rem);
+            }
+          }
+          &.lt-2{
+            font-size: clamp(1.4rem, 2.1vw, 2.1rem); // 30% reduction
+            line-height: clamp(1.4rem, 2.1vw, 2.1rem);
+            b{
+              font-size: clamp(1.54rem, 2.188vw, 2.188rem); // 30% reduction
+              line-height: clamp(1.54rem, 2.188vw, 2.188rem);
+            }
+          }
+          letter-spacing: 0.6px;
+        }
+        
         b {
           color: #039EA2;
           font-family: "Century Gothic";
@@ -209,6 +240,35 @@ onMounted( async () => {
           font-style: normal;
           font-weight: 700;
           letter-spacing: 0.8px;
+          
+          // New media query for laptop screens with limited height
+          @media(min-width: 1400px) and (max-height: 800px){
+            font-size: clamp(1.05rem, 1.75vw, 1.75rem); // 30% reduction
+            line-height: clamp(1.05rem, 1.75vw, 1.75rem);
+            letter-spacing: 0.56px;
+          }
+        }
+        @media(max-width: 1600px) and (min-width: 1366px) and (max-height: 900px){
+          .large{
+            &.lt-1{
+              font-size: 36px;
+              b{
+                
+              }
+            }
+            &.lt-2{
+              font-size: 50px;
+              b{
+
+              }
+            }
+            font-size: 64px;
+            line-height: 64px;
+          }
+          .small-text{
+            font-size: 30px;
+            line-height: 30px;
+          }
         }
       }
 
@@ -220,6 +280,14 @@ onMounted( async () => {
         font-style: normal;
         font-weight: 400;
         margin-bottom: 50px;
+        
+        // New media query for laptop screens with limited height
+        @media(min-width: 1400px) and (max-height: 800px){
+          font-size: clamp(0.7rem, 1.05vw, 0.875rem); // 30% reduction
+          line-height: clamp(1.05rem, 1.313vw, 1.313rem); // 30% reduction
+          margin-bottom: 35px; // 30% reduction
+        }
+        
         @media(max-width: 1366px){
           margin-bottom: 25px;
           font-size: 12px;
@@ -231,11 +299,24 @@ onMounted( async () => {
 
   .bottom-section {
     width: 100%;
+    
+    // New media query for laptop screens with limited height
+    @media(min-width: 1400px) and (max-height: 800px){
+      margin-top: -15px; // Reduce spacing to save vertical space
+    }
+    
     p {
       color: #000;
       font-family: "Raleway";
       font-size: clamp(1rem, 1.25vw, 1.25rem);
       line-height: clamp(1.5rem, 1.875vw, 1.875rem);
+      
+      // New media query for laptop screens with limited height
+      @media(min-width: 1400px) and (max-height: 800px){
+        font-size: clamp(0.7rem, 0.875vw, 0.875rem); // 30% reduction
+        line-height: clamp(1.05rem, 1.313vw, 1.313rem); // 30% reduction
+      }
+      
       @media(max-width: 1366px){
         font-size: 12px;
         line-height: 18px;

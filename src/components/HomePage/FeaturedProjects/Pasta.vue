@@ -101,7 +101,6 @@ onMounted( async () => {
     </div>
   </section>
 </template>
-
 <style lang="scss" scoped>
 .featured {
   display: flex;
@@ -136,6 +135,18 @@ onMounted( async () => {
       font-weight: 700;
       letter-spacing: 6px;
       width: 65%;
+      
+      // New media query for laptop screens with limited height
+      @media(min-width: 1400px) and (max-height: 800px){
+        font-size: clamp(1.05rem, 1.75vw, 2.1rem); // 30% reduction
+        line-height: clamp(1.05rem, 1.75vw, 2.1rem);
+        letter-spacing: 4.2px;
+        .small-text{
+          font-size: clamp(2.1rem, 3.5vw, 4.2rem); // 30% reduction
+          line-height: clamp(2.1rem, 3.5vw, 4.2rem);
+        }
+      }
+      
       .small-text {
         color: #FFF;
         text-align: left;
@@ -186,6 +197,19 @@ onMounted( async () => {
         letter-spacing: 0.9px;
         display: flex;
         flex-direction: column;
+        
+        // New media query for laptop screens with limited height
+        @media(min-width: 1400px) and (max-height: 800px){
+          font-size: clamp(1.225rem, 2.1vw, 1.96rem); // 30% reduction
+          line-height: clamp(1.225rem, 2.1vw, 1.96rem);
+          letter-spacing: 0.63px;
+          b {
+            font-size: clamp(1.05rem, 1.75vw, 1.75rem); // 30% reduction
+            line-height: clamp(1.05rem, 1.75vw, 1.75rem);
+            letter-spacing: 0.56px;
+          }
+        }
+        
         b {
           color: #039EA2;
           font-family: "Century Gothic";
@@ -204,20 +228,27 @@ onMounted( async () => {
         line-height: clamp(18px, 1.5vw, 1.25rem);
         font-style: normal;
         font-weight: 400;
+        
+        // New media query for laptop screens with limited height
+        @media(min-width: 1400px) and (max-height: 800px){
+          font-size: clamp(8.4px, 1.05vw, 0.875rem); // 30% reduction
+          line-height: clamp(12.6px, 1.05vw, 0.875rem); // 30% reduction
+        }
+        
         @media(max-width: 1366px){
           font-size: 12px;
           line-height: 18px;
-        }
-        
-        @media(max-width: 1600px) and (min-width: 1366px) and (max-height: 900px){
-          font-size: 18px;
-          line-height: 20px;
         }
       }
     }
   }
 
   .bottom-section {
+    // New media query for laptop screens with limited height
+    @media(min-width: 1400px) and (max-height: 800px){
+      margin-top: -15px; // Reduce spacing to save vertical space
+    }
+    
     p {
       color: #000;
       font-family: "Raleway";
@@ -225,9 +256,11 @@ onMounted( async () => {
       line-height: clamp(18px, 1.2vw, 1.25rem);
       font-style: normal;
       font-weight: 400;
-      @media(max-width: 1600px) and (min-width: 1366px) and (max-height: 900px){
-        font-size: 18px;
-        line-height: 20px;
+      
+      // New media query for laptop screens with limited height
+      @media(min-width: 1400px) and (max-height: 800px){
+        font-size: clamp(8.4px, 1vw, 0.875rem); // 30% reduction
+        line-height: clamp(12.6px, 1vw, 0.875rem); // 30% reduction
       }
     }
   }

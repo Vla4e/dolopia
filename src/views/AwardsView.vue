@@ -113,6 +113,11 @@ watch(() => selectedAward.value, (value) => {
         letter-spacing: 6.75px;
         text-transform: uppercase;
         margin-bottom: 30px;
+        @media(min-width: 1400px) and (max-height: 900px){
+          font-size: 64px;
+          letter-spacing: 5.75px;
+          margin-bottom: 20px;
+        }
       }
       p{
         color: #000;
@@ -122,6 +127,9 @@ watch(() => selectedAward.value, (value) => {
         font-style: normal;
         font-weight: 400;
         line-height: 75%; /* 75% */
+        @media(min-width: 1400px) and (max-height: 900px){
+          font-size: 28px;
+        }
       }
     }
     .select-section{
@@ -132,11 +140,20 @@ watch(() => selectedAward.value, (value) => {
       justify-content: center;
       align-items: flex-start;
       padding-top: 4vh;
+      @media(min-width: 1400px) and (max-height: 900px){
+        padding-top: 1vh;
+      }
       .award{
         display: flex;
         justify-content: center;
         min-width: 190px;
         min-height: 190px;
+        @media(min-width: 1400px) and (max-height: 900px){
+          // min-width: 140px;
+          // min-height: 140px;
+          max-width: 240px;
+          max-height: 240px;
+        }
         // transition: transform ease 0.2s;
         &:not(:last-child){
           margin-right: 5vw;

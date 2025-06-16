@@ -1,5 +1,5 @@
 <template>
-  <div class="carousel-container">
+  <div ref="carousel" class="carousel-container">
     <div ref="carouselAnimationContainer" 
          class="carousel-animation-container"
          @mousedown="startDrag" 
@@ -23,6 +23,8 @@
           @click="goToItem(obj)"
           @mouseenter="hoverTrigger(index, true)"
           @mouseleave="hoverTrigger(index, false)"
+          ref="awardedItems"
+          :style="itemDynamicStyles[index]"
         >
           <slot :name="index">
             <img :src="obj.imageUrl" :ref="'jar' + index" class="jar-image" loading="lazy" :draggable="false"/>
@@ -44,27 +46,84 @@
 
 
 <script setup>
-import { ref, onMounted, onBeforeMount, onBeforeUnmount, watchEffect, inject, computed, toRaw, watch } from 'vue';
+import { 
+  ref, 
+  onMounted, 
+  onBeforeMount, 
+  onBeforeUnmount, 
+  watchEffect, 
+  inject, 
+  computed,
+  useTemplateRef, 
+  toRaw, 
+  watch
+} from 'vue';
 // import router from '@/router/index.js'
-
+//@/assets/products/product-images/projects/${keyToCategory}-project/${keyToSubcategory}/
 defineOptions({
   name: "Carousel"
 })
-
 const props = defineProps({
   awardedItems: {
     type: Object,
     required: true
   },
 });
-
 const { isMobile, isTablet } = inject('screenSize')
+
+
+let awardedItemsRef = useTemplateRef('awardedItems');
+// New reactive variable to store item styles
+const itemDynamicStyles = ref({});
+
+// Function to calculate and apply dynamic styles
+function updateItemFadeEffect() {
+  if (!carouselAnimationContainer.value || !carouselContent.value) return;
+
+  const containerRect = carouselAnimationContainer.value.getBoundingClientRect();
+  const containerLeft = containerRect.left;
+  const containerRight = containerRect.right;
+  const containerWidth = containerRect.width;
+
+  const fadeThreshold = containerWidth * 0.05; // 20% of container width for fade effect
+
+  const carouselItems = carouselContent.value.querySelectorAll('.carousel-item');
+  carouselItems.forEach((item, index) => {
+    const itemRect = item.getBoundingClientRect();
+    const itemLeft = itemRect.left;
+    const itemRight = itemRect.right;
+    const itemWidth = itemRect.width;
+
+    let opacity = 1;
+    let scale = 1;
+
+    // Calculate fade for left side
+    if (itemLeft < containerLeft + fadeThreshold) {
+      const overlap = (containerLeft + fadeThreshold) - itemLeft;
+      opacity = Math.max(0, 1 - (overlap / fadeThreshold));
+      scale = Math.max(0.8, 1 - (overlap / fadeThreshold) * 0.05); // Scale down slightly
+    }
+    // Calculate fade for right side
+    else if (itemRight > containerRight - fadeThreshold) {
+      const overlap = itemRight - (containerRight - fadeThreshold);
+      opacity = Math.max(0, 1 - (overlap / fadeThreshold));
+      scale = Math.max(0.8, 1 - (overlap / fadeThreshold) * 0.05); // Scale down slightly
+    }
+
+    itemDynamicStyles.value[index] = {
+      opacity: opacity.toFixed(3), // To prevent floating point issues in style attribute
+      transform: `scale(${scale.toFixed(3)})`,
+    };
+  });
+}
+
+
 
 
 // Carousel item logic
 let indexHoveredItem = ref(null)
 function hoverTrigger(index, hoverStatus){
-  console.log("Hovered => ", index)
+  // console.log("Hovered => ", index)
   if(!hoverStatus) indexHoveredItem.value = null
   else indexHoveredItem.value = index
 }
@@ -82,6 +141,7 @@ let computedCarouselDirection = computed(() => {
 
 const carouselAnimationContainer = ref(null);
 const carouselContent = ref(null);
+const carousel = ref();
 
 const translateValue = ref(0);
 const isDragging = ref(false);
@@ -210,19 +270,29 @@ function preventDefaultSelection(event) {
 }
 
 
+function resizeTriggeredFunctions(event){
+  calculateItemWidth(event);
+  updateItemFadeEffect(event)
+}
+
+// Call updateItemFadeEffect when translateValue changes or window resizes
+watch(translateValue, () => {
+  requestAnimationFrame(updateItemFadeEffect);
+});
 //lifecycle hooks
 onMounted(() => {
+  console.log("REF", awardedItemsRef)
   console.log("MOUNTED CAROUSEL", props.awardedItems)
   setTimeout(() => {
     console.log("JAR REF", jar0.value[0].width)
     if(jar0.value && jar0.value[0]){
       carouselLeftMarginOffset = jar0.value[0].width * 28 / 100;
-      carouselContent.value.style.marginLeft = -carouselLeftMarginOffset + 'px';
+      // carousel.value.style.marginLeft = -carouselLeftMarginOffset + 'px';
       console.log("CARLEFTMARG", carouselLeftMarginOffset) 
     }
   }, 1500)
   calculateItemWidth();
-  window.addEventListener('resize', calculateItemWidth);
+  window.addEventListener('resize', resizeTriggeredFunctions);
 });
 
 onBeforeUnmount(() => {
@@ -235,23 +305,31 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Add padding to accommodate overflowing product information */
-  padding-bottom: 120px; /* Adjust based on your product-information height */
+  /* Remove padding-bottom here if it's causing issues. */
+  /* Instead, ensure this container has sufficient height or let content define it. */
+  /* If you need space below the carousel for the product info, consider: */
+  margin-bottom: 120px; /* Or adjust height of parent of carousel-container */
+  // The height of carousel-container might need to be defined if it's not expanding.
+  // height: auto; /* Or a fixed height if applicable */
+  min-height: 450px;
 }
 
 .carousel-animation-container {
   width: 100%;
-  height: 100%;
+  height: 100%; /* Or define a specific height for the visible carousel area */
   cursor: grab;
   position: relative;
-  /* Remove overflow properties - we'll handle clipping with the fade overlays */
+  overflow-x: hidden; /* This keeps horizontal overflow hidden */
+  overflow-y: visible; /* This should allow vertical content to be seen *outside* this container's bounds if it's positioned absolutely. */
+  // It's this combination that can be tricky. Let's rely more on positioning for the product info.
 }
 
 .carousel-content {
   height: 100%;
   display: flex;
   will-change: transform;
-  overflow: visible; /* Allow content to overflow */
+  /* Removed overflow: visible here as the container will handle clipping horizontally */
+  /* This ensures the content itself doesn't force a scrollbar */
   // margin-left: 28px;
   &.row {
     flex-direction: row;
@@ -273,6 +351,10 @@ onBeforeUnmount(() => {
 
 .carousel-item {
   flex: 0 0 30%; /* Adjust based on the number of items visible */
+  @media(max-width: 1600px) and (max-height: 900px){
+    flex: 0 0 20%;
+  }
+  flex-shrink: 0;
   text-align: center;
   color: black;
   display: flex;
@@ -282,7 +364,8 @@ onBeforeUnmount(() => {
   // height: 85%;
   // max-height: 10%;
   position: relative;
-  /* Remove overflow: hidden if it exists, to allow product-information to overflow */
+  /* Crucially, ensure this does NOT have overflow: hidden if you want product-information to show */
+  /* If you *had* overflow: hidden here, remove it. */
   
   .jar-image {
     // height: 80%;
@@ -292,7 +375,7 @@ onBeforeUnmount(() => {
       // width: 80%;
     }
     @media(max-width: 480px){
-      max-width: 100%;
+      width: 100%;
     }
   }
   
@@ -301,7 +384,6 @@ onBeforeUnmount(() => {
     flex-direction: column;
     justify-content: flex-start;
     width: 150%; /* This allows it to extend beyond container */
-    // gap: 10px;
     position: absolute;
     top: 85%; /* position right after jar image */
     left: 27%; /* Align left edge with container, image empty space is 27% of whole image width */
@@ -321,7 +403,7 @@ onBeforeUnmount(() => {
       letter-spacing: 1px;
       text-transform: uppercase;
       @media(max-width: 1600px) and (max-height: 900px){
-        font-size: 16px;
+        font-size: 14px;
       }
     }
     .name{
@@ -377,5 +459,23 @@ onBeforeUnmount(() => {
   // background: linear-gradient(to left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
   pointer-events: none;
   z-index: 20; /* Ensure fade overlay appears above carousel items */
+}
+
+/* Slide-in transition styles */
+.slide-in-enter-active,
+.slide-in-leave-active {
+  transition: all 0.5s ease; /* Adjust duration and easing as needed */
+}
+
+.slide-in-enter-from,
+.slide-in-leave-to {
+  transform: translateY(20px); /* Start 20px below and slide up */
+  opacity: 0;
+}
+
+.slide-in-enter-to,
+.slide-in-leave-from {
+  transform: translateY(0);
+  opacity: 1;
 }
 </style>
