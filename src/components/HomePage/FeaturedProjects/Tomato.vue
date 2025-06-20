@@ -5,7 +5,7 @@ defineOptions({
   name:'FeaturedTomato'
 })
 
-let container = ref();
+let container = ref(); // Keep this ref if it's still used by positionElementC
 let topTarget = ref();
 let rightTarget = ref();
 let floatingImage = ref();
@@ -37,19 +37,31 @@ const positionElementC = async () => {
   floatingImage.value.style.top = -topVal + 'px';
 };
 
-onMounted( async () => {
-  // setInterval(async () => {
-  //   await positionElementC()
-  // }, 500);
-  setTimeout( async () => {
+// No need to inject emitter or use IntersectionObserver here anymore
+// import {inject, onUnmounted} from 'vue'; // REMOVE THIS LINE
+// let observer = null; // REMOVE THIS LINE
+// let hasTriggeredEnter = ref(false) // REMOVE THIS LINE
+// const observerCallback = (entries) => { ... } // REMOVE THIS FUNCTION
+
+onMounted(async () => {
+  // Position the floating image
+  setTimeout(async () => {
     await positionElementC();
-  }, 500)
-})
+  }, 500);
+
+  // IntersectionObserver logic for this component is moved to Home.vue
+});
+
+// onUnmounted(() => { // REMOVE THIS onUnmounted BLOCK
+//   if (observer) {
+//     observer.disconnect();
+//   }
+// });
 
 </script>
 
 <template>
-  <section ref="container" class="featured">
+  <section ref="container" class="featured"> 
 
     <div ref="topSection" class="top-section">
       <h2 ref="topTarget" class="product-name">
@@ -75,7 +87,7 @@ onMounted( async () => {
           <br/>earthy aroma of savory, this sauce turns any pasta into a rustic
           <br/> Mediterranean experience.
         </p>
-        
+
         <span class="large">
           Tasty, Tangy
           <b>Irresistible</b>
@@ -84,9 +96,9 @@ onMounted( async () => {
     </div>
     <div class="bottom-section">
       <p>
-        It's part of our Tomato project - a celebration of authentic traditional tomato sauces. Alongside classic 
+        It's part of our Tomato project - a celebration of authentic traditional tomato sauces. Alongside classic
         <br/>
-        Mediterranean flavors, you'll find bold creations like our oriental sauce with 12 spices, or our oven-baked 
+        Mediterranean flavors, you'll find bold creations like our oriental sauce with 12 spices, or our oven-baked
         <br/>
         aubergines in tomato sauce, inspired by the beloved Mousaka.
       </p>
@@ -95,6 +107,7 @@ onMounted( async () => {
 </template>
 
 <style lang="scss" scoped>
+/* Your existing styles remain the same */
 .featured {
   display: flex;
   flex-direction: column;
@@ -106,7 +119,7 @@ onMounted( async () => {
   align-items: center;
   color: black;
   position: relative;
-  
+
   .top-section {
     display: flex;
     width: 100%;
@@ -120,7 +133,7 @@ onMounted( async () => {
       text-align: right;
       font-family: "Century Gothic";
       font-size: clamp(2.5rem, 7vw, 7rem);
-      line-height: clamp(2.5rem, 7vw, 7rem);
+      line-height: 1; // 135% of font-size
       font-style: normal;
       font-weight: 700;
       letter-spacing: 6px;
@@ -129,9 +142,10 @@ onMounted( async () => {
         text-align: right;
         font-family: "Century Gothic";
         font-size: clamp(1.5rem, 3vw, 4rem);
-        line-height: clamp(1.5rem, 3vw, 4rem);
+        line-height: 1;
         font-style: normal;
         font-weight: 700;
+        letter-spacing: 0.9px;
       }
     }
   }
@@ -166,7 +180,7 @@ onMounted( async () => {
         color: #039EA2;
         font-family: "Century Gothic";
         font-size: clamp(1.4rem, 2.5vw, 2.8rem);
-        line-height: clamp(1.4rem, 2.5vw, 2.8rem);
+        line-height: 1.2;
         font-style: normal;
         font-weight: 400;
         letter-spacing: 0.9px;
@@ -176,7 +190,7 @@ onMounted( async () => {
           color: #039EA2;
           font-family: "Century Gothic";
           font-size: clamp(1.3rem, 2vw, 2.5rem);
-          line-height: clamp(1.3rem, 2vw, 2.5rem);
+          line-height: 1.2;
           font-style: normal;
           font-weight: 700;
           letter-spacing: 0.8px;
@@ -186,8 +200,8 @@ onMounted( async () => {
       p {
         color: #000;
         font-family: "Raleway";
-        font-size: clamp(12px, 1.2vw, 1.25rem);
-        line-height: clamp(18px, 1.2vw, 1.25rem);
+        font-size: clamp(12px, 1.3vw, 1.25rem);
+        line-height: 1.5;
         font-style: normal;
         font-weight: 400;
       }
@@ -198,10 +212,45 @@ onMounted( async () => {
     p {
       color: #000;
       font-family: "Raleway";
-      font-size: clamp(12px, 1.2vw, 1.25rem);
-      line-height: clamp(18px, 1.2vw, 1.25rem);
+      font-size: clamp(12px, 1.3vw, 1.25rem);
+      line-height: 1.5;
       font-style: normal;
       font-weight: 400;
+    }
+  }
+
+  // Media query for smaller screens with 30% font-size reduction
+  @media (max-width: 1600px) and (max-height: 900px) {
+    .top-section {
+      .product-name {
+        font-size: clamp(1.75rem, 4.9vw, 4.9rem); // 30% reduction from clamp(2.5rem, 7vw, 7rem)
+
+        .small-text {
+          font-size: clamp(1.05rem, 2.1vw, 2.8rem); // 30% reduction from clamp(1.5rem, 3vw, 4rem)
+        }
+      }
+    }
+
+    .middle-section {
+      .text {
+        .large {
+          font-size: clamp(0.98rem, 1.75vw, 1.96rem); // 30% reduction from clamp(1.4rem, 2.5vw, 2.8rem)
+
+          b {
+            font-size: clamp(0.91rem, 1.4vw, 1.75rem); // 30% reduction from clamp(1.3rem, 2vw, 2.5rem)
+          }
+        }
+
+        p {
+          font-size: clamp(8.4px, 0.91vw, 0.875rem); // 30% reduction from clamp(12px, 1.3vw, 1.25rem)
+        }
+      }
+    }
+
+    .bottom-section {
+      p {
+        font-size: clamp(8.4px, 0.91vw, 0.875rem); // 30% reduction from clamp(12px, 1.3vw, 1.25rem)
+      }
     }
   }
 }

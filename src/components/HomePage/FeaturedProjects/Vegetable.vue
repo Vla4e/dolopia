@@ -176,13 +176,13 @@ onMounted( async () => {
         }
         &.lt-1{
           font-size: clamp(2rem, 2.5vw, 2.8rem);
-          line-height: clamp(2rem, 2.5vw, 2.8rem);
+          line-height: 1.25;
         }
         b {
           color: #039EA2;
           font-family: "Century Gothic";
           font-size: clamp(1.5rem, 2.25vw, 2.5rem);
-          line-height: clamp(1.5rem, 2.25vw, 2.5rem);
+          line-height: 1.25;
           font-style: normal;
           font-weight: 700;
           letter-spacing: 0.8px;
@@ -193,12 +193,11 @@ onMounted( async () => {
         color: #000;
         font-family: "Raleway";
         font-size: clamp(12px, 1.25vw, 1.25rem);
-        line-height: clamp(18px, 1.25vw, 1.25rem);
+        line-height: 1.5;
         font-style: normal;
         font-weight: 400;        
         @media(max-width: 1600px) and (min-width: 1366px)and (max-height: 900px){
           font-size: 18px;
-          line-height: 20px;
         }
       }
     }
@@ -212,13 +211,54 @@ onMounted( async () => {
       color: #000;
       font-family: "Raleway";
       font-size: clamp(12px, 1.25vw, 1.25rem);
-      line-height: clamp(18px, 1.875vw, 1.875rem);
+      line-height: 1.5;
       font-style: normal;
       font-weight: 400;        
         @media(max-width: 1600px) and (min-width: 1366px) and (max-height: 900px){
           font-size: 18px;
-          line-height: 20px;
         }
+    }
+  }
+
+  // Media query for smaller screens with 30% font-size reduction
+  @media (max-width: 1600px) and (max-height: 900px) {
+    .top-section {
+      .product-name {
+        font-size: clamp(2.1rem, 3.5vw, 4.2rem); // 30% reduction from clamp(3rem, 5vw, 6rem)
+        line-height: clamp(2.1rem, 3.5vw, 4.2rem); // 30% reduction from clamp(3rem, 5vw, 6rem)
+        
+        .small-text {
+          font-size: clamp(1.05rem, 1.575vw, 1.75rem); // 30% reduction from clamp(1.5rem, 2.25vw, 2.5rem)
+          line-height: clamp(1.05rem, 1.575vw, 1.75rem); // 30% reduction from clamp(1.5rem, 2.25vw, 2.5rem)
+        }
+      }
+    }
+
+    .middle-section {
+      .text {
+        .large {
+          font-size: clamp(1.225rem, 1.75vw, 1.96rem); // 30% reduction from clamp(1.75rem, 2.5vw, 2.8rem)
+          line-height: clamp(1.225rem, 1.75vw, 1.96rem); // 30% reduction from clamp(1.75rem, 2.5vw, 2.8rem)
+          
+          &.lt-1 {
+            font-size: clamp(1.4rem, 1.75vw, 1.96rem); // 30% reduction from clamp(2rem, 2.5vw, 2.8rem)
+          }
+          
+          b {
+            font-size: clamp(1.05rem, 1.575vw, 1.75rem); // 30% reduction from clamp(1.5rem, 2.25vw, 2.5rem)
+          }
+        }
+
+        p {
+          font-size: clamp(8.4px, 0.875vw, 0.875rem); // 30% reduction from clamp(12px, 1.25vw, 1.25rem)
+        }
+      }
+    }
+
+    .bottom-section {
+      p {
+        font-size: clamp(8.4px, 0.875vw, 0.875rem); // 30% reduction from clamp(12px, 1.25vw, 1.25rem)
+      }
     }
   }
 }

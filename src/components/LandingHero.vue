@@ -28,7 +28,17 @@ const { isMobile } = inject('screenSize')
     font-family: 'Raleway';
     font-style: normal;
   }
-  
+  @media(min-width: 768px) and (max-height: 900px){
+    .heading{
+      font-size: 64px;
+      line-height: 1.1;
+      padding-left: 5vw;
+    }
+    .subheading{
+      
+      padding-left: 5vw;
+    }
+  }
   @media(max-width: 450px){
     .heading{
       color: #FFF;

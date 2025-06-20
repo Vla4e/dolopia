@@ -66,7 +66,7 @@ let currentTransition = computed(() => {
         <div class="text-container">
           <span class="text-row first-row large-text">Where we craft</span>
           <span class="text-row second-row large-text">high-quality, artisanal </span>
-          <span class="third-row" >
+          <span class="third-row">
             <span class="large-text">food products</span>
             <span class="small-text" :class="{'animate-in': thirdRowVisible}">Bringing vibrant flavors from Greece and beyond to kitchens around the world.</span>
           </span>

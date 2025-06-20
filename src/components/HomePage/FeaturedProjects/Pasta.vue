@@ -17,37 +17,9 @@ const positionElementC = async () => {
   if (!container.value || !topTarget.value || !rightTarget.value || !floatingImage.value) {
       return;
   }
+  const imageBottomOffset = 5 * floatingImage.value.height /100; //empty space in image from product to bottom
+  floatingImage.value.style.marginBottom = (parseFloat(getComputedStyle(floatingImage.value).marginBottom) - imageBottomOffset) + 'px';
 
-  // Get the bounding topTargetRectngles relative to the viewport
-  const containerRect = container.value.getBoundingClientRect();
-  const topTargetRect = topTarget.value.getBoundingClientRect();
-  const rightTargetRect = rightTarget.value.getBoundingClientRect();
-  const topSectionRect = topSection.value.getBoundingClientRect();
-  // console.log("TSR", topSection.value.offsetTop)
-  // Calculate positions relative to the container
-  const containerLeft = containerRect.left;
-  const containerTop = containerRect.top;
-  // console.log("Container left / top / height / width", containerLeft,"/", containerTop, "/", containerRect.height, "/", containerRect.width)
-  // console.log("Right target left / top / height / width", rightTargetRect.left,"/", rightTargetRect.top, "/", rightTargetRect.height, "/", rightTargetRect.width)
-  // console.log("Top target left / top / height / width", topTargetRect.left,"/", topTargetRect.top, "/", topTargetRect.height, "/", topTargetRect.width)
-  // C's right edge should align with B's left edge
-  // So C's left position = B's left - C's width
-  const offsetInVW = 0;
-  const offsetManual = 0;
-  const offsetFinal = offsetInVW - offsetManual
-  const offsetInPixels = (offsetFinal * window.innerWidth) / 100;
-  const rightVal = rightTargetRect.width - offsetInPixels;
-
-  const marginOffset = 50;
-  const heightOffset = 30 * topTargetRect.height / 100;
-  // const topVal = topTargetRect.height + topSection.value.offsetTop;
-  const topVal = -topTargetRect.height - marginOffset;
-  // console.log("RIGHTVAL:", rightVal)
-  // console.log("TOPVAL", topVal)
-  // Apply the positioning
-  floatingImage.value.style.right = rightVal + 'px';
-  // floatingImage.value.style.top = topVal + 'px';
-  floatingImage.value.style.top = topVal + 'px';
 };
 
 onMounted( async () => {
@@ -62,34 +34,36 @@ onMounted( async () => {
   <section ref="container" class="featured">
 
     <div ref="topSection" class="top-section">
-      <h2 ref="topTarget" class="product-name">
-        Two-Coloured
-        <span class="small-text">
-          Seafood Orzo
-        </span>
-      </h2>
     </div>
     <div class="middle-section">
       <img ref="floatingImage" src="@/assets/landing/sections/pasta-group.png" class="product-image"/>
+      <div class="texts-container">
+        <h2 ref="topTarget" class="product-name">
+          Two-Coloured
+          <span class="small-text">
+            Seafood Orzo
+          </span>
+        </h2>
 
-      <div ref="rightTarget" class="text">
-        <span class="large">
-          Seafood elegance
-          <b>Shaped into orzo</b>
-        </span>
-        <p>
-          Dolopia’s Two-Coloured Seafood Orzo brings together two worlds: jet-black
-          <br/>orzo with squid ink and golden orzo infused with shellfish essence. It’s a visual 
-          <br/>and culinary ode to the Greek seaside, where simplicity meets bold taste.
-          <br/>Part of our Pasta Project, this creation stands alongside traditional pastas
-          <br/>made with goat or sheep milk, vibrant vegan blends with vegetables and
-          <br/>spices, and other specialty shapes.
-        </p>
-        
-        <span class="large">
-          Where simplicity meets
-          <b>Bold taste</b>
-        </span>
+        <div ref="rightTarget" class="text">
+          <span class="large">
+            Seafood elegance
+            <b>Shaped into orzo</b>
+          </span>
+          <p>
+            Dolopia’s Two-Coloured Seafood Orzo brings together two worlds: jet-black
+            <br/>orzo with squid ink and golden orzo infused with shellfish essence. It’s a visual 
+            <br/>and culinary ode to the Greek seaside, where simplicity meets bold taste.
+            <br/>Part of our Pasta Project, this creation stands alongside traditional pastas
+            <br/>made with goat or sheep milk, vibrant vegan blends with vegetables and
+            <br/>spices, and other specialty shapes.
+          </p>
+          
+          <span class="large">
+            Where simplicity meets
+            <b>Bold taste</b>
+          </span>
+        </div>
       </div>
     </div>
     <div class="bottom-section">
@@ -116,13 +90,33 @@ onMounted( async () => {
   @media(max-width: 1366px){
     width: 70%;
   }
-  
-  .top-section {
+
+  .middle-section {
     display: flex;
+    // justify-content: flex-end;
+    align-items: flex-end;
+    margin-bottom: 30px;
     width: 100%;
-    justify-content: flex-end;
-    margin-bottom: 15px;
+    height: 55vh;
     position: relative;
+    overflow: visible;
+
+    .texts-container{
+      width: 70%;
+    }
+    .product-image {
+      // width: 24vw;
+      // // width: 30vw;
+      // height: auto;
+      max-height: 100%;
+      height: 100%;
+      object-fit: contain;
+      max-width: 100%;
+      // position: absolute;
+      // top: -25%;
+      // left: 5%;
+    }
+    
     .product-name {
       display: flex;
       flex-direction: column;
@@ -134,7 +128,7 @@ onMounted( async () => {
       font-style: normal;
       font-weight: 700;
       letter-spacing: 6px;
-      width: 65%;
+      width: 100%;
       
       // New media query for laptop screens with limited height
       @media(min-width: 1400px) and (max-height: 800px){
@@ -157,35 +151,12 @@ onMounted( async () => {
         font-weight: 700;
       }
     }
-  }
-
-  .middle-section {
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-start;
-    margin-bottom: 30px;
-    width: 100%;
-    // height: 45%;
-    position: relative;
-    overflow: visible;
-
-    .product-image {
-      width: 24vw;
-      // width: 30vw;
-      // height: auto;
-      object-fit: contain;
-      max-width: 100%;
-      position: absolute;
-      // top: -25%;
-      // left: 5%;
-    }
-
     .text {
       display: flex;
       flex-direction: column;
       row-gap: 12px;
       // margin-right: 40px;
-      width: 65%;
+      width: 100%;
       align-items: flex-start;
       .large {
         color: #039EA2;
@@ -225,14 +196,14 @@ onMounted( async () => {
         color: #000;
         font-family: "Raleway";
         font-size: clamp(12px, 1.5vw, 1.25rem);
-        line-height: clamp(18px, 1.5vw, 1.25rem);
+        line-height: clamp(18px, 1.5vw, 1.5rem);
         font-style: normal;
         font-weight: 400;
         
         // New media query for laptop screens with limited height
         @media(min-width: 1400px) and (max-height: 800px){
           font-size: clamp(8.4px, 1.05vw, 0.875rem); // 30% reduction
-          line-height: clamp(12.6px, 1.05vw, 0.875rem); // 30% reduction
+          line-height: clamp(12.6px, 1.05vw, 0.975rem); // 30% reduction
         }
         
         @media(max-width: 1366px){
@@ -253,14 +224,14 @@ onMounted( async () => {
       color: #000;
       font-family: "Raleway";
       font-size: clamp(12px, 1.2vw, 1.25rem);
-      line-height: clamp(18px, 1.2vw, 1.25rem);
+      line-height: clamp(18px, 1.2vw, 1.5rem);
       font-style: normal;
       font-weight: 400;
       
       // New media query for laptop screens with limited height
       @media(min-width: 1400px) and (max-height: 800px){
         font-size: clamp(8.4px, 1vw, 0.875rem); // 30% reduction
-        line-height: clamp(12.6px, 1vw, 0.875rem); // 30% reduction
+        line-height: clamp(12.6px, 1vw, 0.975rem); // 30% reduction
       }
     }
   }
