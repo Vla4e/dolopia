@@ -30,9 +30,11 @@ const props = defineProps({
   }
 })
 
+let scrollEnabled = ref(false)
 let awardPropIdList = ref({})
 let awardProps = ref([])
 watch(() => props.award, async (value) => {
+  if(value.name == 'gta1') scrollEnabled.value = true;
   console.log("Watcher triggered => ", value)
   awardProps.value = [];
   awardPropIdList.value = awardedProductMap[value.name]
@@ -64,7 +66,7 @@ watch(() => props.award, async (value) => {
           <p class="award-description">{{ award.description }}</p>
         </div> 
       </div>
-      <ProductCarousel class="carousel" :awardedItems="awardProps"/>
+      <ProductCarousel class="carousel" :scrollEnabled="scrollEnabled" :awardedItems="awardProps"/>
     </section>
     <div class="blue-bg"/>
   </div>

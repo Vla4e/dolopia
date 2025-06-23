@@ -2,7 +2,7 @@
   <div ref="carousel" class="carousel-container">
     <div ref="carouselAnimationContainer" 
          class="carousel-animation-container"
-         @mousedown="startDrag" 
+         @mousedown="(event) => startDrag(event, scrollEnabled)" 
          @mousemove="onMouseMove" 
          @mouseup="endDrag" 
          @mouseleave="endDrag"
@@ -26,13 +26,12 @@
           ref="awardedItems"
           :style="itemDynamicStyles[index]"
         >
-        {{ index }}
           <slot :name="index">
             <img :src="obj.imageUrl" :ref="'jar' + index" class="jar-image" loading="lazy" :draggable="false"/>
             <Transition name="slide-in" :key="index">
               <section v-show="indexHoveredItem === index" class="product-information">
-                <span class="award"> {{ obj.award }} </span>
                 <span class="name"> {{ obj.name }} </span>
+                <span class="award"> {{ obj.award }} </span>
                 <span class="description"> {{obj.description}} </span>
               </section>
             </Transition>
@@ -63,6 +62,11 @@ const props = defineProps({
     type: Object,
     required: true
   },
+  scrollEnabled: {
+    type: Boolean,
+    required: false,
+    default: true
+  }
 });
 
 const screenSize = inject('screenSize');
@@ -203,14 +207,15 @@ onMounted(() => {
     .award {
       color: #000;
       font-family: "Century Gothic";
-      font-size: 20px;
+      font-size: 16px;
       font-style: normal;
       font-weight: 700;
-      line-height: 24px;
+      line-height: 18px;
       letter-spacing: 1px;
       text-transform: uppercase;
+      margin-bottom: 5px;
       @media(max-height: 900px) {
-        font-size: 14px;
+        font-size: 12px;
       }
     }
     .name {
@@ -219,7 +224,7 @@ onMounted(() => {
       font-size: 20px;
       font-style: normal;
       font-weight: 700;
-      line-height: 24px;
+      line-height: 20px;
       letter-spacing: 1px;
       text-transform: uppercase;
       @media(max-height: 900px) {

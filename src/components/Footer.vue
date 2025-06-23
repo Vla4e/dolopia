@@ -107,7 +107,12 @@ let computeShowDropdown = computed(() => {
     width: 100%;
   }
   .awards{
-    max-height: 115px;
+    max-height: 100px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+    &:hover{
+      transform: scale(1.05);
+    }
   }
   .socials-container{
     display: flex;

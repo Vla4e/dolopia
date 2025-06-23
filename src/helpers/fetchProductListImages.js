@@ -18,9 +18,10 @@ export async function getProductCodeToUrlMap(productCodes) {
   const productImageMap = {};
   for (const path in images) {
     const filename = path.substring(path.lastIndexOf('/') + 1);
+    // console.log("filename:", filename)
     let [prefix, codeWithExt] = filename.split('-');
     if (!codeWithExt) continue; // Skip files that don't match the expected pattern
-
+    
     const code = codeWithExt.split('.')[0];
 
     // Build the product image map
@@ -29,11 +30,10 @@ export async function getProductCodeToUrlMap(productCodes) {
       fullPath: images[path]
     };
   }
-
+  console.log("product image map", productImageMap)
   // Loop through the product codes and build the codeToUrlMap
   for (const code of productCodes) {
     const imageInfo = productImageMap[code];
-
     if (!imageInfo) {
       // If image info is not found, use the placeholder
       codeToUrlMap[code] = {
@@ -54,6 +54,6 @@ export async function getProductCodeToUrlMap(productCodes) {
       };
     }
   }
-
+  console.log("CodeToURLMap", codeToUrlMap)
   return codeToUrlMap;
 }
