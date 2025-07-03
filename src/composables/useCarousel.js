@@ -146,7 +146,7 @@ export function useCarousel(props, screenSize) {
 
   // Drag functionality
   function startDrag(event, scrollEnabled) {
-    console.log("Got event ====> ", scrollEnabled)
+    // console.log("Got event ====> ", scrollEnabled)
     if(!scrollEnabled) return;
     if (isMobile.value) return;
     event.preventDefault();

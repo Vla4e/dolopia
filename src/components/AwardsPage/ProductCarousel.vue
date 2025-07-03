@@ -1,5 +1,5 @@
 <template>
-  <div ref="carousel" class="carousel-container">
+  <div ref="carousel" class="carousel-container" :style="isReady ? 'opacity: 1;': ''">
     <div ref="carouselAnimationContainer" 
          class="carousel-animation-container"
          @mousedown="(event) => startDrag(event, scrollEnabled)" 
@@ -27,7 +27,14 @@
           :style="itemDynamicStyles[index]"
         >
           <slot :name="index">
-            <img :src="obj.imageUrl" :ref="'jar' + index" class="jar-image" loading="lazy" :draggable="false"/>
+            <img 
+              :src="obj.imageUrl" 
+              :ref="'jar' + index" 
+              class="jar-image" 
+              loading="lazy" 
+              :draggable="false"
+              @load="loadTest()"
+            />
             <Transition name="slide-in" :key="index">
               <section v-show="indexHoveredItem === index" class="product-information">
                 <span class="name"> {{ obj.name }} </span>
@@ -49,7 +56,9 @@ import {
   ref, 
   onMounted, 
   inject, 
-  useTemplateRef 
+  useTemplateRef, 
+  nextTick,
+  watch
 } from 'vue';
 import { useCarousel } from '@/composables/useCarousel.js'; // Adjust path as needed
 
@@ -100,14 +109,24 @@ function hoverTrigger(index, hoverStatus) {
 }
 
 function goToItem(val) {
-  console.log('Item selected ===================================>', val);
+  // console.log('Item selected ===================================>', val);
+}
+
+let loadedImages = 0;
+let isReady = ref(false);
+function loadTest(){
+  loadedImages++
+  if(loadedImages === props.awardedItems.length){
+    // console.log("ALL IAMGES LAODED")
+    isReady.value = true
+  }
 }
 
 // Initialize carousel with proper offset
-onMounted(() => {
-  console.log("REF", awardedItemsRef);
-  console.log("MOUNTED CAROUSEL", props.awardedItems);
-  
+onMounted( async () => {
+  // console.log("REF", awardedItemsRef);
+  // console.log("MOUNTED CAROUSEL", props.awardedItems);
+  await nextTick();
   setTimeout(() => {
     calculateItemWidth();
     // Set initial position so first visible item is at left edge
@@ -117,10 +136,10 @@ onMounted(() => {
   }, 100);
   
   setTimeout(() => {
-    console.log("JAR REF", jar0.value[0].width);
+    // console.log("JAR REF", jar0.value[0].width);
     if (jar0.value && jar0.value[0]) {
       carouselLeftMarginOffset = jar0.value[0].width * 28 / 100;
-      console.log("CARLEFTMARG", carouselLeftMarginOffset);
+      // console.log("CARLEFTMARG", carouselLeftMarginOffset);
     }
   }, 1500);
 });
@@ -133,6 +152,8 @@ onMounted(() => {
   justify-content: center;
   margin-bottom: 120px;
   min-height: 450px;
+  transition: opacity 0.7s ease;
+  opacity: 0;
 }
 
 .carousel-animation-container {

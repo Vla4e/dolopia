@@ -46,7 +46,7 @@ export const categoryToSubcategoryNames = new Map([
   [
     "tomato-project", [
       "Pasta sauce",
-      "Tomato creation",
+      "Tomato creations",
       "Ketchup"
     ],
   ],
@@ -66,7 +66,7 @@ export const subcategoryFullNames = {
   "vegetable-in-oil": "Vegetables in oil",
   "red-pepper-pate": "Red pepper pate",
   "pasta-sauces": "Pasta sauce",
-  "tomato-creations": "Tomato creation",
+  "tomato-creations": "Tomato creations",
   "ketchup": "Ketchup",
   "traditional-pasta": "Traditional pasta",
   "vegan-pasta": "Vegan pasta",

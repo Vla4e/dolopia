@@ -11,7 +11,7 @@ import VideoShowcase from "@/components/AboutPage/VideoShowcase.vue";
 let phaseId = ref(0)
 let phaseCount = 13
 function cyclePhase(direction){
-  console.log("before cycle", phaseId.value)
+  // console.log("before cycle", phaseId.value)
   if(direction){
     if(phaseId.value < phaseCount - 1){ //end of phases, jump back to first phase
       phaseId.value ++
@@ -19,7 +19,7 @@ function cyclePhase(direction){
       phaseId.value = 0;
     }
   } else phaseId.value --
-  console.log("after cycle", phaseId.value)
+  // console.log("after cycle", phaseId.value)
 }
 
 

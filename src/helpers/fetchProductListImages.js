@@ -1,59 +1,81 @@
-
-import placeholderImage from '@/assets/products/product-images/placeholder/placeholder.png';
+import placeholderImageGeneral from '@/assets/products/product-images/placeholder/placeholder.png';
 import candiedFruitsPlaceholder from "@/assets/products/product-images/candied-fruits-placeholder/candied-fruits.png";
 
+// Precompute and cache image maps at module level
+const mainImageModules = import.meta.glob('@/assets/products/product-images/projects/**/*.png', { eager: true, as: 'url' });
+const shadowsOverlaysModules = import.meta.glob('@/assets/products/product-images/shadows-overlay/**/*.png', { eager: true, as: 'url' });
 
-export async function getProductCodeToUrlMap(productCodes) {
-  console.log("Product Codes", productCodes)
-  // Import all images from 'product-images' directory
-  const images = import.meta.glob('@/assets/products/product-images/projects/**/*.png', { eager: true, as: 'url' });
-  const shadowsOverlaysImages = import.meta.glob('@/assets/products/product-images/shadows-overlay/**/*.png', { eager: true, as: 'url' });
+// Build cache structures
+const [compressedMainImageMap, uncompressedMainImageMap] = (() => {
+  const compressed = {};
+  const uncompressed = {};
   
-  // Import placeholder images
-
-  // Create a map from code to image information
-  const codeToUrlMap = {};
-
-  // Parse images and create a map
-  const productImageMap = {};
-  for (const path in images) {
+  for (const path in mainImageModules) {
     const filename = path.substring(path.lastIndexOf('/') + 1);
-    // console.log("filename:", filename)
-    let [prefix, codeWithExt] = filename.split('-');
-    if (!codeWithExt) continue; // Skip files that don't match the expected pattern
+    const isCompressed = filename.includes('-compressed.png');
+    const baseFilename = filename.replace(/-compressed\.png$/, '').replace(/\.png$/, '');
     
-    const code = codeWithExt.split('.')[0];
-
-    // Build the product image map
-    productImageMap[code] = {
-      prefix: prefix,
-      fullPath: images[path]
-    };
+    const [prefix, ...codeParts] = baseFilename.split('-');
+    const code = codeParts.join('-');
+    
+    if (isCompressed) {
+      compressed[code] = { prefix, url: mainImageModules[path] };
+    } else {
+      uncompressed[code] = { prefix, url: mainImageModules[path] };
+    }
   }
-  console.log("product image map", productImageMap)
-  // Loop through the product codes and build the codeToUrlMap
+  
+  return [compressed, uncompressed];
+})();
+
+const [shadowsMap, overlaysMap] = (() => {
+  const shadows = {};
+  const overlays = {};
+  
+  for (const path in shadowsOverlaysModules) {
+    const filename = path.substring(path.lastIndexOf('/') + 1);
+    const key = filename.replace(/-compressed\.png$/, '');
+    console.log("--path-shadow-overlay--", path)
+    
+    if (path.includes('/shadows/')) {
+      shadows[key] = shadowsOverlaysModules[path];
+    } else if (path.includes('/overlays/')) {
+      overlays[key] = shadowsOverlaysModules[path];
+    }
+  }
+  
+  return [shadows, overlays];
+})();
+
+export async function getProductCodeToUrlMap(productCodes, useCompressed) {
+  const codeToUrlMap = {};
+  const mainImageMap = useCompressed ? compressedMainImageMap : uncompressedMainImageMap;
+
   for (const code of productCodes) {
-    const imageInfo = productImageMap[code];
+    // Special case for candied fruits
+    const placeholder = code === 'GTL280' 
+      ? candiedFruitsPlaceholder 
+      : placeholderImageGeneral;
+
+    const imageInfo = mainImageMap[code];
     if (!imageInfo) {
-      // If image info is not found, use the placeholder
       codeToUrlMap[code] = {
-        mainImage: placeholderImage,
-        shadow: shadowsOverlaysImages['/src/assets/products/product-images/shadows-overlay/shadows/250.png'],
-        overlay: shadowsOverlaysImages['/src/assets/products/product-images/shadows-overlay/overlays/250.png'],
-        code: code,
+        mainImage: placeholder,
+        shadow: shadowsMap['250'],
+        overlay: overlaysMap['250'],
+        code,
         preload: true
       };
     } else {
-      // Build the image data object
       codeToUrlMap[code] = {
-        mainImage: imageInfo.fullPath,
-        shadow: shadowsOverlaysImages[`/src/assets/products/product-images/shadows-overlay/shadows/${imageInfo.prefix}.png`] || null,
-        overlay: shadowsOverlaysImages[`/src/assets/products/product-images/shadows-overlay/overlays/${imageInfo.prefix}.png`] || null,
-        code: code,
+        mainImage: imageInfo.url,
+        shadow: shadowsMap[imageInfo.prefix] || null,
+        overlay: overlaysMap[imageInfo.prefix] || null,
+        code,
         preload: true
       };
     }
   }
-  console.log("CodeToURLMap", codeToUrlMap)
+
   return codeToUrlMap;
 }

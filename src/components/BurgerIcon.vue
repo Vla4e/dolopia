@@ -15,13 +15,13 @@ import { ref, watch } from 'vue';
 import { useMenuStore } from '@/store/menu';
 const menuStore = useMenuStore();
 watch(() => menuStore.showSidebar, (val) => {
-  console.log("VAL", val)
+  // console.log("VAL", val)
   menuOpened.value = val
 })
 
 let menuOpened = ref(false)
 function toggleMenu() {
-  console.log("TOGGLING")
+  // console.log("TOGGLING")
   menuOpened.value = !menuOpened.value
   menuStore.setSidebarFlag(menuOpened.value)
 }

@@ -45,7 +45,7 @@ export const useRouteParamsStore = defineStore({
   },
   actions: {
     updateParams(params) {
-      console.log("Adjusting params", params)
+      // console.log("Adjusting params", params)
       this.category = params.category;
       this.subcategory = params.subcategory;
       // Update other params as needed

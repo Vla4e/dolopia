@@ -200,7 +200,7 @@ let validationResult = reactive({
 let responseError = ref(null)
 let showError = ref(false)
 watch(() => form.newsletter, (val) => {
-  console.log("Val:", val)
+  // console.log("Val:", val)
 })
 
 async function validateInputs(){
@@ -210,18 +210,18 @@ async function validateInputs(){
   });
 
   const { isValid, errors } = validateForm(form, 'contact');
-  console.log("ERRORS:", errors)
+  // console.log("ERRORS:", errors)
   if (!isValid) {
     Object.entries(errors).forEach(([field, message]) => {
-      // console.log("f,m", field,message)
-      // console.log("VALRES", validationResult)
+      // // console.log("f,m", field,message)
+      // // console.log("VALRES", validationResult)
       if (message && validationResult[field]) {
-        // console.log("FIELD", field)
+        // // console.log("FIELD", field)
         validationResult[field].invalid = true;
         validationResult[field].message = message;
       }
     });
-    console.log("Valres", validationResult)
+    // console.log("Valres", validationResult)
     return false;
   } else return true
 }
@@ -229,16 +229,16 @@ async function validateInputs(){
 let isSubmitting = ref(false)
 async function handleSubmit() {
   try{
-    console.log("Attempting submission")
+    // console.log("Attempting submission")
     isSubmitting.value = true;
     
     const validity = await validateInputs()
-    console.log("Validity:", validity)
+    // console.log("Validity:", validity)
     if(!validity) return
     
     let captchaToken = await getCaptchaToken();
     await submitForm(captchaToken);
-    console.log("Will return value to false/allow submission")
+    // console.log("Will return value to false/allow submission")
     isSubmitting.value = false;
   } catch ( error) {
     console.error("Error while submitting form:", error)
@@ -265,7 +265,7 @@ async function submitForm(captchaToken) {
       },
       body: JSON.stringify(formData)
     });
-    console.log("Resp from sendMail:", response)
+    // console.log("Resp from sendMail:", response)
     if (response.ok) {
       alert('Email sent successfully');
       setTimeout(() => {
@@ -292,9 +292,11 @@ async function submitForm(captchaToken) {
   }
 }
 
+import { useMenuStore } from '@/store/menu';
+const menuStore = useMenuStore();
 function toggleContactForm(){
   console.log("Should toggle cfrom")
-  emitter.emit('toggleContactForm')
+  menuStore.setContactFormFlag(false)
 }
 
 </script>
@@ -309,7 +311,7 @@ function toggleContactForm(){
   height: 100vh;
   min-height: 100vh;
   background: white;
-  z-index: 12;
+  z-index: 1001;
   .contact-container-bordered{
     display: flex;
     justify-content: space-around;

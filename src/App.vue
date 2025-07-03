@@ -63,7 +63,7 @@ let showSidebar = computed(() => {
   return menuStore.showSidebar
 })
 let showContactForm = computed(() => {
-  console.log("COMPUTING", menuStore.showContactForm)
+  // console.log("COMPUTING", menuStore.showContactForm)
   return menuStore.showContactForm
 })
 
@@ -74,14 +74,14 @@ provide('screenSize', { isMobile, isTablet, isDesktop })
 const emitter = inject('emitter')
 let mountFinished = ref(false)
 emitter.on('mountFinished', (e) => {
-  console.log("Mount finished")
+  // console.log("Mount finished")
   setTimeout(() => {
     mountFinished.value = true
 
   }, 700)
 })
 onMounted(() => {
-  console.log("Window =================", window.innerWidth, window.innerHeight)
+  // console.log("Window =================", window.innerWidth, window.innerHeight)
 })
 onBeforeUnmount(() => {
   emitter.off('mountFinished')
@@ -95,7 +95,7 @@ let computedTransition = ref('');
 watch(
   () => route.name,
   (newVal) => {
-    // console.log("VAL", route.meta);
+    // // console.log("VAL", route.meta);
     if(isMobile.value){
       showNavbar.value = route.meta.hasNavbarMobile;
       floatingNavbar.value = route.meta.floatingNavbarMobile;
@@ -110,7 +110,7 @@ watch(
     if(isMobile.value){
       floatingNavbar.value = true;
     }
-    console.log("Route name", route.name)
+    // console.log("Route name", route.name)
     if(route.name !== 'home'){
       computedTransition.value = 'slide'
     }
@@ -144,6 +144,7 @@ header{
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position: relative;
   @media(min-width: 451px){
     // position: absolute;
   }
@@ -154,6 +155,7 @@ header{
 }
 .page-container {
   height: 100%; /* Ensure the content fills the parent container */
+  min-height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;

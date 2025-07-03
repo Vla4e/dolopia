@@ -1,23 +1,23 @@
 <template>
   <div class="footer">
     <router-link to="/awards">
-      <img src="@/assets/awards-icon.png" class="awards"/>
+      <img src="@/assets/awards-icon.png" class="awards" />
     </router-link>
     <div class="socials-container">
       <a href="https://www.facebook.com/Dolopia/" target="_blank">
-        <img  src="@/assets/facebook-icon.png" class="social facebook"/>
+        <img src="@/assets/facebook-icon.png" class="social facebook" />
       </a>
       <a href="https://www.instagram.com/dolopia/" target="_blank">
-        <img  src="@/assets/instagram-icon.png" class="social instagram"/>
+        <img src="@/assets/instagram-icon.png" class="social instagram" />
       </a>
       <a href="https://www.linkedin.com/company/dolopia" target="_blank">
-        <img src="@/assets/linkedin-icon.png" class="social linkedin"/>
+        <img src="@/assets/linkedin-icon.png" class="social linkedin" />
       </a>
     </div>
     <!-- <a href="mailto:info@dolopia.eu" target="_blank" class="mail-link">
       info@dolopia.eu
     </a> -->
-    
+
     <!-- <div class="recaptcha-disclaimer" style="text-align: center; margin-top: 10px;">
       <span class="disclaimer-text">
         This site is protected by reCAPTCHA and the Google
@@ -29,38 +29,43 @@
         <span>&nbsp;apply&nbsp;</span>
       </div>
     </div> -->
-    <ArrowButton v-if="computeShowArrow" class="footer-arrow" :routePath="'/catalog'" :showDropdown="false" :buttonText="'Explore'"/>
-    <Dropdown v-if="computeShowDropdown" :forType="'product'" :dropdownAlignment="'left'" class="product-dropdown" />
+    <ArrowButton
+      v-if="computeShowArrow"
+      class="footer-arrow"
+      :routePath="'/catalog'"
+      :showDropdown="false"
+      :buttonText="'Explore'"
+    />
+    <!-- <Dropdown v-if="computeShowDropdown" :forType="'product'" :dropdownAlignment="'left'" class="product-dropdown" /> -->
   </div>
 </template>
 
 <script setup>
-import ArrowButton from '@/components/ArrowButton.vue'
-import Dropdown from './Dropdown/Dropdown.vue';
-import { computed } from 'vue';
+import ArrowButton from "@/components/ArrowButton.vue";
+import Dropdown from "./Dropdown/Dropdown.vue";
+import { computed } from "vue";
 
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
 const router = useRouter();
 
-function logsomething(){
-  console.log("something")
+function logsomething() {
+  // console.log("something");
 }
 let computeShowArrow = computed(() => {
-  // console.log("computing?", route.meta)
-  if(route.meta?.showRouterArrow){
-    return true
-  } else return false
-})
+  // // console.log("computing?", route.meta)
+  if (route.meta?.showRouterArrow) {
+    return true;
+  } else return false;
+});
 let computeShowDropdown = computed(() => {
-  if(route.meta?.showDropdown){
-    return true
-  } else return false
-})
+  if (route.meta?.showDropdown) {
+    return true;
+  } else return false;
+});
 </script>
 
 <style lang="scss" scoped>
-
 // .recaptcha-disclaimer{
 //   display:flex;
 //   flex-direction: column;
@@ -93,7 +98,7 @@ let computeShowDropdown = computed(() => {
 //     }
 //   }
 // }
-.footer{
+.footer {
   display: flex;
   justify-content: flex-start;
   padding: 0vw 5% 0vw 5%;
@@ -101,35 +106,40 @@ let computeShowDropdown = computed(() => {
   background: none;
   align-items: center;
   z-index: 2;
-  @media(min-width: 451px){
+  @media (min-width: 451px) {
     position: fixed;
     bottom: 0;
     width: 100%;
+    min-height: 100px;
   }
-  .awards{
+  .awards {
     max-height: 100px;
+    @media (max-width: 1600px) and (max-height: 900px) {
+      max-height: 65px;
+    }
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
-    &:hover{
+    &:hover {
       transform: scale(1.05);
+      transform: rotate(45deg);
     }
   }
-  .socials-container{
+  .socials-container {
     display: flex;
     justify-content: space-between;
     min-width: 15%;
     margin-left: 5%;
     margin-top: 5vh;
-    .social{ 
+    .social {
       max-height: 16px;
       transition: transform 0.3s ease;
-      &:hover{
+      &:hover {
         transform: scale(110%);
       }
     }
   }
-  
-  .mail-link{
+
+  .mail-link {
     color: #000;
     text-align: center;
     font-family: "Raleway";
@@ -140,12 +150,12 @@ let computeShowDropdown = computed(() => {
     letter-spacing: 1.26px;
     margin-left: 25px;
   }
-  .arrow-button{
+  .arrow-button {
     margin-left: auto;
   }
 }
 
-.product-dropdown{
+.product-dropdown {
   position: absolute;
   bottom: 5vh;
   right: 5%;

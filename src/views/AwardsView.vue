@@ -35,7 +35,7 @@ let selectedAward = ref({
   name: null,
 })
 function selectAward(award){
-  console.log("Selecting:", award, selectedAward.value)
+  // console.log("Selecting:", award, selectedAward.value)
   if(award.name !== selectedAward.value.name){
     selectedAward.value = award
     selectedAwardFlag.value = true;
@@ -43,7 +43,7 @@ function selectAward(award){
 }
 
 watch(() => selectedAward.value, (value) => {
-  console.log("selected award value", value)
+  // console.log("selected award value", value)
 }, { immediate: true })
 </script>
 

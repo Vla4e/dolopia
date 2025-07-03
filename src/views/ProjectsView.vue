@@ -1,160 +1,182 @@
-
 <script setup>
-import ProjectsViewMobile from '@/components/ProjectsViewMobile/ProjectsViewMobile.vue';
-import ArrowButton from '@/components/ArrowButton.vue';
-import { inject } from 'vue';
-const { isMobile } = inject('screenSize')
+import ProjectsViewMobile from "@/components/ProjectsViewMobile/ProjectsViewMobile.vue";
+import ArrowButton from "@/components/ArrowButton.vue";
+import { inject, onMounted } from "vue";
+const { isMobile } = inject("screenSize");
 const panels = [
   {
     category: {
-      name: 'the tomato project',
-      description: 'Savor the taste of tradition with Dolopias Finest Tomato Creations',
-      route: 'tomato-project'
+      name: "the tomato project",
+      description: "Savor the taste of tradition with Dolopias Finest Tomato Creations",
+      route: "tomato-project",
     },
     subcategories: [
       {
-        name:'PASTA SAUCES',
-        route: 'pasta-sauces',
+        name: "PASTA SAUCES",
+        route: "pasta-sauces",
       },
       {
-        name:'TOMATO CREATIONS',
-        route: 'tomato-creations',
+        name: "TOMATO CREATIONS",
+        route: "tomato-creations",
       },
       {
-        name:'HOMEMADE KETCHUP',
-        route: 'ketchup',
-      }
+        name: "HOMEMADE KETCHUP",
+        route: "ketchup",
+      },
     ],
-    imageUrl: new URL('@/assets/tomato-project.png', import.meta.url).href
+    imageUrl: new URL("@/assets/tomato-project.png", import.meta.url).href,
   },
   {
     category: {
-      name: 'the vegetable project',
-      description: 'Authentic Mediterranean flavors, rooted in heritage, perfected for modern palates.',
-      route: 'vegetable-project'
+      name: "the vegetable project",
+      description:
+        "Authentic Mediterranean flavors, rooted in heritage, perfected for modern palates.",
+      route: "vegetable-project",
     },
     subcategories: [
       {
-        name:'appetizer',
-        route: 'appetizer',
+        name: "appetizer",
+        route: "appetizer",
       },
       {
-        name:'VEGETABLEs in OIL',
-        route: 'vegetable-in-oil',
+        name: "VEGETABLEs in OIL",
+        route: "vegetable-in-oil",
       },
       {
-        name:'Red pepper pate',
-        route: 'red-pepper-pate',
-      }
+        name: "Red pepper pate",
+        route: "red-pepper-pate",
+      },
     ],
-    imageUrl: new URL('@/assets/vegetable-project.png', import.meta.url).href
+    imageUrl: new URL("@/assets/vegetable-project.png", import.meta.url).href,
   },
   {
     category: {
-      name: 'The FRUIT Project',
-      description: 'Authentic fruit delights with a creative modern twist',
-      route: 'fruit-project',
+      name: "The FRUIT Project",
+      description: "Authentic fruit delights with a creative modern twist",
+      route: "fruit-project",
     },
     subcategories: [
       {
-        name:'jams',
-        route: 'jam',
+        name: "jams",
+        route: "jam",
       },
       {
-        name:'marmalades',
-        route: 'marmalade',
+        name: "marmalades",
+        route: "marmalade",
       },
       {
-        name:'candied fruits in syrup',
-        route: 'candied-fruit',
+        name: "candied fruits in syrup",
+        route: "candied-fruit",
       },
     ],
-    imageUrl: new URL('@/assets/fruit-project.png', import.meta.url).href
+    imageUrl: new URL("@/assets/fruit-project.png", import.meta.url).href,
   },
   {
     category: {
-      name: 'The PASTA Project',
-      description: 'Crafted with care: artisanal pasta, naturally dried, richly flavored',
-      route: 'pasta-project',
+      name: "The PASTA Project",
+      description: "Crafted with care: artisanal pasta, naturally dried, richly flavored",
+      route: "pasta-project",
     },
     subcategories: [
       {
-        name:'Milk pasta',
-        route: 'traditional-pasta',
+        name: "Milk pasta",
+        route: "traditional-pasta",
       },
       {
-        name:'vegan pasta',
-        route: 'vegan-pasta',
+        name: "vegan pasta",
+        route: "vegan-pasta",
       },
       {
-        name:'Seafood pasta',
-        route: 'seafood-pasta',
+        name: "Seafood pasta",
+        route: "seafood-pasta",
       },
     ],
-    imageUrl: new URL('@/assets/pasta-project.png', import.meta.url).href
+    imageUrl: new URL("@/assets/pasta-project.png", import.meta.url).href,
   },
-]
+];
+
+onMounted(() => {
+  console.log("MOUNTED");
+});
+function clickedTest(c, s, p) {
+  console.log("Cat", c);
+  console.log("Sub", s);
+  console.log(p);
+}
 </script>
 
 <template>
   <div class="page-catalog">
-    
-    <ArrowButton 
-    :routePath="'/home'" 
-    :buttonText="''" 
-    :showArrow="true"
-    :arrowDirection="'left'"
-    :showDropdown="false"
-    v-if="!isMobile"
+    <ArrowButton
+      :routePath="'/home'"
+      :buttonText="''"
+      :showArrow="true"
+      :arrowDirection="'left'"
+      :showDropdown="false"
+      v-if="!isMobile"
     />
     <div v-if="!isMobile" class="panel-container">
-      <div v-for="(panel, idx) in panels" :key="idx" class="panel" :class="`panel-${idx}`">
+      <div
+        v-for="(panel, idx) in panels"
+        :key="idx"
+        class="panel"
+        :class="`panel-${idx}`"
+      >
         <div class="panel-half text-panel">
           <div class="category">
             <span class="category-name">{{ panel.category.name }}</span>
             <span class="category-description">{{ panel.category.description }}</span>
           </div>
+
           <div class="subcategory-list">
-            <router-link 
-            v-for="subcategory in panel.subcategories" 
-            :key="subcategory.name" 
-            :to="{ name : 'projects', params: { category: panel.category.route, subcategory: subcategory.route }}"
-            class="subcategory"
+            <router-link
+              v-for="subcategory in panel.subcategories"
+              :key="subcategory.name"
+              :to="{
+                name: 'projects',
+                params: {
+                  category: panel.category.route,
+                  subcategory: subcategory.route,
+                  product: 'default',
+                },
+              }"
+              @click="clickedTest(panel.category.route, subcategory.route, 'default')"
+              class="subcategory"
             >
               {{ subcategory.name }}
             </router-link>
           </div>
         </div>
+
         <div class="panel-half image-panel">
           <!-- <img :src="panel.imageUrl" class="category-image"/> -->
         </div>
       </div>
     </div>
-    <ProjectsViewMobile v-if="isMobile"/>
+    <ProjectsViewMobile v-if="isMobile" />
   </div>
 </template>
 
-
 <style lang="scss" scoped>
-.arrow-button{
+.arrow-button {
   position: absolute;
   z-index: 2;
   top: 5vh;
   left: 5vh;
 }
-.page-catalog{
+.page-catalog {
   width: 100%;
   height: 100%;
-  @media(max-width: 450px){
+  @media (max-width: 450px) {
     margin-bottom: 40px !important;
   }
-  .panel-container{
+  .panel-container {
     display: grid;
     grid-template-rows: 50% 50%;
     grid-template-columns: 50% 50%;
-    flex-grow:1;
+    flex-grow: 1;
     max-height: 100vh;
-    .panel{
+    .panel {
       width: 100%;
       height: 100%;
       display: flex;
@@ -162,7 +184,7 @@ const panels = [
       align-items: center;
       // flex-direction: column;
       // border: 1px solid gray;
-      .panel-half{
+      .panel-half {
         width: 100%;
         height: 100%;
         // background: #CEEAEC;
@@ -171,19 +193,19 @@ const panels = [
         justify-content: center;
         align-items: center;
         // border: 1px solid black;
-        .category-image{
+        .category-image {
           width: 100%;
           height: 100%;
           object-fit: cover;
         }
-        .category{
+        .category {
           display: flex;
           flex-direction: column;
           max-width: 80%;
           margin-left: auto;
           margin-right: auto;
           margin-bottom: 5%;
-          &-name{
+          &-name {
             font-family: "Century Gothic";
             font-size: 24px;
             font-style: normal;
@@ -193,7 +215,7 @@ const panels = [
             text-align: center;
             letter-spacing: 0%;
           }
-          &-description{
+          &-description {
             font-family: "Raleway";
             font-size: 14px;
             font-style: normal;
@@ -202,14 +224,14 @@ const panels = [
             text-align: center;
           }
         }
-        .subcategory-list{
+        .subcategory-list {
           display: flex;
           flex-direction: column;
           max-width: 80%;
           margin-left: auto;
           margin-right: auto;
-          .subcategory{
-            font-family: 'Century Gothic';
+          .subcategory {
+            font-family: "Century Gothic";
             font-size: 16px;
             text-transform: uppercase;
             color: black;
@@ -217,49 +239,48 @@ const panels = [
           }
         }
       }
-      &-0{
-        background-image: url('@/assets/project_showcase_images/16_9/tomato_16_9.jpg');
+      &-0 {
+        background-image: url("@/assets/project_showcase_images/16_9/tomato_16_9.jpg");
         background-size: cover;
         background-repeat: no-repeat;
-        @m
+        @m;
       }
-      &-1{
-        background-image: url('@/assets/project_showcase_images/16_9/vegetable_16_9.jpg');
-        background-size: cover;
-        background-repeat: no-repeat;
-
-      }
-      &-2{
-        background-image: url('@/assets/project_showcase_images/16_9/fruit_16_9.jpg');
+      &-1 {
+        background-image: url("@/assets/project_showcase_images/16_9/vegetable_16_9.jpg");
         background-size: cover;
         background-repeat: no-repeat;
       }
-      &-3{
-        background-image: url('@/assets/project_showcase_images/16_9/pasta_16_9.jpg');
+      &-2 {
+        background-image: url("@/assets/project_showcase_images/16_9/fruit_16_9.jpg");
         background-size: cover;
         background-repeat: no-repeat;
-
       }
-      &-0, &-1{
-        .text-panel{
+      &-3 {
+        background-image: url("@/assets/project_showcase_images/16_9/pasta_16_9.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+      }
+      &-0,
+      &-1 {
+        .text-panel {
           order: 1;
         }
-        .image-panel{
+        .image-panel {
           order: 2;
         }
       }
-      &-2, &-3{
-        .text-panel{
+      &-2,
+      &-3 {
+        .text-panel {
           order: 2;
         }
-        .image-panel{
+        .image-panel {
           order: 1;
         }
       }
-      .text-panel{
+      .text-panel {
       }
-      .image-panel{
-
+      .image-panel {
       }
     }
   }

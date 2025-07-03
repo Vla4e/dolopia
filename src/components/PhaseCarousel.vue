@@ -27,7 +27,7 @@ let props = defineProps({
 const Backward = false; //scrollUp
 const Forward = true; //scrollDown
 let emit = defineEmits('selectedPhaseFromCarousel', 'cyclePhase')
-function selectPhase(phase){ //ProductEmbeddedView.vue localPhases.length = 4, phasesShownOnCarousel.length = 3 ("none" is not passed), thus +1 to val
+function selectPhase(phase){ //ProductInformation.vue localPhases.length = 4, phasesShownOnCarousel.length = 3 ("none" is not passed), thus +1 to val
   emit('selectedPhaseFromCarousel', phase + 1)
 }
 function emitCyclePhase(direction){

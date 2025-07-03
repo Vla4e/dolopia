@@ -119,6 +119,7 @@ onUnmounted(() => {
   justify-content: flex-start;
   // padding-top: 10vh;
   .hero-container{
+    min-height: 100vh;
     .text-container{
       width: 90%;
       margin-left: auto;

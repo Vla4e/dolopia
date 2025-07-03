@@ -20,9 +20,9 @@ let errorResponse = reactive({
 let showError = ref(true);
 
 function mountErrorObject(error){
-  console.log("Error POPUP OBJ:", error)
+  // console.log("Error POPUP OBJ:", error)
   errorResponse = error;
-  console.log(toRaw(errorResponse))
+  // console.log(toRaw(errorResponse))
 }
 function closeError(){
   showError.value = false;
@@ -30,19 +30,19 @@ function closeError(){
 }
 
 watch(() => errorResponse, (newVal) => {
-  console.log("errorResponse errorPopup WATCHER::", newVal)
+  // console.log("errorResponse errorPopup WATCHER::", newVal)
 }, { immediate: true })
 
 watch(() => showError.value, (newVal) => {
-  console.log("SHOW ERROR VAL", newVal)
+  // console.log("SHOW ERROR VAL", newVal)
 }, { immediate: true })
 
 onBeforeMount(() => {
-  console.log("MOUNTED ERROR POPUP :::::::::::")
+  // console.log("MOUNTED ERROR POPUP :::::::::::")
 })
 onMounted(() => {
   emitter.on('showErrorPopup', (val) => {
-    console.log("Showing Error Popup")
+    // console.log("Showing Error Popup")
     showError.value = val;
   })
   emitter.on("mountErrorObject", mountErrorObject)

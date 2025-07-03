@@ -8,7 +8,7 @@ const { isMobile } = inject('screenSize')
 import { useMenuStore } from '@/store/menu';
 const menuStore = useMenuStore()
 function toggleContactForm(){
-  console.log("clicked")
+  // console.log("clicked")
   menuStore.setContactFormFlag(true)
 }
 </script>
@@ -36,7 +36,7 @@ function toggleContactForm(){
         contact: info@dolopia.eu
       </a> -->
     </div>
-    <img src="@/assets/search-icon.png" style="opacity: 0.1;" class="search-icon"/>
+    <img v-if="!menuStore.showContactForm" src="@/assets/search-icon.png" style="opacity: 0.1;" class="search-icon"/>
   </div>
 </template>
 

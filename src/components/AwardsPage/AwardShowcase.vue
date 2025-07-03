@@ -35,10 +35,10 @@ let awardPropIdList = ref({})
 let awardProps = ref([])
 watch(() => props.award, async (value) => {
   if(value.name == 'gta1') scrollEnabled.value = true;
-  console.log("Watcher triggered => ", value)
+  // console.log("Watcher triggered => ", value)
   awardProps.value = [];
   awardPropIdList.value = awardedProductMap[value.name]
-  let productImages = await getProductCodeToUrlMap(awardPropIdList.value)
+  let productImages = await getProductCodeToUrlMap(awardPropIdList.value, true) // useCompressed => true
   awardPropIdList.value.forEach((val) => {
     let item = allProductMap.get(val);
     awardProps.value.push({      
@@ -49,7 +49,7 @@ watch(() => props.award, async (value) => {
       comments: item["consumers comments"],
     });
   })
-  console.log("AwardPropsVal", toRaw(awardProps.value))
+  // console.log("AwardPropsVal", toRaw(awardProps.value))
 }, { immediate: true })
 
 

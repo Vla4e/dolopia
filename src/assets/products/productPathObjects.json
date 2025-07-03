@@ -1,0 +1,292 @@
+[
+    {
+        "name": "Apricot with orange & peppermint",
+        "subcategory": "jam",
+        "path": "apricot-orange-peppermint"
+    },
+    {
+        "name": "Lemon with olive oil",
+        "subcategory": "marmalade",
+        "path": "lemon-olive-oil"
+    },
+    {
+        "name": "Plum with cinnamon",
+        "subcategory": "jam",
+        "path": "plum-cinnamon"
+    },
+    {
+        "name": "Sweet Orange with chocolate",
+        "subcategory": "marmalade",
+        "path": "sweet-orange-chocolate"
+    },
+    {
+        "name": "Sweet orange",
+        "subcategory": "marmalade",
+        "path": "sweet-orange"
+    },
+    {
+        "name": "Strawberry with mint & pepper",
+        "subcategory": "jam",
+        "path": "strawberry-mint-pepper"
+    },
+    {
+        "name": "Blood orange with bergamot",
+        "subcategory": "marmalade",
+        "path": "blood-orange-bergamot"
+    },
+    {
+        "name": "Peach with rose geranium",
+        "subcategory": "jam",
+        "path": "peach-rose-geranium"
+    },
+    {
+        "name": "Sticky fig relish with vinegar variety",
+        "subcategory": "jam",
+        "path": "sticky-fig-relish"
+    },
+    {
+        "name": "Candied Ginger with lavender",
+        "subcategory": "candied-fruit",
+        "path": "ginger-lavender"
+    },
+    {
+        "name": "Candied Fresh Walnuts with cloves",
+        "subcategory": "candied-fruit",
+        "path": "fresh-walnuts-cloves"
+    },
+    {
+        "name": "Candied Cherries with bitter almond",
+        "subcategory": "candied-fruit",
+        "path": "cherries-bitter-almond"
+    },
+    {
+        "name": "Aubergine salad with smoked tea",
+        "subcategory": "appetizer",
+        "path": "aubergine-salad-smoked-tea"
+    },
+    {
+        "name": "Aubergine salad Mount Athos Recipe",
+        "subcategory": "appetizer",
+        "path": "aubergine-salad-mount-athos"
+    },
+    {
+        "name": "Aubergine pate with sesame paste - hot",
+        "subcategory": "appetizer",
+        "path": "hot-aubergine-pate-sesame"
+    },
+    {
+        "name": "Bouyiourntí Tomato&Pepper Spread with Katiki cheese",
+        "subcategory": "appetizer",
+        "path": "bouyiournti-katiki-cheese"
+    },
+    {
+        "name": "Bouyiourntí spicy Tomato&Pepper Spread with Feta cheese",
+        "subcategory": "appetizer",
+        "path": "spicy-bouyiournti-feta-cheese"
+    },
+    {
+        "name": "Grilled vegetables with herbs",
+        "subcategory": "vegetable-in-oil",
+        "path": "grilled-vegetables-herbs"
+    },
+    {
+        "name": "Marinated mushrooms with herbs in oil",
+        "subcategory": "vegetable-in-oil",
+        "path": "marinated-mushrooms-herbs"
+    },
+    {
+        "name": "Red Sweet Pepper Pate",
+        "subcategory": "red-pepper-pate",
+        "path": "classic"
+    },
+    {
+        "name": "Red Sweet Pepper Pate spicy - with chilli Ghost Pepper",
+        "subcategory": "red-pepper-pate",
+        "path": "spicy-ghost-pepper"
+    },
+    {
+        "name": "Red Sweet Pepper Pate hot - with chilli Trinidad Scorpion",
+        "subcategory": "red-pepper-pate",
+        "path": "hot-trinidad-scorpion"
+    },
+    {
+        "name": "Red Sweet Pepper Pate extra hot - with chilli Carolina Reaper",
+        "subcategory": "red-pepper-pate",
+        "path": "extra-hot-carolina-reaper"
+    },
+    {
+        "name": "Artichoques pate a la polita",
+        "subcategory": "appetizer",
+        "path": "artichoke-pate-a-la-polita"
+    },
+    {
+        "name": "Tomato sauce with olives & capers",
+        "subcategory": "pasta-sauces",
+        "path": "olives-capers"
+    },
+    {
+        "name": "Tomato sauce with oranges and red sweet peppers",
+        "subcategory": "tomato-creations",
+        "path": "oranges-red-peppers"
+    },
+    {
+        "name": "Tomato sauce with garlic & basil",
+        "subcategory": "pasta-sauces",
+        "path": "garlic-basil"
+    },
+    {
+        "name": "Tomato sauce oriental with 12 spices",
+        "subcategory": "tomato-creations",
+        "path": "oriental-12-spices"
+    },
+    {
+        "name": "Oven baked Aubergines in tomato sauce",
+        "subcategory": "tomato-creations",
+        "path": "oven-baked-aubergines"
+    },
+    {
+        "name": "Tomato sauce with Feta cheese and savory",
+        "subcategory": "pasta-sauces",
+        "path": "feta-cheese-savory"
+    },
+    {
+        "name": "Tomato sauce with tuna & Ouzo",
+        "subcategory": "pasta-sauces",
+        "path": "tuna-ouzo"
+    },
+    {
+        "name": "Tomato sauce with seafood & Retsina",
+        "subcategory": "pasta-sauces",
+        "path": "seafood-retsina"
+    },
+    {
+        "name": "Homemade ketchup classic",
+        "subcategory": "ketchup",
+        "path": "classic"
+    },
+    {
+        "name": "Grill - Ketchup smoked",
+        "subcategory": "ketchup",
+        "path": "smoked-grill"
+    },
+    {
+        "name": "Homemade ketchup spicy",
+        "subcategory": "ketchup",
+        "path": "spicy"
+    },
+    {
+        "name": "Homemade ketchup extra hot with chilli Carolina Reaper",
+        "subcategory": "ketchup",
+        "path": "extra-hot-carolina-reaper"
+    },
+    {
+        "name": "Orzo with goat milk",
+        "subcategory": "traditional-pasta",
+        "path": "orzo-goat-milk"
+    },
+    {
+        "name": "Short Tagliatelle with goat milk",
+        "subcategory": "traditional-pasta",
+        "path": "short-tagliatelle-goat-milk"
+    },
+    {
+        "name": "Tagliatelle with goat milk",
+        "subcategory": "traditional-pasta",
+        "path": "tagliatelle-goat-milk"
+    },
+    {
+        "name": "Short Macaroni with goat milk",
+        "subcategory": "traditional-pasta",
+        "path": "short-macaroni-goat-milk"
+    },
+    {
+        "name": "Trachanas with goat milk",
+        "subcategory": "traditional-pasta",
+        "path": "trachanas-goat-milk"
+    },
+    {
+        "name": "Tagliatelle - Hilopites with sheep milk",
+        "subcategory": "traditional-pasta",
+        "path": "hilopites-sheep-milk"
+    },
+    {
+        "name": "Short Tagliatelle with sheep milk",
+        "subcategory": "traditional-pasta",
+        "path": "short-tagliatelle-sheep-milk"
+    },
+    {
+        "name": "Trachanas with sheep milk",
+        "subcategory": "traditional-pasta",
+        "path": "trachanas-sheep-milk"
+    },
+    {
+        "name": "Vegie - Gemelli with tomato, carrot and spinach",
+        "subcategory": "vegan-pasta",
+        "path": "gemelli-tomato-carrot-spinach"
+    },
+    {
+        "name": "Vegie - Orzo with tomato, carrot and spinach",
+        "subcategory": "vegan-pasta",
+        "path": "orzo-tomato-carrot-spinach"
+    },
+    {
+        "name": "Gemelli with porcini mushroom",
+        "subcategory": "vegan-pasta",
+        "path": "gemelli-porcini-mushroom"
+    },
+    {
+        "name": "Orzo with pepper variety - HOT",
+        "subcategory": "vegan-pasta",
+        "path": "hot-orzo-pepper"
+    },
+    {
+        "name": "Gemelli with ground red smoked pepper",
+        "subcategory": "vegan-pasta",
+        "path": "gemelli-smoked-red-pepper"
+    },
+    {
+        "name": "Orzo with saffron",
+        "subcategory": "vegan-pasta",
+        "path": "orzo-saffron"
+    },
+    {
+        "name": "Tagliatelle with saffron",
+        "subcategory": "vegan-pasta",
+        "path": "tagliatelle-saffron"
+    },
+    {
+        "name": "Tagliatelle with nettle",
+        "subcategory": "vegan-pasta",
+        "path": "tagliatelle-nettle"
+    },
+    {
+        "name": "Tagliatelle with squid ink",
+        "subcategory": "seafood-pasta",
+        "path": "tagliatelle-squid-ink"
+    },
+    {
+        "name": "Orzo with squid ink",
+        "subcategory": "seafood-pasta",
+        "path": "orzo-squid-ink"
+    },
+    {
+        "name": "Orzo with seafood",
+        "subcategory": "seafood-pasta",
+        "path": "orzo-seafood"
+    },
+    {
+        "name": "Tagliatelle with shellfish",
+        "subcategory": "seafood-pasta",
+        "path": "tagliatelle-shellfish"
+    },
+    {
+        "name": "Orzo with shellfish",
+        "subcategory": "seafood-pasta",
+        "path": "orzo-shellfish"
+    },
+    {
+        "name": "Short Macaroni with seafood",
+        "subcategory": "seafood-pasta",
+        "path": "short-macaroni-seafood"
+    }
+]

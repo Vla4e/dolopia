@@ -38,7 +38,7 @@ const props = defineProps({
 let currentProject = ref('pasta')
 let currentProjectObject = ref({})
 watch(() => props.project, (newProject) => {
-  console.log("NewURL:", newProject)
+  // console.log("NewURL:", newProject)
   // new URL(newProject, import.meta.url).href
   currentProject.value = newProject
   currentProjectObject.value = dataObjects[newProject]
@@ -51,7 +51,7 @@ async function triggerSlideIn(){
   
 }
 onMounted(() => {
-  console.log("mounted", props.project)
+  // console.log("mounted", props.project)
   triggerSlideIn()
 })
 </script>

@@ -8,7 +8,7 @@ import cardBackgroundPlaceholder from "@/assets/product_overview/background.png"
 import placeholderProduct from "@/assets/products/product-images/placeholder/placeholder.png"
 
 // import { getProductImages } from "@/helpers/fetchProductListImages.js"
-// console.log("gpi", getProductImages)
+// // console.log("gpi", getProductImages)
 import { getProductCodeToUrlMap } from '@/helpers/fetchProductListImages';
 
 import {ref, computed, watch, onMounted, onBeforeMount, onBeforeUnmount } from 'vue';
@@ -30,7 +30,7 @@ let categoryIdentifier = ref(0)
 let subcategoryIdentifier = ref(null)
 let productIdentifier = ref(null)
 watch(() => categoryData.value.name, (value) => {
-  console.log("LALALALLAL", value)
+  // console.log("LALALALLAL", value)
   productStore.subcategoryByIdentifier = categoryData.value.subcategories[0]
 })
 let currentCategoryIndex = 0
@@ -41,7 +41,7 @@ onMounted(() => {
   else currentCategoryIndex = 3
 })
 function cycleCategory(direction){
-  console.log("DIRECTION", direction, currentCategoryIndex)
+  // console.log("DIRECTION", direction, currentCategoryIndex)
   if(direction === 'right'){
     if(currentCategoryIndex === 3){
       currentCategoryIndex = 0
@@ -60,7 +60,7 @@ function cycleCategory(direction){
 
 function selectSubcategory(value){
   productStore.subcategoryByIdentifier = value
-  console.log("value", value)
+  // console.log("value", value)
 }
 
 
@@ -98,7 +98,7 @@ let processedProducts = computed(() => {
 
 import router from '@/router';
 function goToRoute(categoryPath, subcategoryPath, productQuery ) {
-  console.log("going to product:", categoryPath, subcategoryPath, productQuery)
+  // console.log("going to product:", categoryPath, subcategoryPath, productQuery)
   router.replace({
     name: "projects",
     params: { 
@@ -109,17 +109,17 @@ function goToRoute(categoryPath, subcategoryPath, productQuery ) {
       productCode: productQuery
     }
   }).catch((e) => {
-    console.log("Navigation error:", e);
+    // console.log("Navigation error:", e);
     console.error(e);
   });
 }
 const productImageMap = ref({})
 let mapLoaded = ref(false)
 async function updateProductImageMap() {
-  console.log("updating PIM")
+  // console.log("updating PIM")
   if (subcategoryData.value.productIdentifiers) {
     mapLoaded.value = false
-    let tempMap = await getProductCodeToUrlMap(subcategoryData.value.productIdentifiers);
+    let tempMap = await getProductCodeToUrlMap(subcategoryData.value.productIdentifiers, true); // useCompressed => true
     productImageMap.value = tempMap;
     mapLoaded.value = true
   }
@@ -189,7 +189,7 @@ watch(() => subcategoryData.value.productIdentifiers, () => {
           <img v-if="mapLoaded" class="product" :src="productImageMap[key].mainImage"/>
         </div>
         
-        <!-- <CurrentSelectionInfo class="current-selection-info"/> -->
+        <!-- <SelectionInformationPanel class="current-selection-info"/> -->
 
         <div class="product-texts">
           <div class="category-subcategory">

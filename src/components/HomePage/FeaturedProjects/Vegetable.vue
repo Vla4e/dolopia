@@ -33,8 +33,8 @@ const positionElementC = async () => {
   const heightOffset = 30 * topTargetRect.height / 100;
 
   const topVal = marginOffset + heightOffset;
-  // console.log("leftVal:", leftVal)
-  // console.log("TOPVAL", topVal)
+  // // console.log("leftVal:", leftVal)
+  // // console.log("TOPVAL", topVal)
   // Apply the positioning
   floatingImage.value.style.left = leftVal + 'px';
   // floatingImage.value.style.top = topVal + 'px';

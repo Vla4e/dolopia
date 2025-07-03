@@ -1,90 +1,84 @@
-
 <script setup>
-import leftChevron from "@/assets/project-catalog/left-chevron.png"
-import rightChevron from "@/assets/project-catalog/right-chevron.png"
+import leftChevron from "@/assets/project-catalog/left-chevron.png";
+import rightChevron from "@/assets/project-catalog/right-chevron.png";
 
-import ProductImage from "../ProductOverview/ProductImage.vue";
+import ProductImage from "../ProductView/ProductInformation/ProductData/ProductImage.vue";
 import ProductEmbeddedMobile from "./ProductEmbeddedMobile.vue";
 
-import { ref, computed, onMounted } from 'vue';
-
+import { ref, computed, onMounted } from "vue";
 
 import { useProductStore } from "@/store/product";
 const productStore = useProductStore();
 let productData = computed(() => {
-  return productStore.productData
-})
+  return productStore.productData;
+});
 let productIdentifiers = computed(() => {
-  return productStore.subcategoryData.productIdentifiers
-})
+  return productStore.subcategoryData.productIdentifiers;
+});
 let processedProductName = computed(() => {
-  return splitIntoParts(productData.value.name)
-})
-let iterator = 0
+  return splitIntoParts(productData.value.name);
+});
+let iterator = 0;
 onMounted(() => {
-  iterator = productIdentifiers.value.indexOf(productData.value.code)
-})
-function cycleProduct(direction){
-  console.log("DIRECTION", direction, iterator)
-  if(direction === 'right'){
-    if(iterator === productIdentifiers.value.length - 1){
-      iterator = 0
+  iterator = productIdentifiers.value.indexOf(productData.value.code);
+});
+function cycleProduct(direction) {
+  if (direction === "right") {
+    if (iterator === productIdentifiers.value.length - 1) {
+      iterator = 0;
     } else {
-      iterator++
+      iterator++;
     }
   } else {
-    if(iterator === 0){
-      iterator = productIdentifiers.value.length - 1
+    if (iterator === 0) {
+      iterator = productIdentifiers.value.length - 1;
     } else {
-      iterator--
+      iterator--;
     }
   }
-  console.log("switching product", productIdentifiers.value[iterator])
-  productStore.productCodeByIdentifier = productIdentifiers.value[iterator]
+  productStore.productCodeByIdentifier = productIdentifiers.value[iterator];
 }
 
-let currentPhaseName = ref('description')
+let currentPhaseName = ref("description");
 
-function splitIntoParts (newProduct) {
-  console.log("SPLITTING", newProduct)
+function splitIntoParts(newProduct) {
   // Check if the product name contains "with" or "*"
-  const withIndex = newProduct.indexOf(' with ')
-  const asteriskIndex = newProduct.indexOf('*')
-  let firstPart = ''
-  let secondPart = ''
+  const withIndex = newProduct.indexOf(" with ");
+  const asteriskIndex = newProduct.indexOf("*");
+  let firstPart = "";
+  let secondPart = "";
   if (withIndex !== -1) {
     // split at "with"
-    firstPart = newProduct.slice(0, withIndex).trim()
-    secondPart = newProduct.slice(withIndex).trim()
+    firstPart = newProduct.slice(0, withIndex).trim();
+    secondPart = newProduct.slice(withIndex).trim();
   } else if (asteriskIndex !== -1) {
     // Split at "*"
-    firstPart = newProduct.slice(0, asteriskIndex).trim()
-    secondPart = newProduct.slice(asteriskIndex + 1).trim()
+    firstPart = newProduct.slice(0, asteriskIndex).trim();
+    secondPart = newProduct.slice(asteriskIndex + 1).trim();
   } else {
     // If neither "with" nor "*" is found, put everything in firstPart
-    firstPart = newProduct.trim()
-    secondPart = ''
+    firstPart = newProduct.trim();
+    secondPart = "";
   }
 
-  return [firstPart, secondPart]
+  return [firstPart, secondPart];
 }
-const localPhases = ['none', 'description', 'wheel', 'data']
-let currentPhaseIndex = ref(0)
-let isTransitioning = ref(false)
+const localPhases = ["none", "description", "wheel", "data"];
+let currentPhaseIndex = ref(0);
+let isTransitioning = ref(false);
 const Backward = false; //scrollUp
 const Forward = true; //scrollDown
-let test = true
+let test = true;
 function cyclePhase(direction) {
-  if(test) return
-  console.log("CurrentPHASEINDEx", currentPhaseIndex.value, "direction", direction, localPhases.length)
-  if(!props.isOverviewActive){
-    return
+  if (test) return;
+  if (!props.isOverviewActive) {
+    return;
   }
   if (!currentPhaseIndex.value) {
     currentPhaseIndex.value = 1;
     currentPhaseName.value = localPhases[currentPhaseIndex.value];
     isTransitioning.value = true;
-    emit('phaseChange', currentPhaseName.value);
+    emit("phaseChange", currentPhaseName.value);
     return;
   }
   if (!isTransitioning.value) {
@@ -92,58 +86,57 @@ function cyclePhase(direction) {
       if (currentPhaseIndex.value < localPhases.length - 1) {
         currentPhaseIndex.value++;
       } else {
-        currentPhaseIndex.value = 1
+        currentPhaseIndex.value = 1;
       }
     } else {
-      if(currentPhaseIndex.value === 1){
-        currentPhaseIndex.value = localPhases.length - 1
+      if (currentPhaseIndex.value === 1) {
+        currentPhaseIndex.value = localPhases.length - 1;
       } else {
-        currentPhaseIndex.value--
+        currentPhaseIndex.value--;
       }
     }
     currentPhaseName.value = localPhases[currentPhaseIndex.value];
     isTransitioning.value = true;
   }
 }
-function selectedPhaseFromCarousel(phaseIndex){
-  if(test) return
-  currentPhaseIndex = phaseIndex
+function selectedPhaseFromCarousel(phaseIndex) {
+  if (test) return;
+  currentPhaseIndex = phaseIndex;
   currentPhaseName.value = localPhases[currentPhaseIndex];
   isTransitioning.value = true;
 }
-const phasesShownOnCarousel = ['description', 'wheel', 'data']
+const phasesShownOnCarousel = ["description", "wheel", "data"];
 </script>
 
 <template>
   <div class="products-mobile">
-  
     <div class="selection-menu">
       <div class="products">
-        <img @click="cycleProduct('left')" :src="leftChevron" class="chevron left">
+        <img @click="cycleProduct('left')" :src="leftChevron" class="chevron left" />
         <span class="product">
           <span class="large-text">{{ processedProductName[0] }}</span>
           <span class="small-text">{{ processedProductName[1] }}</span>
         </span>
-        <img @click="cycleProduct('right')" :src="rightChevron" class="chevron right">
+        <img @click="cycleProduct('right')" :src="rightChevron" class="chevron right" />
       </div>
     </div>
 
-    <ProductImage class="product-image"/>
-    
+    <ProductImage class="product-image" />
+
     <div class="dynamic-container">
-      <div 
-        v-if="currentPhaseName === 'description'" 
-        key="description" 
+      <div
+        v-if="currentPhaseName === 'description'"
+        key="description"
         class="description"
       >
         <p>
-          {{ productData.properties['Description EN'] }}
+          {{ productData.properties["Description EN"] }}
         </p>
       </div>
     </div>
-    
+
     <ProductEmbeddedMobile />
-    
+
     <!-- <PhaseCarousel 
       @selectedPhaseFromCarousel="selectedPhaseFromCarousel"
       @cyclePhase="cyclePhase"
@@ -151,33 +144,31 @@ const phasesShownOnCarousel = ['description', 'wheel', 'data']
       :currentPhaseName="currentPhaseName" 
       :phasesShownOnCarousel="phasesShownOnCarousel"
     /> -->
-
   </div>
 </template>
 
-
 <style lang="scss" scoped>
-.products-mobile{
+.products-mobile {
   // flex-grow:1;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   height: 100%;
-  .product-image{
+  .product-image {
     width: 90%;
     height: 40%;
     min-height: 40%;
     max-height: 45%;
   }
-  .dynamic-container{
+  .dynamic-container {
     margin-top: 20px;
     margin-bottom: 20px;
-    .description{
+    .description {
       width: 95%;
       margin-left: auto;
       margin-right: auto;
-      p{
+      p {
         color: #000;
         text-align: center;
         font-family: "Raleway";
@@ -185,75 +176,73 @@ const phasesShownOnCarousel = ['description', 'wheel', 'data']
         font-style: normal;
         font-weight: 400;
         line-height: 24px; /* 150% */
-        @media(max-width: 390px){
+        @media (max-width: 390px) {
           font-size: 12px;
         }
       }
     }
   }
 }
-.selection-menu{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-    width: 100%;
+.selection-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  min-height: 20%;
+  max-height: 25%;
+  @media (max-width: 390px) {
     min-height: 20%;
-    max-height: 25%;
-    @media(max-width: 390px){
-      min-height: 20%;
-    }
-    .products{
+  }
+  .products {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    .product {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+      width: 90%;
+      justify-content: center;
       align-items: center;
-      width: 95%;
-      margin-left: auto;
-      margin-right: auto;
-      .product{
-        display: flex;
-        flex-direction: column;
-        width: 90%;
-        justify-content: center;
-        align-items: center;
-        .large-text{
-          color: #000;
-          text-align: center;
-          font-family: "Century Gothic";
-          font-size: 24px;
-          font-style: normal;
-          font-weight: 700;
-          line-height: 24px; /* 75% */
-          letter-spacing: 2.88px;
-          text-transform: uppercase;
-          margin-bottom: 10px;
-        }
-        .small-text{
-          color: #000;
-          text-align: center;
-          font-family: "Century Gothic";
-          font-size: 16px;
-          font-style: normal;
-          font-weight: 700;
-          line-height: 24px; /* 150% */
-          letter-spacing: 1.44px;
-          text-transform: uppercase;
-        }
+      .large-text {
+        color: #000;
+        text-align: center;
+        font-family: "Century Gothic";
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 24px; /* 75% */
+        letter-spacing: 2.88px;
+        text-transform: uppercase;
+        margin-bottom: 10px;
       }
-      .chevron{
-        width: 10px;
-        height: 20px;
-        transition: transform 0.3s ease;
-        &.left{
-
-        }
-        &.right{
-
-        }
-        &:focus{
-          transform: scale(110%);
-        }
+      .small-text {
+        color: #000;
+        text-align: center;
+        font-family: "Century Gothic";
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 24px; /* 150% */
+        letter-spacing: 1.44px;
+        text-transform: uppercase;
       }
     }
+    .chevron {
+      width: 10px;
+      height: 20px;
+      transition: transform 0.3s ease;
+      &.left {
+      }
+      &.right {
+      }
+      &:focus {
+        transform: scale(110%);
+      }
+    }
+  }
 }
 </style>

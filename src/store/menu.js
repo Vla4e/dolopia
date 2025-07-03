@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { ref, reactive, computed, watch, toRaw } from 'vue';
 
 
-console.log("subcategory")
+// console.log("subcategory")
 export const useMenuStore = defineStore('menu', () => {
 
   const showSidebar = ref(null);
@@ -13,7 +13,7 @@ export const useMenuStore = defineStore('menu', () => {
   }
   function setContactFormFlag(value){
     showContactForm.value = value
-    console.log("value set to:", showContactForm.value)
+    // console.log("value set to:", showContactForm.value)
   }
   return {
     showSidebar,

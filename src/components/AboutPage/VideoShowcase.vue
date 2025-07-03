@@ -51,7 +51,7 @@ const props = defineProps({
 
 let currentDataObject = ref({})
 watch(() => props.sectionId, (newSectionId) => {
-  console.log("ID:", newSectionId)
+  // console.log("ID:", newSectionId)
   currentDataObject.value = dataObject[newSectionId]
 }, {
   immediate: true

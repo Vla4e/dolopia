@@ -30,7 +30,7 @@ const props = defineProps({
 import { useProductStore } from '@/store/product';
 const productStore = useProductStore();
 
-// console.log("FORTYPE", props.forType)
+// // console.log("FORTYPE", props.forType)
 
 let selectedIdArray = computed(() => { // returns array with values
   if(props.forType === 'category'){
@@ -52,18 +52,18 @@ let selectedNameArray = computed(() => { // returns array names
 })
 
 let selectedTypeData = computed(() => {
-  console.log("Computing type data", props.forType)
+  // console.log("Computing type data", props.forType)
   if(props.forType === 'category'){
     return productStore.categoryData
   } else if(props.forType === 'subcategory'){
     return productStore.subcategoryData
   } else if(props.forType === 'product'){
-    console.log("Returning product:", productStore.productData)
+    // console.log("Returning product:", productStore.productData)
     return productStore.productData
   }
 })
 watch(() => selectedTypeData.value.name, (newValue) => {
-  console.log("New value for selectedTypeData", newValue)
+  // console.log("New value for selectedTypeData", newValue)
 })
 
 const removeAsterisks = (text) => {
@@ -74,7 +74,7 @@ let isSelecting = false
 // Select default item
 const selectItem = (itemIdentifier) => {
   isSelecting = true
-  console.log("newItem", itemIdentifier)
+  // console.log("newItem", itemIdentifier)
   productStore.selectItemFromDropdown(props.forType, itemIdentifier)
   isOpen.value = !isOpen.value;
   setTimeout(() => {

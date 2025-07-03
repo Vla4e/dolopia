@@ -45,7 +45,7 @@ export const validateWebsite = (value) => {
 };
 
 export const validateForm = (form, formType = null) => {
-  // console.log("Validating form:", form)
+  // // console.log("Validating form:", form)
   const errors = {};
 
   errors.email = validateEmail(form.email);
@@ -64,7 +64,7 @@ export const validateForm = (form, formType = null) => {
     // errors.firstName = validateName(form.firstName, 'First name');
     // errors.lastName = validateName(form.lastName, 'Last name');
   }
-  console.log("Errors before returning: ", errors)
+  // console.log("Errors before returning: ", errors)
   return {
     isValid: Object.values(errors).every(error => error === null),
     errors
