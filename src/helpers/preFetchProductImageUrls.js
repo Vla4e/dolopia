@@ -37,7 +37,7 @@ const [shadowsMap, overlaysMap] = (() => {
   for (const path in shadowsOverlaysModules) {
     const filename = path.substring(path.lastIndexOf('/') + 1);
     const key = filename.replace(/-compressed\.png$/, '');
-    console.log("--path-shadow-overlay--", path)
+    // console.log("--path-shadow-overlay--", path)
     
     if (path.includes('/shadows/')) {
       shadows[key] = shadowsOverlaysModules[path];

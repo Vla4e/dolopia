@@ -98,10 +98,10 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-      component: () => import('../views/AboutView.vue'),
+      component: () => import('../views/AboutViewReworked.vue'),
       meta: { 
-        hasNavbar: true,
-        hasFooter: true,
+        hasNavbar: false,
+        hasFooter: false,
         hasNavbarMobile: true,
         floatingNavbarMobile: true,
         floatingNavbar: true,
