@@ -94,20 +94,20 @@ onUnmounted(() => {
 
     <img class="landing-mobile" v-if="isMobile" src="@/assets/landing/landing-mobile-smallest.png"/>
 
-    <div class="project-section" id="tomato" key="phase-4" ref="tomatoSection">
+    <div v-if="!isMobile" class="project-section" id="tomato" key="phase-4" ref="tomatoSection">
       <Tomato/>
     </div>
-    <div class="project-section gradient" key="phase-3">
+    <div v-if="!isMobile" class="project-section gradient" key="phase-3">
       <Vegetable :project="'pasta'"/>
     </div>
-    <div class="project-section" key="phase-5">
+    <div v-if="!isMobile" class="project-section" key="phase-5">
       <Pasta :project="'vegetable'"/>
     </div>
-    <div class="project-section gradient" key="phase-6">
+    <div v-if="!isMobile" class="project-section gradient" key="phase-6">
       <Fruit :project="'fruit'"/>
     </div>
     <Transition name="slide" mode="in-out">
-      <div v-show="showFeaturedDisclaimer" class="featured-products-disclaimer">Featured product</div>
+      <div v-show="showFeaturedDisclaimer" class="featured-products-disclaimer">Featured products</div>
     </Transition>
 
   </div>
@@ -179,10 +179,10 @@ onUnmounted(() => {
   color: #039EA2;
   text-align: center;
   font-family: "Century Gothic";
-  font-size: 36px;
+  font-size: 24px;
   font-style: normal;
   font-weight: 700;
-  line-height: 30px; /* 83.333% */
+  line-height: 0.8; /* 83.333% */
   z-index: 2000;
   pointer-events: none;
   @media(max-width: 1600px){

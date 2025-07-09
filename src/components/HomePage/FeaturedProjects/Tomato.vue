@@ -1,5 +1,7 @@
 <script setup>
 import { nextTick, onMounted, ref } from 'vue';
+import ChevronLink from '@/components/Routing/ChevronLink.vue';
+import { goToRoute } from '@/helpers/goToRoute';
 
 defineOptions({
   name:'FeaturedTomato'
@@ -22,7 +24,7 @@ const positionElementC = async () => {
   const topTargetRect = topTarget.value.getBoundingClientRect();
   const rightTargetRect = rightTarget.value.getBoundingClientRect();
 
-  const offsetInVW = 6;
+  const offsetInVW = 9;
   const offsetManual = 9;
   const offsetFinal = offsetInVW - offsetManual
   const offsetInPixels = (offsetFinal * window.innerWidth) / 100;
@@ -34,14 +36,9 @@ const positionElementC = async () => {
   const topVal = marginOffset + heightOffset;
 
   floatingImage.value.style.right = rightVal + 'px';
-  floatingImage.value.style.top = -topVal + 'px';
+  // floatingImage.value.style.top = -topVal + 'px';
 };
 
-// No need to inject emitter or use IntersectionObserver here anymore
-// import {inject, onUnmounted} from 'vue'; // REMOVE THIS LINE
-// let observer = null; // REMOVE THIS LINE
-// let hasTriggeredEnter = ref(false) // REMOVE THIS LINE
-// const observerCallback = (entries) => { ... } // REMOVE THIS FUNCTION
 
 onMounted(async () => {
   // Position the floating image
@@ -49,30 +46,25 @@ onMounted(async () => {
     await positionElementC();
   }, 500);
 
-  // IntersectionObserver logic for this component is moved to Home.vue
 });
-
-// onUnmounted(() => { // REMOVE THIS onUnmounted BLOCK
-//   if (observer) {
-//     observer.disconnect();
-//   }
-// });
 
 </script>
 
 <template>
-  <section ref="container" class="featured"> 
+  <section ref="container" class="featured">
 
     <div ref="topSection" class="top-section">
-      <h2 ref="topTarget" class="product-name">
+      
+      <h2 @click="goToRoute('/projects/tomato-project/pasta-sauces/feta-cheese-savory')" ref="topTarget" class="product-name">
         Tomato sauce
         <span class="small-text">
           with Feta and savory
         </span>
       </h2>
+      <!-- <ChevronLink style="z-index: 10;" :routePath="'/catalog'" linkText=""/> -->
     </div>
     <div class="middle-section">
-      <img ref="floatingImage" src="@/assets/landing/sections/tomato-group.png" class="product-image"/>
+      <img @click="goToRoute('/projects/tomato-project/pasta-sauces/feta-cheese-savory')" ref="floatingImage" src="@/assets/landing/sections/tomato-group.png" class="product-image"/>
 
       <div class="text">
         <span ref="rightTarget" class="large">
@@ -107,13 +99,11 @@ onMounted(async () => {
 </template>
 
 <style lang="scss" scoped>
-/* Your existing styles remain the same */
 .featured {
   display: flex;
   flex-direction: column;
   width: 60%;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
   height: 100vh;
   justify-content: center;
   align-items: center;
@@ -129,19 +119,24 @@ onMounted(async () => {
     .product-name {
       display: flex;
       flex-direction: column;
+      width: 60%;
+      margin-right: 25%;
       color: #FFF;
       text-align: right;
       font-family: "Century Gothic";
-      font-size: clamp(2.5rem, 7vw, 7rem);
-      line-height: 1; // 135% of font-size
+      /* Further reduced */
+      font-size: clamp(2.2rem, 4.5vw, 5rem);
+      line-height: 1.1;
       font-style: normal;
       font-weight: 700;
       letter-spacing: 6px;
+      cursor: pointer;
       .small-text {
         color: #FFF;
         text-align: right;
         font-family: "Century Gothic";
-        font-size: clamp(1.5rem, 3vw, 4rem);
+        /* Further reduced */
+        font-size: clamp(1.2rem, 2vw, 2.8rem);
         line-height: 1;
         font-style: normal;
         font-weight: 700;
@@ -154,21 +149,20 @@ onMounted(async () => {
     display: flex;
     justify-content: flex-end;
     align-items: flex-start;
-    margin-bottom: 30px;;
+    margin-bottom: 20px;
     width: 100%;
-    // height: 45%;
     position: relative;
     overflow: visible;
 
     .product-image {
-      width: 30vw;
-      // width: 30vw;
-      // height: auto;
+      width: 28vw;
       object-fit: contain;
       max-width: 100%;
       position: absolute;
-      // top: -25%;
-      // left: 5%;
+      // left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
     }
 
     .text {
@@ -176,10 +170,11 @@ onMounted(async () => {
       flex-direction: column;
       row-gap: 12px;
       margin-right: 40px;
+      width: 60%;
       .large {
         color: #039EA2;
         font-family: "Century Gothic";
-        font-size: clamp(1.4rem, 2.5vw, 2.8rem);
+        font-size: clamp(1.2rem, 2.0vw, 2.2rem);
         line-height: 1.2;
         font-style: normal;
         font-weight: 400;
@@ -189,7 +184,7 @@ onMounted(async () => {
         b {
           color: #039EA2;
           font-family: "Century Gothic";
-          font-size: clamp(1.3rem, 2vw, 2.5rem);
+          font-size: clamp(1.1rem, 1.7vw, 2.1rem);
           line-height: 1.2;
           font-style: normal;
           font-weight: 700;
@@ -200,8 +195,8 @@ onMounted(async () => {
       p {
         color: #000;
         font-family: "Raleway";
-        font-size: clamp(12px, 1.3vw, 1.25rem);
-        line-height: 1.5;
+        font-size: clamp(12px, 1.1vw, 1.05rem);
+        line-height: 1.6;
         font-style: normal;
         font-weight: 400;
       }
@@ -212,46 +207,26 @@ onMounted(async () => {
     p {
       color: #000;
       font-family: "Raleway";
-      font-size: clamp(12px, 1.3vw, 1.25rem);
-      line-height: 1.5;
+      font-size: clamp(12px, 1.1vw, 1.05rem);
+      line-height: 1.6;
       font-style: normal;
       font-weight: 400;
     }
   }
 
-  // Media query for smaller screens with 30% font-size reduction
   @media (max-width: 1600px) and (max-height: 900px) {
-    .top-section {
-      .product-name {
-        font-size: clamp(1.75rem, 4.9vw, 4.9rem); // 30% reduction from clamp(2.5rem, 7vw, 7rem)
-
-        .small-text {
-          font-size: clamp(1.05rem, 2.1vw, 2.8rem); // 30% reduction from clamp(1.5rem, 3vw, 4rem)
-        }
-      }
+    .top-section .product-name {
+      font-size: clamp(1.8rem, 4.2vw, 4.2rem);
+      .small-text { font-size: clamp(1.1rem, 1.8vw, 2.4rem); }
     }
-
-    .middle-section {
-      .text {
-        .large {
-          font-size: clamp(0.98rem, 1.75vw, 1.96rem); // 30% reduction from clamp(1.4rem, 2.5vw, 2.8rem)
-
-          b {
-            font-size: clamp(0.91rem, 1.4vw, 1.75rem); // 30% reduction from clamp(1.3rem, 2vw, 2.5rem)
-          }
-        }
-
-        p {
-          font-size: clamp(8.4px, 0.91vw, 0.875rem); // 30% reduction from clamp(12px, 1.3vw, 1.25rem)
-        }
+    .middle-section .text {
+      .large {
+        font-size: clamp(1rem, 1.5vw, 1.7rem);
+        b { font-size: clamp(0.9rem, 1.2vw, 1.5rem); }
       }
+      p { font-size: clamp(10px, 0.9vw, 0.9rem); }
     }
-
-    .bottom-section {
-      p {
-        font-size: clamp(8.4px, 0.91vw, 0.875rem); // 30% reduction from clamp(12px, 1.3vw, 1.25rem)
-      }
-    }
+    .bottom-section p { font-size: clamp(10px, 0.9vw, 0.9rem); }
   }
 }
 </style>

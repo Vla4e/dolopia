@@ -1,5 +1,6 @@
 <script setup>
 import { nextTick, onMounted, ref } from 'vue';
+import { goToRoute } from '@/helpers/goToRoute';
 
 defineOptions({
   name:'FeaturedTomato'
@@ -29,21 +30,22 @@ const positionElementC = async () => {
   const imageRect = floatingImage.value.getBoundingClientRect();
   // C's right edge should align with B's left edge
   // So C's left position = B's left - C's width
-  const offsetInVW = 0;
+  const offsetInVW = 10;
   const offsetManual = 0;
   const offsetFinal = offsetInVW - offsetManual
   const offsetInPixels = (offsetFinal * window.innerWidth) / 100;
   const leftVal = rightTargetRect.width - offsetInPixels;
+  // console.log()
   const offsetByAwardIcon = (25 * imageRect.width / 100); //Icon is 34.4% of the whole image, removing 9.4% for space to left
 
   const marginOffset = 0;
-  const heightOffset = 10 * imageRect.height / 100;
+  const heightOffset = 5 * imageRect.height / 100;
   const topVal = marginOffset + heightOffset;
 
   // Apply the positioning
-  floatingImage.value.style.left = leftTargetRect.width - offsetByAwardIcon + 'px';
+  floatingImage.value.style.left = leftTargetRect.width - (offsetByAwardIcon + offsetInPixels) + 'px';
   // floatingImage.value.style.top = topVal + 'px';
-  floatingImage.value.style.bottom = -heightOffset - 5 + 'px';
+  floatingImage.value.style.bottom = -heightOffset + 'px';
 };
 
 onMounted( async () => {
@@ -58,7 +60,7 @@ onMounted( async () => {
   <section ref="container" class="featured">
 
     <div ref="topSection" class="top-section">
-      <h2 ref="topTarget" class="product-name">
+      <h2 @click="goToRoute('/projects/fruit-project/jam/strawberry-mint-pepper')" ref="topTarget" class="product-name">
         Strawberry
         <span class="small-text">
           with Mint and Pepper Jam
@@ -67,7 +69,7 @@ onMounted( async () => {
     </div>
     <div class="middle-section">
 
-      <img ref="floatingImage" src="@/assets/landing/sections/fruit-group.png" class="product-image"/>
+      <img @click="goToRoute('/projects/fruit-project/jam/strawberry-mint-pepper')" ref="floatingImage" src="@/assets/landing/sections/fruit-group.png" class="product-image"/>
 
       <div class="text">
         <span ref="rightTarget" class="large lt-1 no-break">
@@ -108,8 +110,7 @@ onMounted( async () => {
   display: flex;
   flex-direction: column;
   width: 60%;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
   height: 100vh;
   justify-content: center;
   align-items: center;
@@ -128,29 +129,29 @@ onMounted( async () => {
       color: #FFF;
       text-align: left;
       font-family: "Century Gothic";
-      font-size: clamp(3rem, 6vw, 6rem); // 48px → 96px
+      // Reduced font size by ~15%
+      font-size: clamp(2.5rem, 5vw, 5.1rem);
       line-height: 1.1;
       font-style: normal;
       font-weight: 700;
-      letter-spacing: 6px;
-      // New media query for laptop screens with limited height
+      letter-spacing: 5px;
+
       @media(min-width: 1400px) and (max-height: 800px){
-        font-size: clamp(2.1rem, 4.2vw, 4.2rem); // 30% reduction from original
-        line-height: clamp(2.1rem, 4.2vw, 4.2rem);
-        letter-spacing: 4px;
+        font-size: clamp(1.8rem, 3.5vw, 3.6rem);
+        line-height: 1.1;
         .small-text{
-          font-size: clamp(0.875rem, 1.75vw, 1.75rem); // 30% reduction
-          line-height: clamp(0.875rem, 1.75vw, 1.75rem);
+          font-size: clamp(0.9rem, 1.5vw, 1.5rem);
         }
       }
       .small-text {
         color: #FFF;
         text-align: right;
         font-family: "Century Gothic";
-        font-size: clamp(1.25rem, 2.5vw, 2.5rem); // 20px → 40px
-        line-height: clamp(1.25rem, 2.5vw, 2.5rem);
+        font-size: clamp(1.05rem, 2.1vw, 2.1rem);
+        line-height: 1;
         font-style: normal;
         font-weight: 700;
+        margin-top: 10px;
       }
     }
   }
@@ -159,28 +160,26 @@ onMounted( async () => {
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
-    margin-bottom: 30px;;
+    margin-bottom: 20px; // Reduced from 30px
     width: 100%;
-    // height: 45%;
     position: relative;
     overflow: visible;
 
     .product-image {
-      width: 27vw;
-      // width: 30vw;
-      // height: auto;
+      width: 25vw; // Reduced from 27vw
       object-fit: contain;
       max-width: 100%;
       position: absolute;
-      // top: -25%;
-      // left: 5%;
+      // top: 50%;
+      // transform: translateY(-50%);
     }
 
     .text {
       display: flex;
       flex-direction: column;
       row-gap: 12px;
-      margin-right: 40px;
+      width: 65%; // Adjusted width to prevent overlap
+      
       .large {
         color: #039EA2;
         font-family: "Century Gothic";
@@ -189,102 +188,43 @@ onMounted( async () => {
         letter-spacing: 0.9px;
         display: flex;
         flex-direction: column;
+        // margin-bottom: 25px;
         &.lt-1{
-          font-size: clamp(1.5rem, 2.25vw, 2.25rem);
+          font-size: clamp(1.3rem, 1.9vw, 1.9rem);
           line-height: 1.25;
-          b{
-            font-size: clamp(1.5rem, 2.25vw, 2.25rem);
-            line-height: 1.25;
-          }
+          b{ font-size: clamp(1.3rem, 1.9vw, 1.9rem); }
         };
         &.lt-2{
-          font-size: clamp(2rem, 3vw, 3rem);
-          line-height: clamp(2rem, 3vw, 3rem);
-          b{
-            font-size: clamp(2.2rem, 3.125vw, 3.125rem); // 50px
-            line-height: clamp(2.2rem, 3.125vw, 3.125rem);
-          }
+          font-size: clamp(1.7rem, 2.5vw, 2.5rem);
+          line-height: 1.1;
+          b{ font-size: clamp(1.8rem, 2.6vw, 2.6rem); }
+          margin-bottom: 25px;
         };
         &.no-break{
           display: inline;
         }
         
-        // New media query for laptop screens with limited height
         @media(min-width: 1400px) and (max-height: 800px){
-          &.lt-1{
-            font-size: clamp(1.05rem, 1.875vw, 1.575rem); // 30% reduction
-            b{
-              font-size: clamp(1.05rem, 1.875vw, 1.575rem);
-            }
-          }
-          &.lt-2{
-            font-size: clamp(1.4rem, 2.1vw, 2.1rem); // 30% reduction
-            line-height: clamp(1.4rem, 2.1vw, 2.1rem);
-            b{
-              font-size: clamp(1.54rem, 2.188vw, 2.188rem); // 30% reduction
-              line-height: clamp(1.54rem, 2.188vw, 2.188rem);
-            }
-          }
-          letter-spacing: 0.6px;
-        }
-        
-        b {
-          color: #039EA2;
-          font-family: "Century Gothic";
-          font-size: clamp(1.5rem, 2.5vw, 2.5rem);
-          line-height: clamp(1.5rem, 2.5vw, 2.5rem);
-          font-style: normal;
-          font-weight: 700;
-          letter-spacing: 0.8px;
-          
-          // New media query for laptop screens with limited height
-          @media(min-width: 1400px) and (max-height: 800px){
-            font-size: clamp(1.05rem, 1.75vw, 1.75rem); // 30% reduction
-            line-height: clamp(1.05rem, 1.75vw, 1.75rem);
-            letter-spacing: 0.56px;
-          }
-        }
-        @media(max-width: 1600px) and (min-width: 1366px) and (max-height: 900px){
-          .large{
-            &.lt-1{
-              font-size: 36px;
-              b{
-                
-              }
-            }
-            &.lt-2{
-              font-size: 50px;
-              b{
-
-              }
-            }
-            font-size: 64px;
-            line-height: 64px;
-          }
-          .small-text{
-            font-size: 30px;
-            line-height: 30px;
-          }
+          &.lt-1{ font-size: clamp(1.1rem, 1.6vw, 1.6rem); }
+          &.lt-2{ font-size: clamp(1.4rem, 2.1vw, 2.1rem); }
         }
       }
 
       p {
         color: #000;
         font-family: "Raleway";
-        font-size: clamp(1rem, 1.5vw, 1.25rem);
-        line-height: 1.5;
+        font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+        line-height: 1.6;
         font-style: normal;
         font-weight: 400;
-        margin-bottom: 50px;
+        margin-bottom: 30px; // Reduced from 50px
         
-        // New media query for laptop screens with limited height
         @media(min-width: 1400px) and (max-height: 800px){
-          font-size: clamp(0.7rem, 1.05vw, 0.875rem); // 30% reduction
-          margin-bottom: 35px; // 30% reduction
-        }
-        
-        @media(max-width: 1366px){
+          font-size: clamp(0.7rem, 1vw, 0.9rem);
           margin-bottom: 25px;
+        }
+        @media(max-width: 1366px){
+          margin-bottom: 20px;
           font-size: 12px;
         }
       }
@@ -293,23 +233,18 @@ onMounted( async () => {
 
   .bottom-section {
     width: 100%;
-    
-    // New media query for laptop screens with limited height
     @media(min-width: 1400px) and (max-height: 800px){
-      margin-top: -15px; // Reduce spacing to save vertical space
+      margin-top: -15px;
     }
     
     p {
       color: #000;
       font-family: "Raleway";
-      font-size: clamp(1rem, 1.25vw, 1.25rem);
-      line-height: 1.5;
-      
-      // New media query for laptop screens with limited height
+      font-size: clamp(0.9rem, 1vw, 1.1rem);
+      line-height: 1.6;
       @media(min-width: 1400px) and (max-height: 800px){
-        font-size: clamp(0.7rem, 0.875vw, 0.875rem); // 30% reduction
+        font-size: clamp(0.7rem, 0.8vw, 0.8rem);
       }
-      
       @media(max-width: 1366px){
         font-size: 12px;
       }

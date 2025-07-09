@@ -34,7 +34,7 @@
       class="footer-arrow"
       :routePath="'/catalog'"
       :showDropdown="false"
-      :buttonText="'Explore'"
+      :buttonText="'Explore projects'"
     />
     <!-- <Dropdown v-if="computeShowDropdown" :forType="'product'" :dropdownAlignment="'left'" class="product-dropdown" /> -->
   </div>

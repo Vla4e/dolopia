@@ -81,7 +81,7 @@ emitter.on('mountFinished', (e) => {
   }, 700)
 })
 onMounted(() => {
-  // console.log("Window =================", window.innerWidth, window.innerHeight)
+  console.log("Window =================", window.innerWidth, window.innerHeight)
 })
 onBeforeUnmount(() => {
   emitter.off('mountFinished')

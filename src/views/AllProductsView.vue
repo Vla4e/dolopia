@@ -214,7 +214,7 @@ function selectSubcategory(subcategory){
     display: flex;
     width: 100%;
     color: black;
-    padding-left: 2vw; // 2.28% of whole navbar width apparently
+    padding-left: 2vw; // 2.28% of whole navbar width
     padding-right: 5vw;
     margin-bottom: 2vh;
     .project-name {
@@ -355,23 +355,6 @@ function selectSubcategory(subcategory){
       // Set borders on the container itself to frame the grid
       border-left: 1px solid white;
       // // border-right: 1px solid white;
-      background-image:
-        /* Horizontal lines (color: #afd6d9, height: 450px) */
-        repeating-linear-gradient(
-          to bottom,
-          #afd6d9,
-          #afd6d9 1px,
-          transparent 1px,
-          transparent 450px
-        ),
-        /* Vertical lines (color: white, width: 1/3 of container) */
-        repeating-linear-gradient(
-          to right,
-          white,
-          white 1px,
-          transparent 1px,
-          transparent calc(100% / 3)
-        );
       .product-grid-inner {
         display: contents; /* Allows the grid items to respect the parent grid's layout */
       }
@@ -420,7 +403,7 @@ function selectSubcategory(subcategory){
             font-size: 12px;
             font-style: normal;
             font-weight: 400;
-            line-height: 12px; /* 120% */
+            line-height: 1.2; /* 120% */
             width: 70%;
             margin-left: auto;
             margin-right: auto;
