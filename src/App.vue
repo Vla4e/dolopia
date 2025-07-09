@@ -1,6 +1,7 @@
 <template>
 
   <!-- <img class="mobile-background" v-if="isMobile" src="@/assets/landing/landing-mobile-edited.png"/> -->
+  <button style="background: white; border-radius: 200px; color: black; width: 100px; height: 40px; position: absolute; left: 50%; z-index: 2302300;" @click="switchFlow">{{ currentFlow }} flow</button>
   <Transition name="slide-down">
     <header v-show="showNavbar" :class="floatingNavbar || !showNavbar ? 'floating-navbar' : ''">
       <div class="wrapper">
@@ -116,7 +117,14 @@ watch(
     }
   }
 );
-
+import { useProductStoreCleanup } from "./store/productCleanup";
+const productStore = useProductStoreCleanup();
+let currentFlow = ref('old');
+function switchFlow(){
+  if(currentFlow.value === 'old') currentFlow.value = 'new'
+  else currentFlow.value = 'old'
+  productStore.setFlowType(currentFlow.value)
+}
 </script>
 
 <style lang="scss" scoped>

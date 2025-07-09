@@ -2,8 +2,12 @@
 import placeholderImage from "@/assets/products/product-images/placeholder/placeholder-compressed.png";
 
 let projects = ["tomato-project", "vegetable-project", "pasta-project", "fruit-project"];
-let loadedSubcategories = ref(true);
-import { ref, computed, watch, nextTick } from "vue";
+let loadedSubcategories = ref(true); // This variable seems unused, consider removing if not needed.
+
+import { useRoute } from "vue-router";
+const route = useRoute();
+
+import { ref, computed, watch, nextTick, onMounted } from "vue";
 import { useProductStoreCleanup } from "@/store/productCleanup";
 import { splitProductName } from "@/helpers/splitProductName";
 const productStore = useProductStoreCleanup();
@@ -20,26 +24,31 @@ let selectedProject = ref("tomato-project");
 let selectedSubcategory = ref(null);
 let isLoading = ref(false);
 
-// Use a watcher on selectedProject to control the loading state
+// Watchers for loading state based on project/subcategory changes
+// We'll primarily manage isLoading within the main route watcher below for initial load.
+// These watchers are good for user interaction with the buttons.
 watch(selectedProject, async (newProject, oldProject) => {
-  // Only trigger loading and reset if the project actually changed
+  console.log("firing watcher SPROJECT");
   if (newProject !== oldProject) {
     isLoading.value = true;
-    selectedSubcategory.value = null; // Reset subcategory when project changes
-    await nextTick(); // Allow Vue to update the DOM before the timeout
-    setTimeout(() => {
+    // selectedSubcategory.value = null; // This reset is now handled more explicitly in selectProject/route watcher
+    await nextTick();
+    setTimeout(() => { // Keep this for visual feedback during project switch
       isLoading.value = false;
-    }, 200); // Small delay to show the skeleton
+    }, 200);
   }
 });
-watch(selectedSubcategory, async () => {
-  isLoading.value = true;
-  // selectedSubcategory.value = null; // Reset subcategory when project changes
-  await nextTick(); // Allow Vue to update the DOM before the timeout
-  setTimeout(() => {
-    isLoading.value = false;
-  }, 200); // Small delay to show the skeleton
-})
+
+watch(selectedSubcategory, async (newSubcategory, oldSubcategory) => {
+  console.log("firing watcher SCATEGORY");
+  if (newSubcategory !== oldSubcategory) { // Only trigger if subcategory actually changed
+    isLoading.value = true;
+    await nextTick();
+    setTimeout(() => { // Keep this for visual feedback during subcategory switch
+      isLoading.value = false;
+    }, 200);
+  }
+});
 
 
 const processedProductsBySubcategory = computed(() => {
@@ -49,16 +58,16 @@ const processedProductsBySubcategory = computed(() => {
   if (!subcategoryKeys) {
     return processedMap; // No subcategories for this project
   }
-  // if(selectedSubcategory.value){
-  //   subcategoryKeys = [];
-  //   subcategoryKeys = [selectedSubcategory.value]
-  // }
 
-  let imageUrls = [];
-  for (const subcatKey of subcategoryKeys) {
+  // Determine which subcategories to process based on selectedSubcategory
+  let keysToProcess = subcategoryKeys;
+  if (selectedSubcategory.value) {
+    // Ensure the selected subcategory actually belongs to the current project
+    keysToProcess = [selectedSubcategory.value].filter(key => subcategoryKeys.includes(key));
+  }
+
+  for (const subcatKey of keysToProcess) {
     const productCodeArray = subcategoryToProductCodes.get(subcatKey) || [];
-    // imageUrls = [...imageUrls, await getProductCodeToUrlMap(productCodeArray, true)];
-    console.log("IMG URLS", imageUrls)
     const productsWithSplitNames = productCodeArray
       .map((productCode) => {
         const product = allProductMap.get(productCode);
@@ -82,98 +91,138 @@ const processedProductsBySubcategory = computed(() => {
   return processedMap;
 });
 
-// which keys to display (when one is selected)
-const displaySubcategoryKeys = computed(() => {
-  if (selectedSubcategory.value) {
-    // If a specific subcategory is selected, only show that one.
-    return [selectedSubcategory.value];
-  }
-  // Otherwise, show all subcategories for the current project.
-  return Array.from(categoryToSubcategory.get(selectedProject.value) || []);
-});
-
 // This computed property is for rendering the clickable subcategory menu items.
 const subcategoryKeysArray = computed(() =>
   Array.from(categoryToSubcategory.get(selectedProject.value) || [])
 );
 
+// Function for UI interaction when clicking project buttons
 function selectProject(project){
+  console.log("SELECTING PROJECT", project);
   if(project === selectedProject.value){
-    return
-  } else selectedProject.value = project
+    return;
+  }
+  selectedProject.value = project;
+  // When changing project via UI, explicitly deselect subcategory.
+  // The route watcher will handle re-selection if the route includes one.
+  selectedSubcategory.value = null;
+}
 
-}
+// Function for UI interaction when clicking subcategory buttons
 function selectSubcategory(subcategory){
+  console.log("SELECTING SUBCAT", subcategory);
   if(subcategory === selectedSubcategory.value){
-    selectedSubcategory.value = null;
-  } else selectedSubcategory.value = subcategory
+    selectedSubcategory.value = null; // Deselect if already selected
+  } else {
+    console.log("inside else");
+    selectedSubcategory.value = subcategory; // Select the new subcategory
+    console.log("AFTER INSIDE ELSE", selectedSubcategory.value);
+  }
 }
+
+// Main watch for route parameters to drive component state
+watch(
+  () => route.params,
+  async (newParams, oldParams) => {
+    console.log("ROUTE PARAMS CHANGED:", newParams);
+
+    const newCategory = newParams.category || "tomato-project";
+    const newSubcategory = newParams.subcategory || null;
+
+    // --- Step 1: Update selectedProject ---
+    if (newCategory !== selectedProject.value) {
+      selectedProject.value = newCategory;
+      // It's crucial to wait for the DOM to update after selectedProject changes
+      // because subcategoryKeysArray (and thus the v-for for subcategories) depends on it.
+      await nextTick();
+      console.log("NEXTTICK after project change, DOM should be ready for new subcategories");
+    }
+
+    // --- Step 2: Update selectedSubcategory (only after selectedProject's DOM is ready) ---
+    // This part runs regardless of whether the project changed, ensuring subcategory is always in sync.
+    if (newSubcategory !== selectedSubcategory.value) {
+      // Before setting selectedSubcategory, ensure it's a valid subcategory for the new project.
+      const currentProjectSubcategories = categoryToSubcategory.get(selectedProject.value) || [];
+      if (newSubcategory && !currentProjectSubcategories.includes(newSubcategory)) {
+          // If the subcategory in the route doesn't match the current project, null it out
+          selectedSubcategory.value = null;
+          console.warn(`Route subcategory '${newSubcategory}' not found for project '${selectedProject.value}'. Resetting selectedSubcategory.`);
+      } else {
+          selectedSubcategory.value = newSubcategory;
+      }
+    }
+
+    // --- Step 3: Manage loading state after all relevant state changes ---
+    // This ensures loading spinner shows during initial data fetch/rendering
+    isLoading.value = true;
+    await nextTick(); // Wait for state changes to be reflected in DOM before hiding skeleton
+    setTimeout(() => {
+      isLoading.value = false;
+    }, 200); // Small delay for visual effect
+  },
+  { immediate: true, deep: true } // immediate: run on initial load; deep: watch nested params
+);
+
+// Removed onMounted, as the primary route watch handles initial setup now.
 </script>
 
 <template>
   <div class="all-products-container">
-    <!-- <button style="position: absolute; top: 10%; left: 40%; z-index: 10000; background: red; color: black;" @click="()=>{isLoading = !isLoading}">{{isLoading}}</button> -->
-    <!-- <div class="light-blue-panel">
-    </div> -->
     <section class="selection">
       <Transition name="slide-horizontal" mode="out-in">
-        <h1 class="project-name  short-slide" :key="selectedProject">{{productStore.categoryFullNames[selectedProject]}}</h1>
+        <h1 class="project-name short-slide" :key="selectedProject">{{productStore.categoryFullNames[selectedProject]}}</h1>
       </Transition>
 
       <div class="menus">
         <div class="projects">
-          <div 
-            v-for="(project, idx) in projects" 
-            @click="selectProject(project)" 
-            :key="project" 
+          <div
+            v-for="(project, idx) in projects"
+            @click="selectProject(project)"
+            :key="project"
             class="project"
-            :class="project === selectedProject ? 'active' : ''"
+            :class="{'active': project === selectedProject}"
             >
               {{ productStore.categoryFullNames[project] }}
             </div>
         </div>
 
         <div class="subcategories">
-          <div 
+          <div
             v-for="subcategory in subcategoryKeysArray"
             @click="selectSubcategory(subcategory)"
-            :key="subcategory" 
+            :key="subcategory"
             class="subcategory"
-            :class="subcategory === selectedSubcategory ? 'active' : ''"
+            :class="{'active': subcategory === selectedSubcategory}"
           >
-            <span class="text">{{ subcategoryFullNames[subcategory] }}</span>
-          </div>
+            {{ subcategoryFullNames[subcategory] }}
+            </div>
         </div>
-
       </div>
     </section>
 
     <section class="listing">
-      <!-- <div v-if="false" class="product-grid-skeleton">
-        <div v-for="n in 6" :key="n" class="skeleton-item"></div>
-      </div> -->
       <div class="subcategory-sections">
-        <div 
-          v-for="subcategory in displaySubcategoryKeys" 
+        <div
+          v-for="[subcategoryKey, products] in processedProductsBySubcategory"
+          :key="subcategoryKey"
           class="subcategory-section"
-          :class="{ 'transitioning': isLoading, 'loading-state': isLoading, 'single': displaySubcategoryKeys.length === 1}" 
-          :ref="subcategory"
+          :class="{ 'transitioning': isLoading, 'loading-state': isLoading, 'single': processedProductsBySubcategory.size === 1}"
+          :ref="subcategoryKey"
         >
 
           <div class="subcategory-panel">
             <Transition name="slide-horizontal" mode="out-in">
-              <h2 class="subcategory-name long-slide" :key="subcategory">{{ subcategoryFullNames[subcategory] }}</h2>
+              <h2 class="subcategory-name long-slide" :key="subcategoryKey">{{ subcategoryFullNames[subcategoryKey] }}</h2>
             </Transition>
           </div>
 
           <div class="product-grid">
             <TransitionGroup name="fade-staggered" tag="div" class="product-grid-inner">
               <router-link
-                v-for="(product, index) in processedProductsBySubcategory.get(subcategory)"
-                :key="product"
-                class="grid-item"
+                v-for="(product, index) in products"
+                :key="product.id" class="grid-item"
                 :style="{ '--delay': `${0.4 + index * 0.1}s` }"
-                :to="'/projects/'+ selectedProject + '/' + subcategory + '/' + product.path"
+                :to="'/projects/'+ selectedProject + '/' + subcategoryKey + '/' + product.path"
               >
                 <div class="texts">
                   <h3 class="name">
@@ -199,6 +248,7 @@ function selectSubcategory(subcategory){
     </section>
   </div>
 </template>
+
 
 <style lang="scss" scoped>
 .all-products-container {

@@ -103,6 +103,9 @@ function clickedTest(c, s, p) {
   console.log("Sub", s);
   console.log(p);
 }
+
+import { useProductStoreCleanup } from "@/store/productCleanup";
+const productStore = useProductStoreCleanup();
 </script>
 
 <template>
@@ -132,14 +135,24 @@ function clickedTest(c, s, p) {
             <router-link
               v-for="subcategory in panel.subcategories"
               :key="subcategory.name"
-              :to="{
-                name: 'projects',
-                params: {
-                  category: panel.category.route,
-                  subcategory: subcategory.route,
-                  product: 'default',
-                },
-              }"
+              :to="
+                productStore.getFlowType === 'old'
+                  ? {
+                      name: 'projects',
+                      params: {
+                        category: panel.category.route,
+                        subcategory: subcategory.route,
+                        product: 'default',
+                      },
+                    }
+                  : {
+                      name: 'subcategory-overview',
+                      params: {
+                        category: panel.category.route,
+                        subcategory: subcategory.route,
+                      },
+                    }
+              "
               @click="clickedTest(panel.category.route, subcategory.route, 'default')"
               class="subcategory"
             >

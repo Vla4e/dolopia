@@ -219,6 +219,14 @@ export const useProductStoreCleanup = defineStore('productCleanup', () => {
   // RETURN STORE API
   // =====================================
   // console.log("CURRENT CATEGORY", currentCategory.value)
+  let flowType = ref('old');
+  function setFlowType(val) {
+    flowType.value = val;
+  }
+  const getFlowType = computed({
+    get: () => flowType.value,
+    set: (val) => setFlowType(val)
+  })
   return {
     // Primary state
     selectedCategoryId,
@@ -226,6 +234,9 @@ export const useProductStoreCleanup = defineStore('productCleanup', () => {
     selectedProductCode,
     isScrollActive,
 
+    flowType,
+    setFlowType,
+    getFlowType,
     // Computed state
     currentCategory,
     currentSubcategory,

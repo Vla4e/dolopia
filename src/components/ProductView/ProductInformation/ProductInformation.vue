@@ -19,18 +19,18 @@ const props = defineProps({
   },
 });
 
-const phasesShownOnCarousel = ["description", "wheel", "data"];
-const localPhases = ["none", "description", "wheel", "data"];
+const phasesShownOnCarousel = ["initial", "description", "wheel", "data"];
+const localPhases = ["initial","description", "wheel", "data"];
 let currentPhaseIndex = 0;
-let currentPhaseName = ref("none");
+let currentPhaseName = ref("initial");
 
 const emit = defineEmits(["phaseChange"]);
 const Backward = false; //scrollUp
 const Forward = true; //scrollDown
 function cyclePhase(direction) {
-  if (!props.isOverviewActive) {
-    return;
-  }
+  // if (!props.isOverviewActive) {
+  //   return;
+  // }
   if (!currentPhaseIndex) {
     currentPhaseIndex = 1;
     currentPhaseName.value = localPhases[currentPhaseIndex];
@@ -76,9 +76,9 @@ watch(
   (isActive) => {
     //initial expansion of component (subcategory page -> product page transition)
     if (isActive) {
-      cyclePhase(Forward);
+      // cyclePhase(Forward);
     } else {
-      currentPhaseName.value = "none";
+      currentPhaseName.value = "initial";
     }
   },
   {
@@ -249,7 +249,7 @@ function selectProduct(id) {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  &.none,
+  &.initial,
   &.description {
     .description {
       transition-delay: 0.5s;

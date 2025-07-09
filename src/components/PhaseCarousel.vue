@@ -80,13 +80,13 @@ function emitCyclePhase(direction){
       height: 15px;
       transition: all ease 0.5s;
       background-color: transparent;
-      border: 1px solid white;
+      border: 1px solid #2B565D;
     }
     &.selected{
       .inner-circle{
         transform: scale(130%);
         border: 2px solid transparent;
-        background-color: white;
+        background-color: #2B565D;
       }
     }
   }

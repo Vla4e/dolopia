@@ -56,12 +56,12 @@ onMounted(async () => {
     <div ref="topSection" class="top-section">
       
       <h2 @click="goToRoute('/projects/tomato-project/pasta-sauces/feta-cheese-savory')" ref="topTarget" class="product-name">
-        Tomato sauce
+        <span class="large-text">Tomato sauce</span>
         <span class="small-text">
           with Feta and savory
         </span>
       </h2>
-      <!-- <ChevronLink style="z-index: 10;" :routePath="'/catalog'" linkText=""/> -->
+      <ChevronLink style="z-index: 10;" :routePath="'/catalog'" linkText="learn more"/>
     </div>
     <div class="middle-section">
       <img @click="goToRoute('/projects/tomato-project/pasta-sauces/feta-cheese-savory')" ref="floatingImage" src="@/assets/landing/sections/tomato-group.png" class="product-image"/>
@@ -120,17 +120,20 @@ onMounted(async () => {
       display: flex;
       flex-direction: column;
       width: 60%;
-      margin-right: 25%;
-      color: #FFF;
-      text-align: right;
-      font-family: "Century Gothic";
-      /* Further reduced */
-      font-size: clamp(2.2rem, 4.5vw, 5rem);
-      line-height: 1.1;
-      font-style: normal;
-      font-weight: 700;
-      letter-spacing: 6px;
+      //margin-right: 25%;
       cursor: pointer;
+      .large-text{
+        color: #FFF;
+        text-align: right;
+        font-family: "Century Gothic";
+        /* Further reduced */
+        font-size: clamp(2.2rem, 4.5vw, 5rem);
+        line-height: 1.1;
+        font-style: normal;
+        font-weight: 700;
+        letter-spacing: 6px;
+        background: #CEEBEC;
+      }
       .small-text {
         color: #FFF;
         text-align: right;

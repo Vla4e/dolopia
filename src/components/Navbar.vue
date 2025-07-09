@@ -2,7 +2,7 @@
 <script setup>
 import BurgerIcon from './BurgerIcon.vue';
 
-import {inject} from 'vue';
+import { inject, ref } from 'vue';
 const { isMobile } = inject('screenSize')
 
 import { useMenuStore } from '@/store/menu';

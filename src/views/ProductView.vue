@@ -44,6 +44,15 @@ onMounted(() => {
     });
   }
 });
+
+import { useScrollDirection } from "@/composables/useScrollDirection"; //Enable scrolling through phases using composable.
+
+useScrollDirection(
+  () => cyclePhase(Backward), //onScrollUp
+  () => {isOverviewActive.value = true;} //onScrollDown
+);
+
+
 </script>
 
 <template>
@@ -88,7 +97,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="categories-selection">
+    <!-- <div class="categories-selection">
       <button
         v-for="category in categories"
         :key="category"
@@ -98,7 +107,7 @@ onMounted(() => {
       >
         {{ productStore.categoryFullNames[category] || "" }}
       </button>
-    </div>
+    </div> -->
 
     <ArrowButton
       :routePath="'/all-products'"
