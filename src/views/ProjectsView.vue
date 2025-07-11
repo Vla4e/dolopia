@@ -127,7 +127,7 @@ const productStore = useProductStoreCleanup();
       >
         <div class="panel-half text-panel">
           <div class="category">
-            <span class="category-name">{{ panel.category.name }}</span>
+            <router-link :to="`/projects/${panel.category.route}`" class="category-name">{{ panel.category.name }}</router-link>
             <span class="category-description">{{ panel.category.description }}</span>
           </div>
 

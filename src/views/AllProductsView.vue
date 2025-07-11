@@ -2,7 +2,6 @@
 import placeholderImage from "@/assets/products/product-images/placeholder/placeholder-compressed.png";
 
 let projects = ["tomato-project", "vegetable-project", "pasta-project", "fruit-project"];
-let loadedSubcategories = ref(true); // This variable seems unused, consider removing if not needed.
 
 import { useRoute } from "vue-router";
 const route = useRoute();
@@ -24,16 +23,12 @@ let selectedProject = ref("tomato-project");
 let selectedSubcategory = ref(null);
 let isLoading = ref(false);
 
-// Watchers for loading state based on project/subcategory changes
-// We'll primarily manage isLoading within the main route watcher below for initial load.
-// These watchers are good for user interaction with the buttons.
 watch(selectedProject, async (newProject, oldProject) => {
   console.log("firing watcher SPROJECT");
   if (newProject !== oldProject) {
     isLoading.value = true;
-    // selectedSubcategory.value = null; // This reset is now handled more explicitly in selectProject/route watcher
     await nextTick();
-    setTimeout(() => { // Keep this for visual feedback during project switch
+    setTimeout(() => { // visuals break without delay between (race condition between subcat and project watchers) :/
       isLoading.value = false;
     }, 200);
   }
@@ -41,10 +36,10 @@ watch(selectedProject, async (newProject, oldProject) => {
 
 watch(selectedSubcategory, async (newSubcategory, oldSubcategory) => {
   console.log("firing watcher SCATEGORY");
-  if (newSubcategory !== oldSubcategory) { // Only trigger if subcategory actually changed
+  if (newSubcategory !== oldSubcategory) {
     isLoading.value = true;
     await nextTick();
-    setTimeout(() => { // Keep this for visual feedback during subcategory switch
+    setTimeout(() => { // visuals break without delay between (race condition between subcat and project watchers) :/
       isLoading.value = false;
     }, 200);
   }
@@ -56,13 +51,11 @@ const processedProductsBySubcategory = computed(() => {
   let subcategoryKeys = categoryToSubcategory.get(selectedProject.value);
 
   if (!subcategoryKeys) {
-    return processedMap; // No subcategories for this project
+    return processedMap;
   }
 
-  // Determine which subcategories to process based on selectedSubcategory
   let keysToProcess = subcategoryKeys;
   if (selectedSubcategory.value) {
-    // Ensure the selected subcategory actually belongs to the current project
     keysToProcess = [selectedSubcategory.value].filter(key => subcategoryKeys.includes(key));
   }
 
@@ -91,31 +84,26 @@ const processedProductsBySubcategory = computed(() => {
   return processedMap;
 });
 
-// This computed property is for rendering the clickable subcategory menu items.
 const subcategoryKeysArray = computed(() =>
   Array.from(categoryToSubcategory.get(selectedProject.value) || [])
 );
 
-// Function for UI interaction when clicking project buttons
 function selectProject(project){
   console.log("SELECTING PROJECT", project);
   if(project === selectedProject.value){
     return;
   }
   selectedProject.value = project;
-  // When changing project via UI, explicitly deselect subcategory.
-  // The route watcher will handle re-selection if the route includes one.
   selectedSubcategory.value = null;
 }
 
-// Function for UI interaction when clicking subcategory buttons
 function selectSubcategory(subcategory){
   console.log("SELECTING SUBCAT", subcategory);
   if(subcategory === selectedSubcategory.value){
-    selectedSubcategory.value = null; // Deselect if already selected
+    selectedSubcategory.value = null; //deselect 
   } else {
     console.log("inside else");
-    selectedSubcategory.value = subcategory; // Select the new subcategory
+    selectedSubcategory.value = subcategory;
     console.log("AFTER INSIDE ELSE", selectedSubcategory.value);
   }
 }
@@ -132,19 +120,13 @@ watch(
     // --- Step 1: Update selectedProject ---
     if (newCategory !== selectedProject.value) {
       selectedProject.value = newCategory;
-      // It's crucial to wait for the DOM to update after selectedProject changes
-      // because subcategoryKeysArray (and thus the v-for for subcategories) depends on it.
       await nextTick();
       console.log("NEXTTICK after project change, DOM should be ready for new subcategories");
     }
 
-    // --- Step 2: Update selectedSubcategory (only after selectedProject's DOM is ready) ---
-    // This part runs regardless of whether the project changed, ensuring subcategory is always in sync.
     if (newSubcategory !== selectedSubcategory.value) {
-      // Before setting selectedSubcategory, ensure it's a valid subcategory for the new project.
       const currentProjectSubcategories = categoryToSubcategory.get(selectedProject.value) || [];
       if (newSubcategory && !currentProjectSubcategories.includes(newSubcategory)) {
-          // If the subcategory in the route doesn't match the current project, null it out
           selectedSubcategory.value = null;
           console.warn(`Route subcategory '${newSubcategory}' not found for project '${selectedProject.value}'. Resetting selectedSubcategory.`);
       } else {
@@ -152,18 +134,15 @@ watch(
       }
     }
 
-    // --- Step 3: Manage loading state after all relevant state changes ---
-    // This ensures loading spinner shows during initial data fetch/rendering
     isLoading.value = true;
     await nextTick(); // Wait for state changes to be reflected in DOM before hiding skeleton
     setTimeout(() => {
       isLoading.value = false;
     }, 200); // Small delay for visual effect
   },
-  { immediate: true, deep: true } // immediate: run on initial load; deep: watch nested params
+  { immediate: true, deep: true } // run on initial load
 );
 
-// Removed onMounted, as the primary route watch handles initial setup now.
 </script>
 
 <template>
@@ -212,7 +191,11 @@ watch(
 
           <div class="subcategory-panel">
             <Transition name="slide-horizontal" mode="out-in">
-              <h2 class="subcategory-name long-slide" :key="subcategoryKey">{{ subcategoryFullNames[subcategoryKey] }}</h2>
+              <h2 class="subcategory-name long-slide" :key="subcategoryKey">
+                <span v-for="word in subcategoryFullNames[subcategoryKey].split(' ')">
+                  {{ word }}
+                </span>
+              </h2>
             </Transition>
           </div>
 
@@ -348,7 +331,7 @@ watch(
     min-height: 70vh;
     flex-grow: 1;
     padding-bottom: 130px;
-    background: #ceebec;
+    background: #2B565D;
     position: relative;
     .subcategory-sections{
       display: flex; // Ensures it can control its children's alignment
@@ -388,10 +371,12 @@ watch(
         padding-top: 5vh;
         color: white;
         font-family: "Century Gothic";
-        font-size: 64px;
+        font-size: 46px;
         font-style: normal;
         font-weight: 700;
-        line-height: 64px; /* 100% */
+        line-height: 1.1; /* 100% */
+        display: flex;
+        flex-direction: column;
         @media(max-width: 1600px){
           font-size: 56px;
         }
@@ -405,6 +390,9 @@ watch(
       // Set borders on the container itself to frame the grid
       border-left: 1px solid white;
       // // border-right: 1px solid white;
+      padding-top: 5vh;
+      // background: #44A0AD;
+      // overflow: hidden;
       .product-grid-inner {
         display: contents; /* Allows the grid items to respect the parent grid's layout */
       }
@@ -412,9 +400,38 @@ watch(
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         height: 450px;
+        position: relative;
+        margin-bottom: 20px;
+        background: #ceebec;
         cursor: pointer;
+
+        // /* GRID ITEM POP */
+        // transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+        // &:hover{
+        //   transform: translate(-2px, -5px); /* Lifts the item up by 5 pixels */
+        //   box-shadow: 0px 15px 10px 2px rgba(0, 0, 0, 0.2);
+        // }
+
+        /* TEXT/IMAGE POP */
+        &:hover{
+          .image{
+            transform: scale(1.05);
+          }
+          .name{
+            // text-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            transform: scale(1.05);
+          }
+        }
+
+        /* MOVE ON HOVER TO LEFT */
+        // transition: transform 0.3s ease;
+        // &:hover{
+        //   transform: translateX(-20%);
+        // }
+
+
         .texts{
           display: flex;
           flex-direction: column;
@@ -426,6 +443,7 @@ watch(
             width: 70%;
             margin-left: auto;
             margin-right: auto;
+            // transition: transform 0.3s ease-out; //text pop
             .top-part {
               color: #000;
               font-family: "Century Gothic";
@@ -444,7 +462,7 @@ watch(
               font-weight: 400;
               line-height: 1; /* 171.429% */
               letter-spacing: 1.26px;
-              margin-bottom: 5px;
+              margin-bottom: 10px;
             }
           }
           .description {
@@ -460,7 +478,11 @@ watch(
           }
         }
         .image {
-          height: 50%;
+          height: 70%;
+          position: absolute;
+          bottom: 0%;
+
+          transition: transform 0.3s ease-out; // image pop
           // width: 70%;
         }
       }
