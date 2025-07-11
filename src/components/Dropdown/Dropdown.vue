@@ -27,8 +27,8 @@ const props = defineProps({
   }
 })
 
-import { useProductStore } from '@/store/product';
-const productStore = useProductStore();
+import { useProductStoreCleanup } from '@/store/productCleanup';
+const productStore = useProductStoreCleanup();
 
 // // console.log("FORTYPE", props.forType)
 

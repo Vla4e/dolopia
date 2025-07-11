@@ -1,56 +1,31 @@
-
 <script setup>
-import { ref } from 'vue';
-import downChevron from '@/assets/dropdown/down-arrow-white.png'
+import { ref, watch } from 'vue';
+import { useProductViewStore } from "@/store/productView.js"; // Import the store
 
-let currentPhase = ref(1)
-let props = defineProps({
-  phases: {
-    type: Array,
-    required: false,
-    default: [1, 2, 3, 4]
-  },
-  currentPhaseName: {
-    type: String,
-    required: true
-  },
-  currentPhaseIndex: {
-    type: Number,
-    required: true
-  },
-  phasesShownOnCarousel: {
-    type: Array,
-    required: true
-  }
-})
+const productViewStore = useProductViewStore(); // Initialize the store
 
-const Backward = false; //scrollUp
-const Forward = true; //scrollDown
-let emit = defineEmits('selectedPhaseFromCarousel', 'cyclePhase')
-function selectPhase(phase){ //ProductInformation.vue localPhases.length = 4, phasesShownOnCarousel.length = 3 ("none" is not passed), thus +1 to val
-  emit('selectedPhaseFromCarousel', phase + 1)
-}
-function emitCyclePhase(direction){
-  emit('cyclePhase', direction)
+// No props needed for currentPhaseName, currentPhaseIndex, phasesShownOnCarousel
+// as they are accessed directly from the store.
+
+let emit = defineEmits('selectedPhaseFromCarousel') // Keep this for clarity, though we'll directly call store action now.
+
+function selectPhase(phaseIndex){
+  productViewStore.setPhase(productViewStore.ALL_PHASES_ARRAY[phaseIndex]);
+  emit('selectedPhaseFromCarousel', phaseIndex) // Still emit if other components are listening for this specific event.
 }
 </script>
 
 <template>
   <ul class="phase-carousel">
-    <!-- <img @click="emitCyclePhase(Backward)" class="up-chevron" :src="downChevron"/> -->
-    <li 
-      v-for="(item, idx) in phasesShownOnCarousel"
-      :class="currentPhaseName === item ? 'selected':''"
+    <li
+      v-for="(item, idx) in productViewStore.ALL_PHASES_ARRAY"
+      :key="item"
+      :class="productViewStore.currentPhaseName === item ? 'selected':''"
       class="phase-item"
       @click="selectPhase(idx)"
     >
-        <span style="position: absolute; z-index: 2000; color: black;left: -800px;  padding: 10px;">
-          {{ item }}
-        </span>
       <div class="inner-circle"/>
-      <!-- <span style="position: absolute; left: 10px;">{{item}}</span> -->
     </li>
-    <!-- <img @click="emitCyclePhase(Forward)" class="down-chevron" :src="downChevron"/> -->
   </ul>
 </template>
 

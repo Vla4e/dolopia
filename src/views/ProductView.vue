@@ -4,16 +4,26 @@ import ProductInformation from "@/components/ProductView/ProductInformation/Prod
 import SelectionInformationPanel from "@/components/ProductView/SelectionInformationPanel.vue";
 import ArrowButton from "@/components/ArrowButton.vue";
 
-import { ref, onMounted, inject } from "vue";
+import { ref, onMounted, inject, onUnmounted } from "vue";
+import { useProductViewStore } from "@/store/productView.js"; // Import the store
+import { useScrollDirection } from "@/composables/useScrollDirection";
+import IconScrollDown from "@/components/icons/IconScrollDown.vue";
+
 const { isMobile } = inject("screenSize");
+const productViewStore = useProductViewStore(); // Initialize the store
 
-/* used for category selection which is disabled for now due to clashing UX */
-// import { useProductStoreCleanup } from "@/store/productCleanup.js";
-// const productStore = useProductStoreCleanup();
-// const categories = productStore.categories;
+// Handle global scroll for desktop
+useScrollDirection(
+  () => {
+    // onScrollUp
+    productViewStore.cyclePhase(false); // false for backward
+  },
+  () => {
+    // onScrollDown
+    productViewStore.cyclePhase(true); // true for forward
+  }
+);
 
-
-// When product list is finalized, include it.
 onMounted(() => {
   if (isMobile.value) {
     window.scrollTo({
@@ -22,41 +32,9 @@ onMounted(() => {
     });
   }
 });
-
-
-
-// Phase handling
-import { useScrollDirection } from "@/composables/useScrollDirection"; //Enable scrolling through phases using composable.
-import IconScrollDown from "@/components/icons/IconScrollDown.vue";
-
-const PHASES = {
-  overview: 'overview',
-  productDescription: 'productDescription',
-  informationWheel: 'informationWheel',
-  nutritionalData: 'nutritionalData'
-};
-
-let isOverviewActive = ref(false);
-let currentOverviewPhase = ref("overview"); //default to 1st phase = overview
-
-function triggerOverview() {
-  // console.log("OVERVIEW");
-  if (isOverviewActive.value) {
-    isOverviewActive.value = false;
-    currentOverviewPhase.value = "productDescription"; //2nd phase
-    return;
-  } else {
-    isOverviewActive.value = true;
-    currentOverviewPhase.value = "overview"; //1st phase
-  }
-}
-
-useScrollDirection(
-  () => cyclePhase(Backward), //onScrollUp
-  () => {isOverviewActive.value = true;} //onScrollDown
-);
-
-
+onUnmounted(() => {
+  productViewStore.setPhase('overview')
+})
 </script>
 
 <template>
@@ -75,45 +53,28 @@ useScrollDirection(
       <SelectionInformationPanel
         v-show="
           !isMobile &&
-          (currentOverviewPhase === 'description' || currentOverviewPhase === 'overview')
+          (productViewStore.currentPhaseName === productViewStore.PHASES.productDescription ||
+            productViewStore.currentPhaseName === productViewStore.PHASES.overview)
         "
       />
     </Transition>
-    <div v-if="!isMobile" :class="isOverviewActive ? 'inactive' : ''" class="left-panel">
-      <div @click="triggerOverview()" class="open-panel">></div>
+
+    <div v-if="!isMobile" :class="!productViewStore.isOverviewActive ? 'inactive' : ''" class="left-panel">
+      <div @click="productViewStore.toggleOverview()" class="open-panel"></div>
     </div>
 
-    <IconScrollDown v-show="!isOverviewActive" class="icon-scroll-down"/>
+    <IconScrollDown v-show="isOverviewActive" class="icon-scroll-down"/>
 
     <div
       v-if="!isMobile"
-      @click="triggerOverview()"
+      @click="productViewStore.toggleOverview()"
       class="right-panel"
-      :class="isOverviewActive ? 'active' : ''"
+      :class="productViewStore.isOverviewActive ? 'active' : ''"
     >
       <div class="panel-half right">
-        <ProductInformation
-          @phaseChange="
-            (newPhase) => {
-              currentOverviewPhase = newPhase;
-            }
-          "
-          :isOverviewActive="isOverviewActive"
-        />
+        <ProductInformation />
       </div>
     </div>
-
-    <!-- <div class="categories-selection">
-      <button
-        v-for="category in categories"
-        :key="category"
-        class="item"
-        :class="productStore.selectedCategoryId === category ? 'active' : ''"
-        @click="productStore.selectCategory(category)"
-      >
-        {{ productStore.categoryFullNames[category] || "" }}
-      </button>
-    </div> -->
 
     <ArrowButton
       :routePath="'/all-products'"
@@ -124,10 +85,6 @@ useScrollDirection(
       v-if="!isMobile"
       class="all-products-arrow"
     />
-    <span style="position: absolute; z-index: 2000; color: black; bottom: 20px; left: 80%;">
-      {{ currentOverviewPhase }}
-    </span>
-    <!-- <ProductsViewMobile v-if="isMobile" /> -->
   </div>
 </template>
 
@@ -184,6 +141,7 @@ useScrollDirection(
     }
   }
 }
+
 .right-panel {
   width: 100%;
   height: 100%;
@@ -192,6 +150,7 @@ useScrollDirection(
   &.active {
   }
 }
+
 .page-category {
   width: 100%;
   height: 100vh;

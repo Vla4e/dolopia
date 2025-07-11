@@ -1,140 +1,61 @@
 <script setup>
-import { ref, watch, onMounted, reactive, computed } from "vue";
+import { ref, watch, computed } from "vue";
 import ProductData from "./ProductData/ProductData.vue";
 import PhaseCarousel from "../../PhaseCarousel.vue";
 import ProductImage from "./ProductData/ProductImage.vue";
 
 import { useProductStore } from "@/store/product";
 import { useProductStoreCleanup } from "@/store/productCleanup.js";
-const productStore = useProductStore();
+import { useProductViewStore } from "@/store/productView.js"; // Import the store
+
 const productStoreCleanup = useProductStoreCleanup();
+const productViewStore = useProductViewStore(); // Initialize the store
+
 let localProductData = computed(() => {
-  // console.log("PROPS:", productStoreCleanup.currentProduct);
   return productStoreCleanup.currentProduct;
 });
-const props = defineProps({
-  isOverviewActive: {
-    type: Boolean,
-    required: true,
-  },
-  phases: {
-    type: Object,
-    required: true,
-    default: () => {
-      return {
-        overview: 'overview',
-        productDescription: 'productDescription',
-        informationWheel: 'informationWheel',
-        nutritionalData: 'nutritionalData'
-      }
-    }
-  }
-});
 
-const phasesShownOnCarousel = ["overview", "product", "wheel", "data"];
-const localPhases = Object.values(props.phases);
-let currentPhaseIndex = 0;
-let currentPhaseName = ref("initial");
+// No props needed for phase management anymore!
 
-const emit = defineEmits(["phaseChange"]);
+let isTransitioning = ref(false); // Prevent actions during transition to not break animation
 
-const Backward = false; //scrollUp
-const Forward = true; //scrollDown
-function cyclePhase(direction) {
-  console.log("CYCLING PHASE IN  direction | isTransitioning", isTransitioning.value)
-  
-  if (!isTransitioning.value) {
-    if (direction === Forward) {
-      console.log("forward")
-      if (currentPhaseIndex < localPhases.length - 1) {
-        console.log("CPI < localPhases.length - 1")
-        currentPhaseIndex++;
-      } else {
-        console.log ("nvm its at the last element and goin to 0")
-        currentPhaseIndex = 0;
-      }
-    } else {
-      console.log("backwards")
-      if (currentPhaseIndex === 0) {
-        console.log("move to last phase")
-        currentPhaseIndex = localPhases.length;
-      } else {
-        console.log("decrementing")
-        currentPhaseIndex--;
-      }
-    }
-    console.log("Now will select:", localPhases[currentPhaseIndex])
-    currentPhaseName.value = localPhases[currentPhaseIndex];
-    isTransitioning.value = true;
-    emit("phaseChange", currentPhaseName.value);
-  }
-}
-
-function selectedPhaseFromCarousel(phaseIndex) {
-  console.log("Selected Phase From Carousel", phaseIndex)
-  currentPhaseIndex = phaseIndex;
-  currentPhaseName.value = localPhases[currentPhaseIndex];
+watch(() => productViewStore.currentPhaseName, () => {
   isTransitioning.value = true;
-  emit("phaseChange", currentPhaseName.value);
-}
-let isTransitioning = ref(false); //Prevent actions during transition to not break animation
-watch(currentPhaseName, () => {
   setTimeout(() => {
     isTransitioning.value = false;
-  }, 1000);
+  }, 1000); // Match this duration with your CSS transition
 });
 
-watch(
-  () => props.isOverviewActive,
-  (isActive) => {
-    //initial expansion of component (subcategory page -> product page transition)
-    if (isActive) {
-      // cyclePhase(Forward);
-    } else {
-      currentPhaseName.value = "initial";
-    }
-  },
-  {
-    immediate: true,
+function selectedPhaseFromCarousel(phaseIndex) {
+  if (!isTransitioning.value) {
+    // Call the action on the store directly
+    productViewStore.setPhase(productViewStore.ALL_PHASES_ARRAY[phaseIndex]);
   }
-);
-
-import { useScrollDirection } from "@/composables/useScrollDirection"; //Enable scrolling through phases using composable.
-
-useScrollDirection(
-  () => cyclePhase(Backward), //onScrollUp
-  () => cyclePhase(Forward) //onScrollDown
-);
-
-function selectProduct(id) {
-  // console.log(productStoreCleanup.productCodeByIdentifier);
-  productStoreCleanup.productCodeByIdentifier = id;
 }
 
-watch(() => localPhases, (val) => {
-  console.log("LOCAL PHASESSS", val)
-}, {immediate: true})
+function selectProduct(id) {
+  productStoreCleanup.productCodeByIdentifier = id;
+}
 </script>
 
 <template>
   <div class="product-overview">
-    <!-- Product Image + Half-circle around product in Wheel phase -->
     <img
       src="@/assets/product_overview/ellipse.png"
       class="half-circle"
-      :class="`half-circle-${currentPhaseName}`"
+      :class="`half-circle-${productViewStore.currentPhaseName}`"
     />
     <ProductImage
       class="image-container"
-      :class="[`image-container-${currentPhaseName}`, { transitioning: isTransitioning }]"
+      :class="[`image-container-${productViewStore.currentPhaseName}`, { transitioning: isTransitioning }]"
     />
 
-    <div class="dynamic-container" :class="currentPhaseName">
+    <div class="dynamic-container" :class="productViewStore.currentPhaseName">
       <Transition name="fade-slide" mode="out-in">
         <div
-          v-if="currentPhaseName === 'description'"
-          key="description"
-          class="description"
+          v-if="productViewStore.currentPhaseName === productViewStore.PHASES.productDescription"
+          key="productDescription"
+          class="productDescription"
         >
           <p>
             {{ localProductData.properties["Description EN"] }}
@@ -142,8 +63,8 @@ watch(() => localPhases, (val) => {
         </div>
 
         <div
-          v-else-if="currentPhaseName === 'wheel'"
-          key="wheel"
+          v-else-if="productViewStore.currentPhaseName === productViewStore.PHASES.informationWheel"
+          key="informationWheel"
           class="information-wheel"
         >
           <div class="info serving">
@@ -177,18 +98,15 @@ watch(() => localPhases, (val) => {
           </div>
         </div>
 
-        <!-- Nutrition Data Phase -->
-        <ProductData v-else-if="currentPhaseName === 'data'" key="data" />
+        <ProductData v-else-if="productViewStore.currentPhaseName === productViewStore.PHASES.nutritionalData" key="nutritionalData" />
       </Transition>
     </div>
 
-    <!-- <Dropdown class=""/> -->
     <PhaseCarousel
       @selectedPhaseFromCarousel="selectedPhaseFromCarousel"
-      @cyclePhase="cyclePhase"
-      :currentPhaseIndex="currentPhaseIndex"
-      :currentPhaseName="currentPhaseName"
-      :phasesShownOnCarousel="props.phases"
+      :currentPhaseIndex="productViewStore.currentPhaseIndex"
+      :currentPhaseName="productViewStore.currentPhaseName"
+      :phasesShownOnCarousel="productViewStore.ALL_PHASES_ARRAY"
     />
   </div>
 </template>
@@ -218,15 +136,15 @@ watch(() => localPhases, (val) => {
 
   clip-path: inset(100% 0 0 0); /* Start fully hidden */
   transition: clip-path 0.5s ease, transform 1s ease;
-  &-description {
+  &-productDescription {
     transform: translateX(-50%);
   }
-  &-wheel {
+  &-informationWheel {
     transform: translateX(-120%);
     clip-path: inset(0 0 0 0);
     transition: clip-path 0.5s 1s ease;
   }
-  &-data {
+  &-nutritionalData {
     transform: translateX(-120%);
     transition-delay: 0s;
     clip-path: inset(100% 0 0 0);
@@ -246,16 +164,16 @@ watch(() => localPhases, (val) => {
   //     transform: translateX(-10%);
   //   }
   // }
-  &-description {
+  &-productDescription {
     transform: translateX(-50%);
     .placeholder {
       // transform: translateX(-10%);
     }
   }
-  &-wheel {
+  &-informationWheel {
     transform: translateX(-115%);
   }
-  &-data {
+  &-nutritionalData {
     transform: translateX(-115%);
   }
 }
@@ -266,13 +184,13 @@ watch(() => localPhases, (val) => {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  &.initial,
-  &.description {
+  &.overview,
+  &.productDescription {
     .description {
       transition-delay: 0.5s;
     }
   }
-  .description {
+  .productDescription {
     display: flex;
     // width: 65%;
     justify-content: center;
