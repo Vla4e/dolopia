@@ -1,13 +1,12 @@
 <script setup>
-import { nextTick, onMounted, ref } from 'vue';
-import ChevronLink from '@/components/Routing/ChevronLink.vue';
-import { goToRoute } from '@/helpers/goToRoute';
+import { nextTick, onMounted, ref } from "vue";
+import ChevronLink from "@/components/Routing/ChevronLink.vue";
 
 defineOptions({
-  name:'FeaturedTomato'
-})
+  name: "FeaturedTomato",
+});
 
-let container = ref(); // Keep this ref if it's still used by positionElementC
+let container = ref();
 let topTarget = ref();
 let rightTarget = ref();
 let floatingImage = ref();
@@ -16,8 +15,13 @@ let topSection = ref();
 const positionElementC = async () => {
   await nextTick();
 
-  if (!container.value || !topTarget.value || !rightTarget.value || !floatingImage.value) {
-      return;
+  if (
+    !container.value ||
+    !topTarget.value ||
+    !rightTarget.value ||
+    !floatingImage.value
+  ) {
+    return;
   }
 
   const containerRect = container.value.getBoundingClientRect();
@@ -26,45 +30,57 @@ const positionElementC = async () => {
 
   const offsetInVW = 9;
   const offsetManual = 9;
-  const offsetFinal = offsetInVW - offsetManual
+  const offsetFinal = offsetInVW - offsetManual;
   const offsetInPixels = (offsetFinal * window.innerWidth) / 100;
   const rightVal = rightTargetRect.width - offsetInPixels;
 
   const marginOffset = 15;
-  const heightOffset = 30 * topTargetRect.height / 100;
+  const heightOffset = (30 * topTargetRect.height) / 100;
 
   const topVal = marginOffset + heightOffset;
 
-  floatingImage.value.style.right = rightVal + 'px';
+  floatingImage.value.style.right = rightVal + "px";
   // floatingImage.value.style.top = -topVal + 'px';
 };
-
 
 onMounted(async () => {
   // Position the floating image
   setTimeout(async () => {
     await positionElementC();
   }, 500);
-
 });
 
+let hoverProp = ref(false);
 </script>
 
 <template>
   <section ref="container" class="featured">
-
     <div ref="topSection" class="top-section">
-      
-      <h2 @click="goToRoute('/projects/tomato-project/pasta-sauces/feta-cheese-savory')" ref="topTarget" class="product-name">
-        <span class="large-text">Tomato sauce</span>
-        <span class="small-text">
-          with Feta and savory
-        </span>
-      </h2>
-      <ChevronLink style="z-index: 10;" :routePath="'/catalog'" linkText="learn more"/>
+      <router-link
+        to="/projects/tomato-project/pasta-sauces/feta-cheese-savory"
+        class="product-name-link"
+        @mouseenter="hoverProp = true"
+        @mouseleave="hoverProp = false"
+      >
+        <h2 ref="topTarget" class="product-name">
+          <span class="large-text">Tomato sauce</span>
+          <span class="small-text"> with Feta and savory </span>
+        </h2>
+      </router-link>
+      <ChevronLink :routePath="'/catalog'" :hoverProp="hoverProp" linkText="" />
     </div>
     <div class="middle-section">
-      <img @click="goToRoute('/projects/tomato-project/pasta-sauces/feta-cheese-savory')" ref="floatingImage" src="@/assets/landing/sections/tomato-group.png" class="product-image"/>
+      <router-link
+        to="/projects/tomato-project/pasta-sauces/feta-cheese-savory"
+        @mouseenter="hoverProp = true"
+        @mouseleave="hoverProp = false"
+      >
+        <img
+          ref="floatingImage"
+          src="@/assets/landing/sections/tomato-group.png"
+          class="product-image"
+        />
+      </router-link>
 
       <div class="text">
         <span ref="rightTarget" class="large">
@@ -73,13 +89,12 @@ onMounted(async () => {
         </span>
         <p>
           Dolopia's Tomato Sauce with Feta and Savory brings the
-          <br/>
+          <br />
           warmth of a summer garden straight to your plate. Made with
-          <br/>sun-ripened tomatoes, real chunks of Greek Feta, and the
-          <br/>earthy aroma of savory, this sauce turns any pasta into a rustic
-          <br/> Mediterranean experience.
+          <br />sun-ripened tomatoes, real chunks of Greek Feta, and the <br />earthy
+          aroma of savory, this sauce turns any pasta into a rustic <br />
+          Mediterranean experience.
         </p>
-
         <span class="large">
           Tasty, Tangy
           <b>Irresistible</b>
@@ -88,10 +103,12 @@ onMounted(async () => {
     </div>
     <div class="bottom-section">
       <p>
-        It's part of our Tomato project - a celebration of authentic traditional tomato sauces. Alongside classic
-        <br/>
-        Mediterranean flavors, you'll find bold creations like our oriental sauce with 12 spices, or our oven-baked
-        <br/>
+        It's part of our Tomato project - a celebration of authentic traditional tomato
+        sauces. Alongside classic
+        <br />
+        Mediterranean flavors, you'll find bold creations like our oriental sauce with 12
+        spices, or our oven-baked
+        <br />
         aubergines in tomato sauce, inspired by the beloved Mousaka.
       </p>
     </div>
@@ -99,6 +116,15 @@ onMounted(async () => {
 </template>
 
 <style lang="scss" scoped>
+/* A new style to ensure the router-link wrapper doesn't affect the h2's layout */
+.product-name-link {
+  text-decoration: none;
+  color: inherit;
+  /* This makes the wrapper 'disappear' for layout purposes,
+     so the h2 behaves as a direct child of the flex container. */
+  display: contents;
+}
+
 .featured {
   display: flex;
   flex-direction: column;
@@ -119,11 +145,11 @@ onMounted(async () => {
     .product-name {
       display: flex;
       flex-direction: column;
-      width: 60%;
-      //margin-right: 25%;
+      width: 70%;
+      margin-right: 25%;
       cursor: pointer;
-      .large-text{
-        color: #FFF;
+      .large-text {
+        color: #fff;
         text-align: right;
         font-family: "Century Gothic";
         /* Further reduced */
@@ -132,10 +158,10 @@ onMounted(async () => {
         font-style: normal;
         font-weight: 700;
         letter-spacing: 6px;
-        background: #CEEBEC;
+        background: #ceebec;
       }
       .small-text {
-        color: #FFF;
+        color: #fff;
         text-align: right;
         font-family: "Century Gothic";
         /* Further reduced */
@@ -157,6 +183,7 @@ onMounted(async () => {
     position: relative;
     overflow: visible;
 
+    /* The router-link wrapping the image inherits cursor: pointer from .product-image */
     .product-image {
       width: 28vw;
       object-fit: contain;
@@ -175,9 +202,9 @@ onMounted(async () => {
       margin-right: 40px;
       width: 60%;
       .large {
-        color: #039EA2;
+        color: #039ea2;
         font-family: "Century Gothic";
-        font-size: clamp(1.2rem, 2.0vw, 2.2rem);
+        font-size: clamp(1.2rem, 2vw, 2.2rem);
         line-height: 1.2;
         font-style: normal;
         font-weight: 400;
@@ -185,7 +212,7 @@ onMounted(async () => {
         display: flex;
         flex-direction: column;
         b {
-          color: #039EA2;
+          color: #039ea2;
           font-family: "Century Gothic";
           font-size: clamp(1.1rem, 1.7vw, 2.1rem);
           line-height: 1.2;
@@ -220,16 +247,31 @@ onMounted(async () => {
   @media (max-width: 1600px) and (max-height: 900px) {
     .top-section .product-name {
       font-size: clamp(1.8rem, 4.2vw, 4.2rem);
-      .small-text { font-size: clamp(1.1rem, 1.8vw, 2.4rem); }
+      .small-text {
+        font-size: clamp(1.1rem, 1.8vw, 2.4rem);
+      }
     }
     .middle-section .text {
       .large {
         font-size: clamp(1rem, 1.5vw, 1.7rem);
-        b { font-size: clamp(0.9rem, 1.2vw, 1.5rem); }
+        b {
+          font-size: clamp(0.9rem, 1.2vw, 1.5rem);
+        }
       }
-      p { font-size: clamp(10px, 0.9vw, 0.9rem); }
+      p {
+        font-size: clamp(10px, 0.9vw, 0.9rem);
+      }
     }
-    .bottom-section p { font-size: clamp(10px, 0.9vw, 0.9rem); }
+    .bottom-section p {
+      font-size: clamp(10px, 0.9vw, 0.9rem);
+    }
   }
+}
+
+.chevron-link-container {
+  position: absolute;
+  left: 78%;
+  top: 50%;
+  transform: translateY(30%);
 }
 </style>

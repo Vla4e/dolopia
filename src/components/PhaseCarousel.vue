@@ -44,6 +44,9 @@ function emitCyclePhase(direction){
       class="phase-item"
       @click="selectPhase(idx)"
     >
+        <span style="position: absolute; z-index: 2000; color: black;left: -800px;  padding: 10px;">
+          {{ item }}
+        </span>
       <div class="inner-circle"/>
       <!-- <span style="position: absolute; left: 10px;">{{item}}</span> -->
     </li>

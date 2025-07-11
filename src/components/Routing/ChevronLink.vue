@@ -1,13 +1,12 @@
 <template>
-  <div class="chevron-link-container" @mouseenter="hovered = true" @mouseleave="hovered = false">
+  <div class="chevron-link-container" @mouseenter="hovered = true" @mouseleave="hovered = false" :class="{'hovered': hovered}">
     <router-link :to="routePath" class="chevron-link">
-      <span :class="['link-text', { 'is-hovered': hovered }]">{{ linkText }}</span>
+      <span class="link-text">{{ linkText }}</span>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="#131313"
         class="bi bi-chevron-right chevron"
         viewBox="0 0 16 16"
-        :class="{ 'is-hovered': hovered }"
       >
         <path
           fill-rule="evenodd"
@@ -19,11 +18,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+
 defineOptions({
   name: 'ChevronLink'
 })
-// Define props for route path and link text
+
 const props = defineProps({
   routePath: {
     type: String,
@@ -31,64 +31,73 @@ const props = defineProps({
   },
   linkText: {
     type: String,
-    default: 'Go to product', // A sensible default
+    default: 'Go to product',
   },
+  hoverProp: {
+    type: Boolean,
+    required: false,
+    default: false
+  }
 });
 
+watch(() => props.hoverProp, (hoverVal) => {
+   hovered.value = hoverVal
+})
 const hovered = ref(false);
 </script>
 
 <style lang="scss" scoped>
 .chevron-link-container {
-  display: inline-block; // Ensures the container wraps its content tightly
-  overflow: hidden; // Hides the text initially
-  position: relative;
-  // Adjust these values as needed for your layout
-  width: auto; // Will expand with content
-  height: 21px; // Based on your original chevron height
+  display: inline-block;
   cursor: pointer;
-  margin-top: 20px;
+  position: relative;
+  min-width: 100px;
+  min-height: 40px;
+
+  &.hovered{
+    .chevron{
+      transform: translateX(30px);
+    }
+    .link-text{
+      opacity: 1;
+      transition-delay: 0.4s;
+    }
+  }
+
+  &:not(.hovered) {
+    .link-text {
+      transition-delay: 0s; // Make text disappear immediately when not hovered
+      transition-duration: 0.2s;
+    }
+  }
 }
 
 .chevron-link {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 5px; // Space between text and chevron
-  text-decoration: none; // Remove default router-link underline
-  color: white; // Set text color
-
-  // Position the entire link, if needed, or let parent handle it
-  // For example, to replicate your original positioning:
-  // position: absolute;
-  // top: 50%;
-  // right: 10%;
-  // transform: translateY(-50%); // Center vertically
-  // z-index: 10;
+  text-decoration: none;
+  color: white;
 }
 
 .link-text {
-  white-space: nowrap; // Prevents text from wrapping
-  transform: translateX(-100%); // Initially hide the text to the left
-  opacity: 0; // Start with text invisible
-  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-  padding-left: 5px; // Give a little padding from the edge if it's revealed from the left
-}
-
-.link-text.is-hovered {
-  transform: translateX(0); // Reveal text by moving it to its natural position
-  opacity: 1; // Make text visible
+  position: absolute;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease-out;
 }
 
 .chevron {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0; // Prevents the chevron from shrinking
-  transition: transform 0.3s ease-out; // Smooth transition for chevron movement
+  width: 25px;
+  height: 25px;
+  flex-shrink: 0;
+  pointer-events: none;
   fill: white;
   stroke: white;
-}
-
-.chevron.is-hovered {
-  transform: translateX(10px); // Move chevron to the right
+  z-index: 2;
+  position: absolute;
+  left: 0;
+  transition: transform 0.5s ease;
 }
 </style>

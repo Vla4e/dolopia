@@ -4,36 +4,14 @@ import ProductInformation from "@/components/ProductView/ProductInformation/Prod
 import SelectionInformationPanel from "@/components/ProductView/SelectionInformationPanel.vue";
 import ArrowButton from "@/components/ArrowButton.vue";
 
-import { ref, watch, onMounted, onUnmounted, computed, inject } from "vue";
+import { ref, onMounted, inject } from "vue";
 const { isMobile } = inject("screenSize");
 
-import { useProductStoreCleanup } from "@/store/productCleanup.js";
-const productStore = useProductStoreCleanup();
-const categories = productStore.categories;
+/* used for category selection which is disabled for now due to clashing UX */
+// import { useProductStoreCleanup } from "@/store/productCleanup.js";
+// const productStore = useProductStoreCleanup();
+// const categories = productStore.categories;
 
-import { useRoute } from "vue-router";
-const route = useRoute();
-watch(
-  () => route,
-  (val) => {
-    // console.log("Route watcher inside component =>", val);
-  },
-  {
-    immediate: true,
-  }
-);
-let isOverviewActive = ref(false);
-function triggerOverview() {
-  // console.log("OVERVIEW");
-  if (isOverviewActive.value) {
-    isOverviewActive.value = false;
-    currentOverviewPhase.value = "none";
-    return;
-  } else {
-    isOverviewActive.value = true;
-  }
-}
-let currentOverviewPhase = ref("none");
 
 // When product list is finalized, include it.
 onMounted(() => {
@@ -45,7 +23,33 @@ onMounted(() => {
   }
 });
 
+
+
+// Phase handling
 import { useScrollDirection } from "@/composables/useScrollDirection"; //Enable scrolling through phases using composable.
+import IconScrollDown from "@/components/icons/IconScrollDown.vue";
+
+const PHASES = {
+  overview: 'overview',
+  productDescription: 'productDescription',
+  informationWheel: 'informationWheel',
+  nutritionalData: 'nutritionalData'
+};
+
+let isOverviewActive = ref(false);
+let currentOverviewPhase = ref("overview"); //default to 1st phase = overview
+
+function triggerOverview() {
+  // console.log("OVERVIEW");
+  if (isOverviewActive.value) {
+    isOverviewActive.value = false;
+    currentOverviewPhase.value = "productDescription"; //2nd phase
+    return;
+  } else {
+    isOverviewActive.value = true;
+    currentOverviewPhase.value = "overview"; //1st phase
+  }
+}
 
 useScrollDirection(
   () => cyclePhase(Backward), //onScrollUp
@@ -71,13 +75,15 @@ useScrollDirection(
       <SelectionInformationPanel
         v-show="
           !isMobile &&
-          (currentOverviewPhase === 'description' || currentOverviewPhase === 'none')
+          (currentOverviewPhase === 'description' || currentOverviewPhase === 'overview')
         "
       />
     </Transition>
     <div v-if="!isMobile" :class="isOverviewActive ? 'inactive' : ''" class="left-panel">
       <div @click="triggerOverview()" class="open-panel">></div>
     </div>
+
+    <IconScrollDown v-show="!isOverviewActive" class="icon-scroll-down"/>
 
     <div
       v-if="!isMobile"
@@ -118,6 +124,9 @@ useScrollDirection(
       v-if="!isMobile"
       class="all-products-arrow"
     />
+    <span style="position: absolute; z-index: 2000; color: black; bottom: 20px; left: 80%;">
+      {{ currentOverviewPhase }}
+    </span>
     <!-- <ProductsViewMobile v-if="isMobile" /> -->
   </div>
 </template>
@@ -275,6 +284,16 @@ useScrollDirection(
   }
 }
 
+.icon-scroll-down{
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2000;
+}
+
+//Animations
 .slide-text {
   transition: transform 0.5s ease, opacity 0.5s ease;
 }

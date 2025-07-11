@@ -17,41 +17,53 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  phases: {
+    type: Object,
+    required: true,
+    default: () => {
+      return {
+        overview: 'overview',
+        productDescription: 'productDescription',
+        informationWheel: 'informationWheel',
+        nutritionalData: 'nutritionalData'
+      }
+    }
+  }
 });
 
-const phasesShownOnCarousel = ["initial", "description", "wheel", "data"];
-const localPhases = ["initial","description", "wheel", "data"];
+const phasesShownOnCarousel = ["overview", "product", "wheel", "data"];
+const localPhases = Object.values(props.phases);
 let currentPhaseIndex = 0;
 let currentPhaseName = ref("initial");
 
 const emit = defineEmits(["phaseChange"]);
+
 const Backward = false; //scrollUp
 const Forward = true; //scrollDown
 function cyclePhase(direction) {
-  // if (!props.isOverviewActive) {
-  //   return;
-  // }
-  if (!currentPhaseIndex) {
-    currentPhaseIndex = 1;
-    currentPhaseName.value = localPhases[currentPhaseIndex];
-    isTransitioning.value = true;
-    emit("phaseChange", currentPhaseName.value);
-    return;
-  }
+  console.log("CYCLING PHASE IN  direction | isTransitioning", isTransitioning.value)
+  
   if (!isTransitioning.value) {
     if (direction === Forward) {
+      console.log("forward")
       if (currentPhaseIndex < localPhases.length - 1) {
+        console.log("CPI < localPhases.length - 1")
         currentPhaseIndex++;
       } else {
-        currentPhaseIndex = 1;
+        console.log ("nvm its at the last element and goin to 0")
+        currentPhaseIndex = 0;
       }
     } else {
-      if (currentPhaseIndex === 1) {
-        currentPhaseIndex = localPhases.length - 1;
+      console.log("backwards")
+      if (currentPhaseIndex === 0) {
+        console.log("move to last phase")
+        currentPhaseIndex = localPhases.length;
       } else {
+        console.log("decrementing")
         currentPhaseIndex--;
       }
     }
+    console.log("Now will select:", localPhases[currentPhaseIndex])
     currentPhaseName.value = localPhases[currentPhaseIndex];
     isTransitioning.value = true;
     emit("phaseChange", currentPhaseName.value);
@@ -59,6 +71,7 @@ function cyclePhase(direction) {
 }
 
 function selectedPhaseFromCarousel(phaseIndex) {
+  console.log("Selected Phase From Carousel", phaseIndex)
   currentPhaseIndex = phaseIndex;
   currentPhaseName.value = localPhases[currentPhaseIndex];
   isTransitioning.value = true;
@@ -97,6 +110,10 @@ function selectProduct(id) {
   // console.log(productStoreCleanup.productCodeByIdentifier);
   productStoreCleanup.productCodeByIdentifier = id;
 }
+
+watch(() => localPhases, (val) => {
+  console.log("LOCAL PHASESSS", val)
+}, {immediate: true})
 </script>
 
 <template>
@@ -171,7 +188,7 @@ function selectProduct(id) {
       @cyclePhase="cyclePhase"
       :currentPhaseIndex="currentPhaseIndex"
       :currentPhaseName="currentPhaseName"
-      :phasesShownOnCarousel="phasesShownOnCarousel"
+      :phasesShownOnCarousel="props.phases"
     />
   </div>
 </template>
