@@ -14,7 +14,7 @@
 <script setup>
 import Dropdown from "./Dropdown/Dropdown.vue";
 import { onMounted, ref } from "vue";
-import { goToRoute } from "@/helpers/goToRoute";
+
 
 let buttonText = ref("");
 const switchText = (selected) => {

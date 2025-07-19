@@ -78,8 +78,6 @@ function getImageUrlsForCode(code, useCompressed = true) {
 
 // Main initialization function that modifies allProductMap in place
 export function initializeProductImages(useCompressed = true) {
-  console.log(`Initializing product images for ${allProductMap.size} products...`);
-  
   // Iterate through the existing map and enhance each entry
   for (const [code, productData] of allProductMap) {
     const imageUrls = getImageUrlsForCode(code, useCompressed);
@@ -94,6 +92,5 @@ export function initializeProductImages(useCompressed = true) {
     allProductMap.set(code, productData);
   }
   
-  console.log(`✅ Product images initialized successfully!`);
   return allProductMap;
 }

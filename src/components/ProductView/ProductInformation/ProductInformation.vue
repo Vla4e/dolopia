@@ -27,15 +27,9 @@ watch(() => productViewStore.currentPhaseName, () => {
 });
 
 function selectedPhaseFromCarousel(phaseIndex) {
-  if (!isTransitioning.value) {
-    // Call the action on the store directly
     productViewStore.setPhase(productViewStore.ALL_PHASES_ARRAY[phaseIndex]);
-  }
 }
 
-function selectProduct(id) {
-  productStoreCleanup.productCodeByIdentifier = id;
-}
 </script>
 
 <template>
@@ -286,10 +280,15 @@ function selectProduct(id) {
   }
 }
 
+
 .fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: all 0.5s ease;
 }
+.fade-slide-enter-active.productDescription{
+    transition: all 0.5s ease 0.5s !important;
+}
+
 
 .fade-slide-enter-from,
 .fade-slide-leave-to {

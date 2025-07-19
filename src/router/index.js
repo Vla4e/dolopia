@@ -1,16 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import HomeView from '../views/HomeView.vue';
 import { handleProjectRouteParameters } from './routeParameterHandler';
-import { handleProjectRouteParameters as RPH } from './rph';
 
-import { useProductStoreCleanup } from '@/store/productCleanup';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
       name: 'home',
-      component: HomeView,
+      component: () => import('../views/HomeView.vue'),
       meta: { 
         hasNavbar: true,
         hasFooter: true,
@@ -37,7 +34,24 @@ const router = createRouter({
       }
     },
     {
-      // Route for /projects, now loading ProjectsView directly
+      // Leads to AllProductsView with defaulted tomato-project
+      path: '/all-products', 
+      name: 'all-products',
+      component: () => import('../views/AllProductsView.vue'), // Remove the redirect, use a component instead
+      meta: { 
+        hasNavbar: true,
+        hasFooter: true,
+        hasNavbarMobile: true,
+        floatingNavbarMobile: true,
+        floatingNavbar: true,
+        floatingFooter: true,
+        fullWidthPage: true,
+        showRouterArrow: false,
+        showDropdown: true
+      }
+    },
+    {
+      // Alias for /all-products page
       path: '/projects',
       name: 'projects-overview',
       component: () => import('../views/ProjectsView.vue'),
@@ -52,7 +66,7 @@ const router = createRouter({
       }
     },
     {
-      // Route for /projects/:category
+      // Leads to all products view with preselected project (:category)
       path: '/projects/:category',
       name: 'category-overview',
       component: () => import('../views/AllProductsView.vue'),
@@ -70,7 +84,7 @@ const router = createRouter({
       }
     },
     {
-      // Route for /projects/:category/:subcategory
+      // Leads to all products view with preselected project and subcategory
       path: '/projects/:category/:subcategory',
       name: 'subcategory-overview',
       component: () => import('../views/AllProductsView.vue'),
@@ -87,8 +101,9 @@ const router = createRouter({
         showDropdown: true
       }
     },
+
     {
-      // Route for individual products
+      // Route for individual product details
       path: '/projects/:category/:subcategory/:product',
       name: 'projects',
       component: () => import('../views/ProductView.vue'),
@@ -97,22 +112,6 @@ const router = createRouter({
         subcategory: route.params.subcategory,
         product: route.params.product,
       }),
-      meta: { 
-        hasNavbar: true,
-        hasFooter: true,
-        hasNavbarMobile: true,
-        floatingNavbarMobile: true,
-        floatingNavbar: true,
-        floatingFooter: true,
-        fullWidthPage: true,
-        showRouterArrow: false,
-        showDropdown: true
-      }
-    },
-    {
-      path: '/all-products', // Catches any /projects/anything that doesn't match above
-      name: 'all-products',
-      component: () => import('../views/AllProductsView.vue'), // Remove the redirect, use a component instead
       meta: { 
         hasNavbar: true,
         hasFooter: true,
@@ -166,17 +165,10 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  console.log("Trying to go to", to)
+  console.log("Router: TO ->", JSON.parse(JSON.stringify(to)));
   try {
-    // This guard now specifically targets the detailed product route
     if (to.name === 'projects') {
-      console.log("awaiting res")
-      let productStore = useProductStoreCleanup();
-      let resolution;
-      if(productStore.getFlowType === 'old'){
-        resolution = await RPH(to.params);
-      } else resolution = await handleProjectRouteParameters(to.params);
-      console.log("RES", resolution)
+      const resolution = await handleProjectRouteParameters(to.params)
       switch (resolution.status) {
         case 'VALID':
           next();
@@ -190,7 +182,6 @@ router.beforeEach(async (to, from, next) => {
           break;
       }
     } else {
-      console.log("Just nexting")
       // For all other routes, including the new category and subcategory overviews, proceed without this specific logic.
       next();
     }

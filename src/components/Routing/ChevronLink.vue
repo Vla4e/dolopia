@@ -48,11 +48,12 @@ const hovered = ref(false);
 
 <style lang="scss" scoped>
 .chevron-link-container {
-  display: inline-block;
   cursor: pointer;
   position: relative;
   min-width: 100px;
   min-height: 40px;
+  display: flex;
+  align-items: center;
 
   &.hovered{
     .chevron{
@@ -78,6 +79,7 @@ const hovered = ref(false);
   align-items: center;
   text-decoration: none;
   color: white;
+  height: 100%;
 }
 
 .link-text {

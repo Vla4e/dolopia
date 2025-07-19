@@ -48,8 +48,6 @@ const parseImages = () => {
 
 // Get images for current product
 const getProductImages = async (code) => {
-  console.log("getting product images for", code);
-  console.log("SUBCATDATA VAL", subcategoryData.value.isCandiedFruit);
   if (!code) return null;
 
   if (subcategoryData.value.isCandiedFruit) {

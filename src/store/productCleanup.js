@@ -5,7 +5,7 @@ import { allProductMap } from '@/assets/products/allProductMap.js';
 import { productMapByCode } from '@/assets/products/productMapByCode';
 import { productMapByPath } from '@/assets/products/productMapByPath';
 import { categoryToSubcategory, categoryToSubcategoryNames, subcategoryFullNames } from '@/assets/products/categoryToSubcategory.js';
-import { subcategoryToProductCodes, subcategoryToProducts, subcategoryToProductsMap } from '@/assets/products/subcategoryToProducts.js';
+import { subcategoryToProductCodes, subcategoryToProductsMap } from '@/assets/products/subcategoryToProducts.js';
 
 export const useProductStoreCleanup = defineStore('productCleanup', () => {
   // console.log("DEFINING STORE")

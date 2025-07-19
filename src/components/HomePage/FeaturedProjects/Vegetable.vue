@@ -1,10 +1,10 @@
 <script setup>
-import { nextTick, onMounted, ref } from 'vue';
-import { goToRoute } from '@/helpers/goToRoute';
+import ChevronLink from "@/components/Routing/ChevronLink.vue";
+import { nextTick, onMounted, ref } from "vue";
 
 defineOptions({
-  name:'FeaturedTomato'
-})
+  name: "FeaturedTomato",
+});
 
 let container = ref();
 let topTarget = ref();
@@ -15,8 +15,13 @@ let topSection = ref();
 const positionElementC = async () => {
   await nextTick(); // Ensure DOM is updated
 
-  if (!container.value || !topTarget.value || !rightTarget.value || !floatingImage.value) {
-      return;
+  if (
+    !container.value ||
+    !topTarget.value ||
+    !rightTarget.value ||
+    !floatingImage.value
+  ) {
+    return;
   }
 
   // Get the bounding topTargetRectngles relative to the viewport
@@ -26,44 +31,63 @@ const positionElementC = async () => {
   // So C's left position = B's left - C's width
   const offsetInVW = 12;
   const offsetManual = 0;
-  const offsetFinal = offsetInVW - offsetManual
+  const offsetFinal = offsetInVW - offsetManual;
   const offsetInPixels = (offsetFinal * window.innerWidth) / 100;
   const leftVal = rightTargetRect.width - offsetInPixels;
 
   const marginOffset = 15;
-  console.log("TTR>H", topTargetRect.height)
-  const heightOffset = 30 * topTargetRect.height / 100;
+  console.log("TTR>H", topTargetRect.height);
+  const heightOffset = (30 * topTargetRect.height) / 100;
 
   const topVal = marginOffset + heightOffset;
   // // console.log("leftVal:", leftVal)
   // // console.log("TOPVAL", topVal)
   // Apply the positioning
-  floatingImage.value.style.left = leftVal + 'px';
+  floatingImage.value.style.left = leftVal + "px";
   // floatingImage.value.style.top = topVal + 'px';
   // floatingImage.value.style.top = -topVal + 'px';
 };
 
-onMounted( async () => {
-  setTimeout( async () => {
+onMounted(async () => {
+  setTimeout(async () => {
     await positionElementC();
-  }, 500)
-})
+  }, 500);
+});
 
+let hoverProp = ref(false);
 </script>
 
 <template>
   <section ref="container" class="featured">
 
     <div ref="topSection" class="top-section">
-      <h2 @click="goToRoute('/projects/vegetable-project/appetizer/aubergine-salad-smoked-tea')" ref="topTarget" class="product-name">
-        Aubergine Salad
-        <span class="small-text">
-          with Smoked tea
-        </span>
-      </h2>
+      <router-link
+        to="/projects/vegetable-project/appetizer/aubergine-salad-smoked-tea"
+        class="product-name-link"
+        @mouseenter="hoverProp = true"
+        @mouseleave="hoverProp = false"
+      >
+        <h2 ref="topTarget" class="product-name">
+          Aubergine Salad
+          <span class="small-text"> with Smoked tea </span>
+        </h2>
+        <ChevronLink :routePath="'/catalog'" :hoverProp="hoverProp" linkText="" />
+      </router-link>
     </div>
+
     <div class="middle-section">
-      <img @click="goToRoute('/projects/vegetable-project/appetizer/aubergine-salad-smoked-tea')" ref="floatingImage" src="@/assets/landing/sections/vegetable-group.png" class="product-image"/>
+      <router-link
+        to="/projects/vegetable-project/appetizer/aubergine-salad-smoked-tea"
+        class="product-image-link"
+        @mouseenter="hoverProp = true"
+        @mouseleave="hoverProp = false"
+      >
+        <img
+          ref="floatingImage"
+          src="@/assets/landing/sections/vegetable-group.png"
+          class="product-image"
+        />
+      </router-link>
 
       <div class="text">
         <span ref="rightTarget" class="large no-break">
@@ -71,29 +95,45 @@ onMounted( async () => {
         </span>
         <p>
           One of Dolopia’s oldest recipes and still our biggest success, this
-          <br/> aubergine salad redefines tradition. Instead of smoking the
-          <br/>aubergines, we infuse the velvety pulp with smoked tea – a subtle
-          <br/>twist that preserves purity while adding mystery. A hint of garlic, a
-          <br/>drizzle of extra virgin olive oil, and fresh ingredients only
-          <br/>– no additives, ever. 
+          <br />
+          aubergine salad redefines tradition. Instead of smoking the <br />aubergines, we
+          infuse the velvety pulp with smoked tea – a subtle <br />twist that preserves
+          purity while adding mystery. A hint of garlic, a <br />drizzle of extra virgin
+          olive oil, and fresh ingredients only <br />– no additives, ever.
         </p>
-        
+
         <span class="large lt-1">
-          <b>Rooted in 
-          <br/>Mediterranean simplicity</b>
+          <b>Rooted in <br />Mediterranean simplicity</b>
           Crafted with care
         </span>
       </div>
     </div>
+
     <div class="bottom-section">
       <p>
-        Part of our Vegetable Project, under the Salads & Spreads subcategory, it shares the spotlight with red pepper
-        <br/>creations and slow-cooked vegetables in EVO oil 
+        Part of our Vegetable Project, under the Salads & Spreads subcategory, it shares
+        the spotlight with red pepper
+        <br />creations and slow-cooked vegetables in EVO oil
       </p>
     </div>
+
   </section>
 </template>
 <style lang="scss" scoped>
+.product-name-link {
+  text-decoration: none;
+  color: inherit;
+  display: contents;
+  .chevron-link-container{
+    margin-left: 15px;
+  }
+}
+.product-image-link{
+  text-decoration: none;
+  color: inherit;
+  display: contents;
+}
+
 .featured {
   display: flex;
   flex-direction: column;
@@ -104,17 +144,18 @@ onMounted( async () => {
   align-items: center;
   color: black;
   position: relative;
-  
+
   .top-section {
     display: flex;
     width: 100%;
     justify-content: flex-start;
+    align-items: center;
     margin-bottom: 15px;
     position: relative;
     .product-name {
       display: flex;
       flex-direction: column;
-      color: #FFF;
+      color: #fff;
       text-align: left;
       font-family: "Century Gothic";
       /* Further reduced */
@@ -125,11 +166,11 @@ onMounted( async () => {
       letter-spacing: 6px;
       cursor: pointer;
       .small-text {
-        color: #FFF;
+        color: #fff;
         text-align: left;
         font-family: "Century Gothic";
         /* Further reduced */
-        font-size: clamp(1.2rem, 1.8vw, 2.0rem);
+        font-size: clamp(1.2rem, 1.8vw, 2rem);
         line-height: 1.1;
         font-style: normal;
         font-weight: 700;
@@ -165,7 +206,7 @@ onMounted( async () => {
       row-gap: 12px;
       width: 60%;
       .large {
-        color: #039EA2;
+        color: #039ea2;
         font-family: "Century Gothic";
         font-size: clamp(1.4rem, 2vw, 2.2rem);
         line-height: 1.25;
@@ -176,7 +217,7 @@ onMounted( async () => {
         flex-direction: column;
 
         b {
-          color: #039EA2;
+          color: #039ea2;
           font-family: "Century Gothic";
           font-size: clamp(1.3rem, 1.9vw, 2.1rem);
           line-height: 1.25;
@@ -223,11 +264,17 @@ onMounted( async () => {
     .middle-section .text {
       .large {
         font-size: clamp(1.2rem, 1.7vw, 1.9rem);
-        b { font-size: clamp(1.1rem, 1.5vw, 1.7rem); }
+        b {
+          font-size: clamp(1.1rem, 1.5vw, 1.7rem);
+        }
       }
-      p { font-size: clamp(10px, 0.9vw, 0.9rem); }
+      p {
+        font-size: clamp(10px, 0.9vw, 0.9rem);
+      }
     }
-    .bottom-section p { font-size: clamp(10px, 0.9vw, 0.9rem); }
+    .bottom-section p {
+      font-size: clamp(10px, 0.9vw, 0.9rem);
+    }
   }
 }
 </style>

@@ -13,7 +13,7 @@ import { getProductCodeToUrlMap } from '@/helpers/fetchProductListImages';
 
 import {ref, computed, watch, onMounted, onBeforeMount, onBeforeUnmount } from 'vue';
 
-import { subcategoryToProductCodes, subcategoryToProductsMap, subcategoryToProducts } from "@/assets/products/subcategoryToProducts"
+import { subcategoryToProductCodes, subcategoryToProductsMap } from "@/assets/products/subcategoryToProducts"
 import { useProductStore } from '@/store/product';
 const productStore = useProductStore()
 

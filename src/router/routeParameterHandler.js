@@ -58,7 +58,6 @@ async function _resolveProjectRoute(params) {
     // If productName is missing, redirect to the default product for the valid subcategory.
     const defaultProduct = _getDefaultProductPathForSubcategory(subcategory);
     if (!defaultProduct) return { status: 'NOT_FOUND' };
-    console.log("REDIRECTING NOPRODUCTNAME")
     return {
       status: 'REDIRECT',
       payload: { 
@@ -70,8 +69,6 @@ async function _resolveProjectRoute(params) {
 
   const productCode = productMapByPath.get(productName)?.code;
   const isProductInSubcategory = productCode && subcategoryToProductCodes.get(subcategory)?.includes(productCode);
-  console.log("Got code ->", productCode)
-  console.log("ISVALID?", isProductInSubcategory)
   if (isProductInSubcategory) {
     // The URL is fully valid.
     return { status: 'VALID', payload: { productCode } };
@@ -79,7 +76,6 @@ async function _resolveProjectRoute(params) {
     // The product is invalid for the given subcategory, so redirect to its default product.
     const defaultProduct = _getDefaultProductPathForSubcategory(subcategory);
     if (!defaultProduct) return { status: 'NOT_FOUND' };
-    console.log("REDIRECT FROM ISPRODUCTINSUBCAT")
     return {
       status: 'REDIRECT',
       payload: { 

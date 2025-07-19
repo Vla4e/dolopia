@@ -13,14 +13,16 @@ const { isMobile } = inject("screenSize");
 const productViewStore = useProductViewStore(); // Initialize the store
 
 // Handle global scroll for desktop
+const scrollUp = true;
+const scrollDown = false;
 useScrollDirection(
   () => {
     // onScrollUp
-    productViewStore.cyclePhase(false); // false for backward
+    productViewStore.cyclePhase(scrollUp); // false for backward
   },
   () => {
     // onScrollDown
-    productViewStore.cyclePhase(true); // true for forward
+    productViewStore.cyclePhase(scrollDown); // true for forward
   }
 );
 
@@ -63,7 +65,7 @@ onUnmounted(() => {
       <div @click="productViewStore.toggleOverview()" class="open-panel"></div>
     </div>
 
-    <IconScrollDown v-show="isOverviewActive" class="icon-scroll-down"/>
+    <IconScrollDown v-show="productViewStore.isOverviewActive" class="icon-scroll-down"/>
 
     <div
       v-if="!isMobile"
@@ -112,11 +114,9 @@ onUnmounted(() => {
   transition: transform ease-in-out 0.5s, opacity 0.5s ease;
   &.inactive {
     transform: translateX(-100%);
-    z-index: 3;
-
+    // z-index: 3;
     .open-panel {
       opacity: 1;
-      z-index: 3000;
     }
   }
   .open-panel {
@@ -147,6 +147,7 @@ onUnmounted(() => {
   height: 100%;
   // background-color: #CEEAEC;
   z-index: 1;
+  cursor: pointer;
   &.active {
   }
 }

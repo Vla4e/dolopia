@@ -1,10 +1,11 @@
 <script setup>
-import { nextTick, onMounted, ref } from 'vue';
-import { goToRoute } from '@/helpers/goToRoute';
+import ChevronLink from "@/components/Routing/ChevronLink.vue";
+import { nextTick, onMounted, ref } from "vue";
+import { goToRoute } from "@/helpers/goToRoute";
 
 defineOptions({
-  name:'FeaturedTomato'
-})
+  name: "FeaturedTomato",
+});
 
 let container = ref();
 let topTarget = ref();
@@ -15,20 +16,28 @@ let topSection = ref();
 const positionElementC = async () => {
   await nextTick(); // Ensure DOM is updated
 
-  if (!container.value || !topTarget.value || !rightTarget.value || !floatingImage.value) {
-      return;
+  if (
+    !container.value ||
+    !topTarget.value ||
+    !rightTarget.value ||
+    !floatingImage.value
+  ) {
+    return;
   }
-  const imageBottomOffset = 5 * floatingImage.value.height /100; //empty space in image from product to bottom
-  floatingImage.value.style.marginBottom = (parseFloat(getComputedStyle(floatingImage.value).marginBottom) - imageBottomOffset) + 'px';
-
+  const imageBottomOffset = (5 * floatingImage.value.height) / 100; //empty space in image from product to bottom
+  floatingImage.value.style.marginBottom =
+    parseFloat(getComputedStyle(floatingImage.value).marginBottom) -
+    imageBottomOffset +
+    "px";
 };
 
-onMounted( async () => {
-  setTimeout( async () => {
+onMounted(async () => {
+  setTimeout(async () => {
     await positionElementC();
-  }, 500)
-})
+  }, 500);
+});
 
+let hoverProp = ref(false);
 </script>
 
 <template>
@@ -36,15 +45,37 @@ onMounted( async () => {
 
     <div ref="topSection" class="top-section">
     </div>
+
     <div class="middle-section">
-      <img @click="goToRoute('/projects/pasta-project/seafood-pasta/orzo-squid-ink')" ref="floatingImage" src="@/assets/landing/sections/pasta-group.png" class="product-image"/>
+      <router-link
+        to="/projects/fruit-project/jam/strawberry-mint-pepper"
+        class="product-image-link"
+        @mouseenter="hoverProp = true"
+        @mouseleave="hoverProp = false"
+      >
+        <img
+          ref="floatingImage"
+          src="@/assets/landing/sections/pasta-group.png"
+          class="product-image"
+        />
+      </router-link>
       <div class="texts-container">
-        <h2 @click="goToRoute('/projects/pasta-project/seafood-pasta/orzo-squid-ink')" ref="topTarget" class="product-name">
-          Two-Coloured
-          <span class="small-text">
-            Seafood Orzo
-          </span>
-        </h2>
+        <router-link
+          to="/projects/fruit-project/jam/strawberry-mint-pepper"
+          class="product-name-link"
+          @mouseenter="hoverProp = true"
+          @mouseleave="hoverProp = false"
+        >
+          <h2
+            @click="goToRoute('/projects/pasta-project/seafood-pasta/orzo-seafood')"
+            ref="topTarget"
+            class="product-name"
+          >
+            Two-Coloured
+            <span class="small-text"> Seafood Orzo </span>
+          </h2>
+          <ChevronLink :routePath="'/catalog'" :hoverProp="hoverProp" linkText="" />
+        </router-link>
 
         <div ref="rightTarget" class="text">
           <span class="large">
@@ -53,13 +84,13 @@ onMounted( async () => {
           </span>
           <p>
             Dolopia’s Two-Coloured Seafood Orzo brings together two worlds: jet-black
-            <br/>orzo with squid ink and golden orzo infused with shellfish essence. It’s a visual 
-            <br/>and culinary ode to the Greek seaside, where simplicity meets bold taste.
-            <br/>Part of our Pasta Project, this creation stands alongside traditional pastas
-            <br/>made with goat or sheep milk, vibrant vegan blends with vegetables and
-            <br/>spices, and other specialty shapes.
+            <br />orzo with squid ink and golden orzo infused with shellfish essence. It’s
+            a visual <br />and culinary ode to the Greek seaside, where simplicity meets
+            bold taste. <br />Part of our Pasta Project, this creation stands alongside
+            traditional pastas <br />made with goat or sheep milk, vibrant vegan blends
+            with vegetables and <br />spices, and other specialty shapes.
           </p>
-          
+
           <span class="large">
             Where simplicity meets
             <b>Bold taste</b>
@@ -67,18 +98,36 @@ onMounted( async () => {
         </div>
       </div>
     </div>
+
     <div class="bottom-section">
       <p>
-        Every piece of pasta is air-dried slowly, never heat-treated – so the aromas stay locked inside. With no
-        <br/>added salt and a naturally rough surface for sauces to cling to, it’s designed to carry flavor in every bite.
-        <br/>Pair it with seafood, lemon zest, or just a touch of olive oil – and let it speak for itself.
+        Every piece of pasta is air-dried slowly, never heat-treated – so the aromas stay
+        locked inside. With no
+        <br />added salt and a naturally rough surface for sauces to cling to, it’s
+        designed to carry flavor in every bite. <br />Pair it with seafood, lemon zest, or
+        just a touch of olive oil – and let it speak for itself.
       </p>
     </div>
+
   </section>
 </template>
 
-
 <style lang="scss" scoped>
+.product-name-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  // align-items: flex-end;
+  .chevron-link-container{
+    margin-left: 15px;
+  }
+}
+.product-image-link{
+  text-decoration: none;
+  color: inherit;
+  display: contents;
+}
+
 .featured {
   display: flex;
   flex-direction: column;
@@ -89,7 +138,7 @@ onMounted( async () => {
   align-items: center;
   color: black;
   position: relative;
-  @media(max-width: 1366px){
+  @media (max-width: 1366px) {
     width: 70%;
   }
 
@@ -102,7 +151,7 @@ onMounted( async () => {
     position: relative;
     overflow: visible;
 
-    .texts-container{
+    .texts-container {
       width: 70%;
     }
     .product-image {
@@ -111,38 +160,38 @@ onMounted( async () => {
       object-fit: contain;
       max-width: 100%;
     }
-    
+
     .product-name {
       display: flex;
       flex-direction: column;
-      color: #FFF;
+      color: #fff;
       text-align: left;
       font-family: "Century Gothic";
       // Reduced font size by ~20%
-      font-size: clamp(1.2rem, 2vw, 2.4rem);
-      line-height: clamp(1.2rem, 2vw, 2.4rem);
+      font-size: clamp(1.2rem, 1.9vw, 2.4rem);
+      line-height: clamp(1.2rem, 1.9vw, 2.4rem);
       font-style: normal;
       font-weight: 700;
       letter-spacing: 5px;
       width: 100%;
-      
-      @media(min-width: 1400px) and (max-height: 800px){
+
+      @media (min-width: 1400px) and (max-height: 800px) {
         font-size: clamp(0.9rem, 1.5vw, 1.8rem);
         line-height: clamp(0.9rem, 1.5vw, 1.8rem);
         letter-spacing: 4px;
-        .small-text{
+        .small-text {
           font-size: clamp(1.8rem, 3vw, 3.6rem);
           line-height: clamp(1.8rem, 3vw, 3.6rem);
         }
       }
-      
+
       .small-text {
-        color: #FFF;
+        color: #fff;
         text-align: left;
         font-family: "Century Gothic";
         // Reduced font size by ~20%
-        font-size: clamp(2.4rem, 4vw, 4.8rem);
-        line-height: clamp(2.4rem, 4vw, 4.8rem);
+        font-size: clamp(2.4rem, 3.7vw, 4.8rem);
+        line-height: clamp(2.4rem, 3.7vw, 4.8rem);
         font-style: normal;
         font-weight: 700;
       }
@@ -154,7 +203,7 @@ onMounted( async () => {
       width: 100%;
       align-items: flex-start;
       .large {
-        color: #039EA2;
+        color: #039ea2;
         font-family: "Century Gothic";
         // Reduced font size by ~15%
         font-size: clamp(1.5rem, 2.5vw, 2.4rem);
@@ -164,8 +213,8 @@ onMounted( async () => {
         letter-spacing: 0.9px;
         display: flex;
         flex-direction: column;
-        
-        @media(min-width: 1400px) and (max-height: 800px){
+
+        @media (min-width: 1400px) and (max-height: 800px) {
           font-size: clamp(1rem, 1.8vw, 1.6rem);
           line-height: clamp(1rem, 1.8vw, 1.6rem);
           b {
@@ -173,9 +222,9 @@ onMounted( async () => {
             line-height: clamp(0.9rem, 1.5vw, 1.5rem);
           }
         }
-        
+
         b {
-          color: #039EA2;
+          color: #039ea2;
           font-family: "Century Gothic";
           // Reduced font size by ~15%
           font-size: clamp(1.3rem, 2.1vw, 2.1rem);
@@ -194,8 +243,8 @@ onMounted( async () => {
         line-height: clamp(18px, 1.8vw, 1.4rem);
         font-style: normal;
         font-weight: 400;
-        
-        @media(min-width: 1400px) and (max-height: 800px){
+
+        @media (min-width: 1400px) and (max-height: 800px) {
           font-size: clamp(10px, 0.9vw, 0.7rem);
           line-height: clamp(14px, 1.2vw, 0.9rem);
         }
@@ -204,10 +253,10 @@ onMounted( async () => {
   }
 
   .bottom-section {
-    @media(min-width: 1400px) and (max-height: 800px){
+    @media (min-width: 1400px) and (max-height: 800px) {
       margin-top: -10px;
     }
-    
+
     p {
       color: #000;
       font-family: "Raleway";
@@ -215,8 +264,8 @@ onMounted( async () => {
       line-height: clamp(18px, 1.5vw, 1.4rem);
       font-style: normal;
       font-weight: 400;
-      
-      @media(min-width: 1400px) and (max-height: 800px){
+
+      @media (min-width: 1400px) and (max-height: 800px) {
         font-size: clamp(10px, 0.8vw, 0.7rem);
         line-height: clamp(14px, 1.2vw, 0.9rem);
       }

@@ -22,7 +22,7 @@ function selectPhase(phaseIndex){
       :key="item"
       :class="productViewStore.currentPhaseName === item ? 'selected':''"
       class="phase-item"
-      @click="selectPhase(idx)"
+      @click.stop="selectPhase(idx)"
     >
       <div class="inner-circle"/>
     </li>

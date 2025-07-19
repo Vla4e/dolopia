@@ -55,6 +55,7 @@ let hoverProp = ref(false);
 
 <template>
   <section ref="container" class="featured">
+
     <div ref="topSection" class="top-section">
       <router-link
         to="/projects/tomato-project/pasta-sauces/feta-cheese-savory"
@@ -66,12 +67,14 @@ let hoverProp = ref(false);
           <span class="large-text">Tomato sauce</span>
           <span class="small-text"> with Feta and savory </span>
         </h2>
+        <ChevronLink :routePath="'/catalog'" :hoverProp="hoverProp" linkText="" />
       </router-link>
-      <ChevronLink :routePath="'/catalog'" :hoverProp="hoverProp" linkText="" />
     </div>
+
     <div class="middle-section">
       <router-link
         to="/projects/tomato-project/pasta-sauces/feta-cheese-savory"
+        class="product-image-link"
         @mouseenter="hoverProp = true"
         @mouseleave="hoverProp = false"
       >
@@ -101,6 +104,7 @@ let hoverProp = ref(false);
         </span>
       </div>
     </div>
+
     <div class="bottom-section">
       <p>
         It's part of our Tomato project - a celebration of authentic traditional tomato
@@ -112,6 +116,7 @@ let hoverProp = ref(false);
         aubergines in tomato sauce, inspired by the beloved Mousaka.
       </p>
     </div>
+
   </section>
 </template>
 
@@ -120,8 +125,14 @@ let hoverProp = ref(false);
 .product-name-link {
   text-decoration: none;
   color: inherit;
-  /* This makes the wrapper 'disappear' for layout purposes,
-     so the h2 behaves as a direct child of the flex container. */
+  display: contents;
+  .chevron-link-container{
+    margin-left: 15px;
+  }
+}
+.product-image-link{
+  text-decoration: none;
+  color: inherit;
   display: contents;
 }
 
@@ -140,6 +151,7 @@ let hoverProp = ref(false);
     display: flex;
     width: 100%;
     justify-content: flex-end;
+    align-items: center;
     margin-bottom: 15px;
     position: relative;
     .product-name {

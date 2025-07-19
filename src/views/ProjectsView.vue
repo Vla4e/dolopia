@@ -79,7 +79,7 @@ const panels = [
     },
     subcategories: [
       {
-        name: "Milk pasta",
+        name: "Traditional pasta",
         route: "traditional-pasta",
       },
       {
@@ -95,17 +95,9 @@ const panels = [
   },
 ];
 
-onMounted(() => {
-  console.log("MOUNTED");
-});
-function clickedTest(c, s, p) {
-  console.log("Cat", c);
-  console.log("Sub", s);
-  console.log(p);
-}
-
 import { useProductStoreCleanup } from "@/store/productCleanup";
 const productStore = useProductStoreCleanup();
+
 </script>
 
 <template>
@@ -136,24 +128,14 @@ const productStore = useProductStoreCleanup();
               v-for="subcategory in panel.subcategories"
               :key="subcategory.name"
               :to="
-                productStore.getFlowType === 'old'
-                  ? {
-                      name: 'projects',
-                      params: {
-                        category: panel.category.route,
-                        subcategory: subcategory.route,
-                        product: 'default',
-                      },
-                    }
-                  : {
-                      name: 'subcategory-overview',
-                      params: {
-                        category: panel.category.route,
-                        subcategory: subcategory.route,
-                      },
-                    }
+                {
+                  name: 'subcategory-overview',
+                  params: {
+                    category: panel.category.route,
+                    subcategory: subcategory.route,
+                  },
+                }
               "
-              @click="clickedTest(panel.category.route, subcategory.route, 'default')"
               class="subcategory"
             >
               {{ subcategory.name }}

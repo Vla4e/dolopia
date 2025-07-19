@@ -108,7 +108,7 @@ let computeShowDropdown = computed(() => {
   z-index: 2;
   @media (min-width: 451px) {
     position: fixed;
-    bottom: 0;
+    bottom: 1vh;
     width: 100%;
     min-height: 100px;
   }

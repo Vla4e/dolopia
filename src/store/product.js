@@ -3,7 +3,7 @@ import { ref, reactive, computed, watch, toRaw } from 'vue';
 
 import { allProductMap } from '@/assets/products/allProductMap.js';
 import { categoryToSubcategory, categoryToSubcategoryNames, subcategoryFullNames } from '@/assets/products/categoryToSubcategory.js';
-import { subcategoryToProductCodes, subcategoryToProducts, subcategoryToProductsMap } from '@/assets/products/subcategoryToProducts.js';
+import { subcategoryToProductCodes, subcategoryToProductsMap } from '@/assets/products/subcategoryToProducts.js';
 
 
 // // console.log("subcategory")

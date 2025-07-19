@@ -3,6 +3,7 @@ import placeholderImage from "@/assets/products/product-images/placeholder/place
 
 let projects = ["tomato-project", "vegetable-project", "pasta-project", "fruit-project"];
 
+import { updateProjectUrl } from "@/router/updateAllProductsUrl";
 import { useRoute } from "vue-router";
 const route = useRoute();
 
@@ -24,23 +25,29 @@ let selectedSubcategory = ref(null);
 let isLoading = ref(false);
 
 watch(selectedProject, async (newProject, oldProject) => {
-  console.log("firing watcher SPROJECT");
   if (newProject !== oldProject) {
     isLoading.value = true;
     await nextTick();
-    setTimeout(() => { // visuals break without delay between (race condition between subcat and project watchers) :/
+    // Set default subcategory if none is present in route.params
+    if (!route.params.subcategory) {
+      const subcategories = categoryToSubcategory.get(newProject) || [];
+      if (subcategories.length > 0) {
+        selectedSubcategory.value = subcategories[0];
+      }
+    }
+    setTimeout(() => {
       isLoading.value = false;
     }, 200);
   }
 });
 
 watch(selectedSubcategory, async (newSubcategory, oldSubcategory) => {
-  console.log("firing watcher SCATEGORY");
   if (newSubcategory !== oldSubcategory) {
     isLoading.value = true;
     await nextTick();
     setTimeout(() => { // visuals break without delay between (race condition between subcat and project watchers) :/
       isLoading.value = false;
+      updateProjectUrl(selectedProject.value, newSubcategory);
     }, 200);
   }
 });
@@ -88,32 +95,30 @@ const subcategoryKeysArray = computed(() =>
   Array.from(categoryToSubcategory.get(selectedProject.value) || [])
 );
 
-function selectProject(project){
-  console.log("SELECTING PROJECT", project);
-  if(project === selectedProject.value){
+function selectProject(project) {
+  if (project === selectedProject.value) {
     return;
   }
   selectedProject.value = project;
-  selectedSubcategory.value = null;
-}
-
-function selectSubcategory(subcategory){
-  console.log("SELECTING SUBCAT", subcategory);
-  if(subcategory === selectedSubcategory.value){
-    selectedSubcategory.value = null; //deselect 
-  } else {
-    console.log("inside else");
-    selectedSubcategory.value = subcategory;
-    console.log("AFTER INSIDE ELSE", selectedSubcategory.value);
+  selectedSubcategory.value = null; // Reset subcategory
+  // Set default subcategory (first one in the array for the project)
+  const subcategories = categoryToSubcategory.get(project) || [];
+  if (subcategories.length > 0) {
+    selectedSubcategory.value = subcategories[0];
   }
 }
 
-// Main watch for route parameters to drive component state
+function selectSubcategory(subcategory){
+  if(subcategory === selectedSubcategory.value){
+    selectedSubcategory.value = null; //deselect 
+  } else {
+    selectedSubcategory.value = subcategory;
+  }
+}
+
 watch(
   () => route.params,
   async (newParams, oldParams) => {
-    console.log("ROUTE PARAMS CHANGED:", newParams);
-
     const newCategory = newParams.category || "tomato-project";
     const newSubcategory = newParams.subcategory || null;
 
@@ -121,26 +126,28 @@ watch(
     if (newCategory !== selectedProject.value) {
       selectedProject.value = newCategory;
       await nextTick();
-      console.log("NEXTTICK after project change, DOM should be ready for new subcategories");
     }
 
+    // --- Step 2: Update selectedSubcategory ---
     if (newSubcategory !== selectedSubcategory.value) {
       const currentProjectSubcategories = categoryToSubcategory.get(selectedProject.value) || [];
       if (newSubcategory && !currentProjectSubcategories.includes(newSubcategory)) {
-          selectedSubcategory.value = null;
-          console.warn(`Route subcategory '${newSubcategory}' not found for project '${selectedProject.value}'. Resetting selectedSubcategory.`);
+        selectedSubcategory.value = null;
+        console.warn(`Route subcategory '${newSubcategory}' not found for project '${selectedProject.value}'. Resetting selectedSubcategory.`);
+        // Set default subcategory
+        selectedSubcategory.value = currentProjectSubcategories[0] || null;
       } else {
-          selectedSubcategory.value = newSubcategory;
+        selectedSubcategory.value = newSubcategory;
       }
     }
 
     isLoading.value = true;
-    await nextTick(); // Wait for state changes to be reflected in DOM before hiding skeleton
+    await nextTick();
     setTimeout(() => {
       isLoading.value = false;
-    }, 200); // Small delay for visual effect
+    }, 200);
   },
-  { immediate: true, deep: true } // run on initial load
+  { immediate: true, deep: true }
 );
 
 </script>
@@ -199,7 +206,7 @@ watch(
             </Transition>
           </div>
 
-          <div class="product-grid">
+          <div class="product-grid" :class="selectedProject">
             <TransitionGroup name="fade-staggered" tag="div" class="product-grid-inner">
               <router-link
                 v-for="(product, index) in products"
@@ -207,6 +214,7 @@ watch(
                 :style="{ '--delay': `${0.4 + index * 0.1}s` }"
                 :to="'/projects/'+ selectedProject + '/' + subcategoryKey + '/' + product.path"
               >
+
                 <div class="texts">
                   <h3 class="name">
                     <span class="top-part">
@@ -220,12 +228,26 @@ watch(
                     {{ product["Short Description EN"] }}
                   </span>
                 </div>
+
                 <img :src="product.mainImage" class="image" :alt="product['Product name EN']" />
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="#131313"
+                  class="chevron"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
+                  />
+                </svg>
+
               </router-link>
             </TransitionGroup>
           </div>
 
-          <div class="horizontal-border"/>
+          <!-- <div class="horizontal-border"/> -->
         </div>
       </div>
     </section>
@@ -331,7 +353,8 @@ watch(
     min-height: 70vh;
     flex-grow: 1;
     padding-bottom: 130px;
-    background: #2B565D;
+    // background: #2B565D;
+    background: #ceebec;
     position: relative;
     .subcategory-sections{
       display: flex; // Ensures it can control its children's alignment
@@ -341,7 +364,6 @@ watch(
     .subcategory-section {
       display: flex;
       width: 100%;
-      background: #ceebec;
 
       &.loading-state {
         min-height: 100vh;
@@ -360,13 +382,13 @@ watch(
       }
     }
     .subcategory-panel {
-      width: 30%;
+      width: 25%;
       // height: 100%;
       // background: lightblue;
       // border-bottom: 1px solid #AFD6D9;
       // box-shadow: inset 0 -1px 0 #AFD6D9; //border-bottom adds 1px which misaligns with grid drawn bottom borders
       .subcategory-name {
-        padding-left: 5%;
+        padding-left: 2vw;
         padding-right: 5%;
         padding-top: 5vh;
         color: white;
@@ -377,6 +399,8 @@ watch(
         line-height: 1.1; /* 100% */
         display: flex;
         flex-direction: column;
+        letter-spacing: 2px;
+        text-transform: uppercase;
         @media(max-width: 1600px){
           font-size: 56px;
         }
@@ -384,15 +408,10 @@ watch(
     }
 
     .product-grid {
-      width: 70%;
+      width: 75%;
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      // Set borders on the container itself to frame the grid
-      border-left: 1px solid white;
-      // // border-right: 1px solid white;
       padding-top: 5vh;
-      // background: #44A0AD;
-      // overflow: hidden;
       .product-grid-inner {
         display: contents; /* Allows the grid items to respect the parent grid's layout */
       }
@@ -403,40 +422,16 @@ watch(
         justify-content: flex-start;
         height: 450px;
         position: relative;
-        margin-bottom: 20px;
+        margin-bottom: 120px;
         background: #ceebec;
         cursor: pointer;
-
-        // /* GRID ITEM POP */
-        // transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
-        // &:hover{
-        //   transform: translate(-2px, -5px); /* Lifts the item up by 5 pixels */
-        //   box-shadow: 0px 15px 10px 2px rgba(0, 0, 0, 0.2);
-        // }
-
-        /* TEXT/IMAGE POP */
-        &:hover{
-          .image{
-            transform: scale(1.05);
-          }
-          .name{
-            // text-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-            transform: scale(1.05);
-          }
-        }
-
-        /* MOVE ON HOVER TO LEFT */
-        // transition: transform 0.3s ease;
-        // &:hover{
-        //   transform: translateX(-20%);
-        // }
 
 
         .texts{
           display: flex;
           flex-direction: column;
           align-items: center;
-          height: 30%;
+          // height: 30%;
           .name {
             display: flex;
             flex-direction: column;
@@ -468,22 +463,49 @@ watch(
           .description {
             color: #000;
             font-family: "Raleway";
-            font-size: 12px;
+            font-size: 13px;
             font-style: normal;
             font-weight: 400;
-            line-height: 1.2; /* 120% */
+            line-height: 1.5; /* 120% */
             width: 70%;
             margin-left: auto;
             margin-right: auto;
           }
         }
         .image {
-          height: 70%;
+          height: 80%;
           position: absolute;
-          bottom: 0%;
+          bottom: -10%;
 
           transition: transform 0.3s ease-out; // image pop
+          z-index: 3;
           // width: 70%;
+        }
+        .chevron{
+          width: 20px;
+          height: 20px;
+          position: absolute;
+          bottom: 20%;
+          stroke: #2B565D;
+          z-index: 2;
+          left: 50%;
+          transition: transform 0.3s ease-out;
+        }
+        
+
+        &:hover{
+          .image{
+            transform: translateX(-20px);
+          }
+          .chevron{
+            // text-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            transform: translateX(100px);
+          }
+        }
+      }
+      &.pasta-project{
+        .image{
+          height: 70%;
         }
       }
     }
