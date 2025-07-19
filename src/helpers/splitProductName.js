@@ -2,7 +2,10 @@ export const splitProductName = (productName) => {
   if (!productName) {
     return { firstPart: "", secondPart: "" };
   }
-
+  
+  productName = productName.replace(/-/g, '');
+  console.log("replaced ->", productName)
+  
   const withDelimiter = " with ";
   const asteriskDelimiter = "*";
 

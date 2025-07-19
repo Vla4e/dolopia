@@ -45,10 +45,10 @@ watch(selectedSubcategory, async (newSubcategory, oldSubcategory) => {
   if (newSubcategory !== oldSubcategory) {
     isLoading.value = true;
     await nextTick();
-    setTimeout(() => { // visuals break without delay between (race condition between subcat and project watchers) :/
-      isLoading.value = false;
-      updateProjectUrl(selectedProject.value, newSubcategory);
-    }, 200);
+    // setTimeout(() => { // visuals break without delay between (race condition between subcat and project watchers) :/
+    // }, 200);
+    isLoading.value = false;
+    updateProjectUrl(selectedProject.value, newSubcategory);
   }
 });
 
@@ -190,7 +190,6 @@ watch(
       <div class="subcategory-sections">
         <div
           v-for="[subcategoryKey, products] in processedProductsBySubcategory"
-          :key="subcategoryKey"
           class="subcategory-section"
           :class="{ 'transitioning': isLoading, 'loading-state': isLoading, 'single': processedProductsBySubcategory.size === 1}"
           :ref="subcategoryKey"
@@ -199,7 +198,7 @@ watch(
           <div class="subcategory-panel">
             <Transition name="slide-horizontal" mode="out-in">
               <h2 class="subcategory-name long-slide" :key="subcategoryKey">
-                <span v-for="word in subcategoryFullNames[subcategoryKey].split(' ')">
+                <span v-for="word in subcategoryFullNames[subcategoryKey].split(' ')" :key="word">
                   {{ word }}
                 </span>
               </h2>
@@ -382,14 +381,14 @@ watch(
       }
     }
     .subcategory-panel {
-      width: 25%;
+      width: 20%;
       // height: 100%;
       // background: lightblue;
       // border-bottom: 1px solid #AFD6D9;
       // box-shadow: inset 0 -1px 0 #AFD6D9; //border-bottom adds 1px which misaligns with grid drawn bottom borders
       .subcategory-name {
         padding-left: 2vw;
-        padding-right: 5%;
+        padding-right: 2vw;
         padding-top: 5vh;
         color: white;
         font-family: "Century Gothic";
@@ -402,7 +401,7 @@ watch(
         letter-spacing: 2px;
         text-transform: uppercase;
         @media(max-width: 1600px){
-          font-size: 56px;
+          font-size: 36px;
         }
       }
     }
@@ -447,7 +446,7 @@ watch(
               font-weight: 400;
               line-height: 1; /* 75% */
               letter-spacing: 2.88px;
-              margin-bottom: 5px;
+              margin-bottom: 10px;
             }
             .bottom-part {
               color: #000;
@@ -561,17 +560,18 @@ watch(
   opacity: 0;
 }
 
+
+
+// Slide animation - Project Name is short-slide
 .slide-horizontal-enter-active,
 .slide-horizontal-leave-active {
   &.long-slide {
     transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
     
-    /* Add delay for enter animation - starts after short-slide finishes */
     &.slide-horizontal-enter-active {
       transition-delay: 0s; /* Delay by short-slide duration */
     }
     
-    /* No delay for leave animation - starts immediately */
     &.slide-horizontal-leave-active {
       transition-delay: 0s;
     }
@@ -580,19 +580,15 @@ watch(
   &.short-slide {
     transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
     
-    /* No delay for enter animation - starts immediately */
     &.slide-horizontal-enter-active {
       transition-delay: 0s;
     }
     
-    /* Add delay for leave animation - starts after long-slide finishes leaving */
     &.slide-horizontal-leave-active {
-      transition-delay: 0s; /* Or add delay if you want short-slide to wait */
+      transition-delay: 0s; /* delay for short-slide */
     }
   }
 }
-
-//slide
 .slide-horizontal-enter-from {
   transform: translateX(-100%);
   opacity: 0;
@@ -609,7 +605,6 @@ watch(
   opacity: 1;
 }
 
-/* Alternative approach using separate classes for more control */
 .slide-horizontal-enter-active.long-slide {
   transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
   transition-delay: 0.4s; /* Enter after short-slide completes */
