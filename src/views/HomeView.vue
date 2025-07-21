@@ -1,7 +1,7 @@
 <script setup>
 import LandingHero from '../components/LandingHero.vue'
 
-// Import all featured components, but we'll only observe the first one directly for the disclaimer logic
+// TODO: Merge all 4 into single component
 import Pasta from '@/components/HomePage/FeaturedProjects/Pasta.vue';
 import Tomato from '@/components/HomePage/FeaturedProjects/Tomato.vue';
 import Vegetable from '@/components/HomePage/FeaturedProjects/Vegetable.vue';
@@ -24,7 +24,6 @@ let tomatoSectionObserver;
 const heroObserverCallback = (entries) => {
   entries.forEach(entry => {
     // If hero section is at least 30% visible and disclaimer is currently shown, hide it.
-    // entry.isIntersecting ensures we only act when it's actually in view.
     if (entry.isIntersecting && entry.intersectionRatio >= 0.6 && showFeaturedDisclaimer.value) {
       showFeaturedDisclaimer.value = false;
     }
@@ -54,22 +53,21 @@ onMounted( async () => {
     const heroOptions = {
       root: null,
       rootMargin: "0px",
-      threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0] // Use multiple thresholds for precise control
+      threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
     };
     heroObserver = new IntersectionObserver(heroObserverCallback, heroOptions);
     heroObserver.observe(heroContainer.value);
   }
 
   // Observer for the first featured section (Tomato)
-  // CORRECTED: Observe tomatoSection.value directly
   if (tomatoSection.value) {
     const firstFeaturedOptions = {
         root: null,
         rootMargin: "0px",
-        threshold: [0, 0.01, 0.1, 0.2, 0.3, 0.5, 0.7, 0.9] // Added 0.01 for very early detection
+        threshold: [0, 0.01, 0.1, 0.2, 0.3, 0.5, 0.7, 0.9]
     };
     tomatoSectionObserver = new IntersectionObserver(tomatoSectionObserverCallback, firstFeaturedOptions);
-    tomatoSectionObserver.observe(tomatoSection.value); // Observe the actual div element
+    tomatoSectionObserver.observe(tomatoSection.value);
   } else {
       console.error("tomatoSection ref is null/undefined during onMounted. Check template ref assignment.");
   }
@@ -106,7 +104,7 @@ onUnmounted(() => {
     <div v-if="!isMobile" class="project-section gradient" key="phase-6">
       <Fruit :project="'fruit'"/>
     </div>
-    <Transition name="slide" mode="in-out">
+    <Transition name="slide-disclaimer" mode="in-out">
       <div v-show="showFeaturedDisclaimer" class="featured-products-disclaimer">Featured products</div>
     </Transition>
 
@@ -192,13 +190,13 @@ onUnmounted(() => {
 }
 
 /* Transition for the disclaimer */
-.slide-enter-active,
-.slide-leave-active {
+.slide-disclaimer-enter-active,
+.slide-disclaimer-leave-active {
   transition: transform 0.5s ease;
 }
 
-.slide-enter-from,
-.slide-leave-to {
+.slide-disclaimer-enter-from,
+.slide-disclaimer-leave-to {
   transform: translateY(-50%) translateX(-100%);
 }
 </style>

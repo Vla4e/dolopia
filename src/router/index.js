@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { handleProjectRouteParameters } from './routeParameterHandler';
+import { isRouteLoading, preloadRouteComponents } from './routePreloader';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -127,7 +128,7 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-      component: () => import('../views/AboutViewReworked.vue'),
+      component: () => import('../views/AboutView.vue'),
       meta: { 
         hasNavbar: false,
         hasFooter: false,
@@ -161,12 +162,24 @@ const router = createRouter({
       name: 'not-found',
       redirect: { name: 'home' }
     }
-  ]
+  ],
+
+  scrollBehavior(to, from, savedPosition) {
+    // If the user is routing back/forward, restore the previous scroll position
+    if (savedPosition) {
+      return savedPosition;
+    }
+    // For all other navigation, scroll to the top of the page.
+    else {
+      return { top: 0 };
+    }
+  }
 });
 
 router.beforeEach(async (to, from, next) => {
   console.log("Router: TO ->", JSON.parse(JSON.stringify(to)));
   try {
+    await preloadRouteComponents(to); 
     if (to.name === 'projects') {
       const resolution = await handleProjectRouteParameters(to.params)
       switch (resolution.status) {
@@ -182,7 +195,6 @@ router.beforeEach(async (to, from, next) => {
           break;
       }
     } else {
-      // For all other routes, including the new category and subcategory overviews, proceed without this specific logic.
       next();
     }
   } catch (e) {

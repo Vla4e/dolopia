@@ -1,54 +1,5 @@
-<template>
-
-  <!-- <img class="mobile-background" v-if="isMobile" src="@/assets/landing/landing-mobile-edited.png"/> -->
-  <button style="background: white; border-radius: 200px; color: black; width: 100px; height: 40px; position: absolute; left: 50%; z-index: 2302300;" @click="switchFlow">{{ currentFlow }} flow</button>
-  <Transition name="slide-down">
-    <header v-show="showNavbar" :class="floatingNavbar || !showNavbar ? 'floating-navbar' : ''">
-      <div class="wrapper">
-        <nav>
-          <Navbar />
-        </nav>
-      </div>
-    </header>
-  </Transition>
-    <!-- Uses emitter 'showErrorPopup' for v-if flag within ErrorPopup component -->
-  <Transition name="fade">
-    <ErrorPopup />
-  </Transition>
-
-  <Transition name="sidebar">
-    <Sidebar v-if="showSidebar"/>
-  </Transition>
-
-  <Transition name="contact-form">
-    <ContactForm v-if="showContactForm"/>
-  </Transition>
-
-  <main class="view-container"> 
-    <RouterView v-slot="{ Component, route }">
-      <Transition :name="computedTransition">
-        <component
-          :is="Component"
-          :key="route.path"
-          class="page-container"
-          :class="{ 'full-width': $route.meta.fullWidthPage }"
-        />
-      </Transition>
-    </RouterView>
-  </main>
-  <ProjectCatalogMobile v-if="isMobile && route.name === 'home' && mountFinished"/>
-
-
-  <Transition name="slide-up">
-    <footer v-show="showFooter && !isMobile" :class="floatingFooter || !showFooter ? 'floating-footer' : ''">
-      <Footer />
-    </footer>
-  </Transition>
-</template>
-
-
 <script setup>
-import { ref, watch, computed, provide, onMounted, inject, onBeforeMount, onBeforeUnmount } from "vue";
+import { ref, watch, computed, provide, onMounted, inject, onBeforeUnmount } from "vue";
 import { RouterLink, RouterView, useRoute } from "vue-router";
 
 import Navbar from "./components/Navbar.vue";
@@ -64,7 +15,6 @@ let showSidebar = computed(() => {
   return menuStore.showSidebar
 })
 let showContactForm = computed(() => {
-  // console.log("COMPUTING", menuStore.showContactForm)
   return menuStore.showContactForm
 })
 
@@ -75,73 +25,80 @@ provide('screenSize', { isMobile, isTablet, isDesktop })
 const emitter = inject('emitter')
 let mountFinished = ref(false)
 emitter.on('mountFinished', (e) => {
-  // console.log("Mount finished")
   setTimeout(() => {
     mountFinished.value = true
-
   }, 700)
 })
-onMounted(() => {
-  console.log("Window =================", window.innerWidth, window.innerHeight)
-})
+
 onBeforeUnmount(() => {
   emitter.off('mountFinished')
 })
+
+
 let route = useRoute();
 let showFooter = ref(true);
-let showNavbar = ref(true);
 let floatingFooter = ref(true);
-let floatingNavbar = ref(true);
 let computedTransition = ref('');
+
 watch(
   () => route.name,
-  (newVal) => {
-    // // console.log("VAL", route.meta);
-    if(isMobile.value){
-      showNavbar.value = route.meta.hasNavbarMobile;
-      floatingNavbar.value = route.meta.floatingNavbarMobile;
-
-    } else {
-      showNavbar.value = route.meta.hasNavbar;
-      floatingNavbar.value = route.meta.floatingNavbar;
-    }
+  () => {
+    // Update footer visibility and floating status based on route meta
     showFooter.value = route.meta.hasFooter;
     floatingFooter.value = route.meta.floatingFooter;
-    
-    if(isMobile.value){
-      floatingNavbar.value = true;
-    }
-    // console.log("Route name", route.name)
-    if(route.name !== 'home'){
-      computedTransition.value = 'slide'
-    }
-  }
+
+    computedTransition.value = 'slide';
+  },
+  { immediate: true }
 );
-import { useProductStoreCleanup } from "./store/productCleanup";
-const productStore = useProductStoreCleanup();
-let currentFlow = ref('old');
-function switchFlow(){
-  if(currentFlow.value === 'old') currentFlow.value = 'new'
-  else currentFlow.value = 'old'
-  productStore.setFlowType(currentFlow.value)
-}
 </script>
 
+
+<template>
+  <Transition name="fade">
+    <ErrorPopup />
+  </Transition>
+
+  <Transition name="sidebar">
+    <Sidebar v-if="showSidebar"/>
+  </Transition>
+
+  <Transition name="contact-form">
+    <ContactForm v-if="showContactForm"/>
+  </Transition>
+
+  <Navbar />
+
+  <main class="view-container"> 
+    <RouterView v-slot="{ Component, route }">
+      <Transition :name="computedTransition">
+        <component
+          :is="Component"
+          :key="route.path"
+          class="page-container"
+          :class="{ 'full-width': $route.meta.fullWidthPage }"
+        />
+      </Transition>
+    </RouterView>
+  </main>
+
+  <ProjectCatalogMobile v-if="isMobile && route.name === 'home' && mountFinished"/>
+
+  <Transition name="slide-up">
+    <footer v-show="showFooter && !isMobile" :class="floatingFooter || !showFooter ? 'floating-footer' : ''">
+      <Footer />
+    </footer>
+  </Transition>
+</template>
+
+
 <style lang="scss" scoped>
-// .mobile-background{
-//   height: 100%;
-//   max-width: 100%;
-//   position: absolute;
-// }
 .project-cards-container{
   @media(max-width:450px){
     margin-top: 20px;
   }
 }
 footer{
-  z-index: 2;
-}
-header{
   z-index: 2;
 }
 .view-container {
@@ -162,28 +119,18 @@ header{
   }
 }
 .page-container {
-  height: 100%; /* Ensure the content fills the parent container */
+  height: 100%;
   min-height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  // width: 90%;
-  margin: auto;
+  // margin: auto;
   transition: width 0.2s ease;
   &.full-width {
     width: 100%;
     margin: 0;
   }
-}
-
-.floating-navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  transform: translateY(0);
 }
 
 .floating-footer {
@@ -193,56 +140,50 @@ header{
   right: 0;
   z-index: 1000;
   transform: translateY(0);
-  /* Adjust padding-bottom on .view-container when footer is floating */
 }
-/* Transition styles */
 
-//Page Slide
-.slide-enter-active,
+
+/* Transitions */
+/* Page Slide */
+.slide-enter-active {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  transition: transform 0.5s linear;
+}
 .slide-leave-active {
   position: absolute;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
-  transition: transform 0.7s ease;
+  transition: transform 0.5s linear;
 }
 
 .slide-enter-from {
   transform: translateX(100%);
+  z-index: 2;
 }
 
 .slide-enter-to {
   transform: translateX(0%);
+  z-index: 2;
 }
 
 .slide-leave-from {
   transform: translateX(0%);
+  z-index: 1;
 }
 
 .slide-leave-to {
-  transform: translateX(-100%);
+  transform: translateX(0%);
+  z-index: 1;
 }
 
-// HEADER
-.slide-down-enter-active,
-.slide-down-leave-active {
-  transition: transform 1s 0.2s ease, opacity 1s 0.2s ease;
-}
 
-.slide-down-enter-from,
-.slide-down-leave-to {
-  transform: translateY(-100%);
-  opacity: 0;
-}
-
-.slide-down-enter-to,
-.slide-down-leave-from {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-// FOOTER
+// FOOTER slide up
 .slide-up-enter-active,
 .slide-up-leave-active {
   transition: transform 1s 0.2s ease, opacity 1s 0.2s ease;
@@ -282,6 +223,8 @@ header{
   opacity: 0;
 }
 
+
+
 // Contact Form
 .contact-form-enter-active, .contact-form-leave-active{
   transition: transform 0.3s ease-out, opacity 0.3s ease-out;
@@ -301,6 +244,7 @@ header{
   transform: translateX(-100%);
   opacity: 0;
 }
+
 
 //Modal animation
 .fade-enter-active, .fade-leave-active{

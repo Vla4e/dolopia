@@ -47,7 +47,7 @@ const [shadowsMap, overlaysMap] = (() => {
   return [shadows, overlays];
 })();
 
-export async function getProductCodeToUrlMap(productCodes, useCompressed) {
+export async function getProductCodeToImageUrlMap(productCodes, useCompressed) {
   const codeToUrlMap = {};
   const mainImageMap = useCompressed ? compressedMainImageMap : uncompressedMainImageMap;
 

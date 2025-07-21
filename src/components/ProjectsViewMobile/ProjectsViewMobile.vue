@@ -9,7 +9,7 @@ import placeholderProduct from "@/assets/products/product-images/placeholder/pla
 
 // import { getProductImages } from "@/helpers/fetchProductListImages.js"
 // // console.log("gpi", getProductImages)
-import { getProductCodeToUrlMap } from '@/helpers/fetchProductListImages';
+import { getProductCodeToImageUrlMap } from '@/helpers/fetchProductListImages';
 
 import {ref, computed, watch, onMounted, onBeforeMount, onBeforeUnmount } from 'vue';
 
@@ -119,7 +119,7 @@ async function updateProductImageMap() {
   // console.log("updating PIM")
   if (subcategoryData.value.productIdentifiers) {
     mapLoaded.value = false
-    let tempMap = await getProductCodeToUrlMap(subcategoryData.value.productIdentifiers, true); // useCompressed => true
+    let tempMap = await getProductCodeToImageUrlMap(subcategoryData.value.productIdentifiers, true); // useCompressed => true
     productImageMap.value = tempMap;
     mapLoaded.value = true
   }

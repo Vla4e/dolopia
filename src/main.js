@@ -4,18 +4,16 @@ import App from './App.vue'
 import router from './router'
 
 import { initializeProductImages } from './helpers/preFetchProductImageUrls'
-import { prefillWithRoutes } from './helpers/preFillAllProductMap'
 
-// Initialize the product map with image URLs before creating the Vue app
-initializeProductImages(true);
-prefillWithRoutes();
+// Initialize the product map with image URLs before creating the Vue app,
+initializeProductImages(true); // useCompressed = true
 
 import './assets/main.scss'
 
 import mitt from 'mitt'
 const emitter = mitt();
 //remove console logs from prod
-// console.log = () => {};
+console.log = () => {};
 
 const app = createApp(App)
 

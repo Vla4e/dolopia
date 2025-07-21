@@ -3,6 +3,7 @@ import ProjectsViewMobile from "@/components/ProjectsViewMobile/ProjectsViewMobi
 import ArrowButton from "@/components/ArrowButton.vue";
 import { inject, onMounted } from "vue";
 const { isMobile } = inject("screenSize");
+
 const panels = [
   {
     category: {
@@ -94,10 +95,6 @@ const panels = [
     imageUrl: new URL("@/assets/pasta-project.png", import.meta.url).href,
   },
 ];
-
-import { useProductStoreCleanup } from "@/store/productCleanup";
-const productStore = useProductStoreCleanup();
-
 </script>
 
 <template>
@@ -209,6 +206,10 @@ const productStore = useProductStoreCleanup();
             text-transform: uppercase;
             text-align: center;
             letter-spacing: 0%;
+            transition: none;
+            &:hover{
+              transform: scale(1.05);
+            }
           }
           &-description {
             font-family: "Raleway";
@@ -231,6 +232,10 @@ const productStore = useProductStoreCleanup();
             text-transform: uppercase;
             color: black;
             text-align: center;
+            transition: none;
+            &:hover{
+              transform: scale(1.05);
+            }
           }
         }
       }
