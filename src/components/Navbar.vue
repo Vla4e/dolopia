@@ -4,7 +4,7 @@ import { inject, ref, watch, computed } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { useMenuStore } from '@/store/menu';
-import { useScrollNavbar } from '@/composables/useNavbarScroll.js'; // Import the new composable
+import { useScrollNavbar } from '@/composables/useScrollNavbar.js';
 
 const menuStore = useMenuStore()
 function toggleContactForm(){

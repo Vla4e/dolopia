@@ -1,59 +1,37 @@
-<template>
-  <div class="footer">
-    <router-link to="/awards">
-      <img src="@/assets/awards-icon.png" class="awards" />
-    </router-link>
-    <div class="socials-container">
-      <a href="https://www.facebook.com/Dolopia/" target="_blank">
-        <img src="@/assets/facebook-icon.png" class="social facebook" />
-      </a>
-      <a href="https://www.instagram.com/dolopia/" target="_blank">
-        <img src="@/assets/instagram-icon.png" class="social instagram" />
-      </a>
-      <a href="https://www.linkedin.com/company/dolopia" target="_blank">
-        <img src="@/assets/linkedin-icon.png" class="social linkedin" />
-      </a>
-    </div>
-    <!-- <a href="mailto:info@dolopia.eu" target="_blank" class="mail-link">
-      info@dolopia.eu
-    </a> -->
-
-    <!-- <div class="recaptcha-disclaimer" style="text-align: center; margin-top: 10px;">
-      <span class="disclaimer-text">
-        This site is protected by reCAPTCHA and the Google
-      </span>
-      <div class="links">
-        <a href="https://policies.google.com/privacy">Privacy Policy</a>
-        <span>&nbsp;and&nbsp;</span>
-        <a href="https://policies.google.com/terms">Terms of Service</a>
-        <span>&nbsp;apply&nbsp;</span>
-      </div>
-    </div> -->
-    <ArrowButton
-      v-if="computeShowArrow"
-      class="footer-arrow"
-      :routePath="'/catalog'"
-      :showDropdown="false"
-      :buttonText="'Explore projects'"
-    />
-    <!-- <Dropdown v-if="computeShowDropdown" :forType="'product'" :dropdownAlignment="'left'" class="product-dropdown" /> -->
-  </div>
-</template>
-
 <script setup>
 import ArrowButton from "@/components/ArrowButton.vue";
 import Dropdown from "./Dropdown/Dropdown.vue";
-import { computed } from "vue";
+import { computed, ref, watch, inject } from "vue";
+import { useRoute } from "vue-router";
+import { useScrollFooter } from "@/composables/useScrollFooter.js";
 
-import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
-const router = useRouter();
+const { isMobile } = inject("screenSize");
 
-function logsomething() {
-  // console.log("something");
-}
+const { isFooterVisible, handleMouseEnter, handleMouseLeave } = useScrollFooter(true);
+
+let showFooterRouteMeta = ref(true);
+let floatingFooter = ref(true);
+
+watch(
+  () => route.name,
+  () => {
+    showFooterRouteMeta.value = route.meta.hasFooter;
+    floatingFooter.value = route.meta.floatingFooter;
+  },
+  { immediate: true }
+);
+
+const finalShowFooter = computed(() => {
+  if (isMobile.value) return false;
+  return showFooterRouteMeta.value && isFooterVisible.value;
+});
+
+const finalFloatingFooter = computed(() => {
+  return floatingFooter.value || !isFooterVisible.value;
+});
+
 let computeShowArrow = computed(() => {
-  // // console.log("computing?", route.meta)
   if (route.meta?.showRouterArrow) {
     return true;
   } else return false;
@@ -65,39 +43,43 @@ let computeShowDropdown = computed(() => {
 });
 </script>
 
+<template>
+  <Transition name="slide-up">
+    <footer
+      v-show="finalShowFooter"
+      :class="{ 'floating-footer': finalFloatingFooter }"
+      @mouseenter="handleMouseEnter"
+      @mouseleave="handleMouseLeave"
+    >
+      <div class="footer">
+        <router-link to="/awards">
+          <img src="@/assets/awards-icon.png" class="awards" />
+        </router-link>
+        <div class="socials-container"></div>
+        <ArrowButton
+          v-if="computeShowArrow"
+          class="footer-arrow"
+          :routePath="'/catalog'"
+          :showDropdown="false"
+          :buttonText="'Explore projects'"
+        />
+      </div>
+    </footer>
+  </Transition>
+</template>
+
 <style lang="scss" scoped>
-// .recaptcha-disclaimer{
-//   display:flex;
-//   flex-direction: column;
-//   width: 100%;
-//   margin-top: 0px;
-//   .disclaimer-text{
-//     font-size: 12px;
-//     color: black;
-//   }
-//   .links{
-//     display: flex;
-//     justify-content: center;
-//     color: black;
-//     font-size: 12px;
-//     a{
-//       text-decoration: underline;
-//       color: black;
-//     }
-//     span{
-//       display: flex;
-//       align-items: center;
-//     }
-//   }
-//   @media(max-width: 450px){
-//     .disclaimer-text{
-//       font-size:11px;
-//     }
-//     .links{
-//       font-size:11px;
-//     }
-//   }
-// }
+footer {
+  z-index: 2;
+  &.floating-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+}
+
 .footer {
   display: flex;
   justify-content: flex-start;
@@ -105,6 +87,8 @@ let computeShowDropdown = computed(() => {
   min-height: 130px;
   background: none;
   align-items: center;
+  width: 100%;
+
   z-index: 2;
   @media (min-width: 451px) {
     position: fixed;
@@ -146,7 +130,7 @@ let computeShowDropdown = computed(() => {
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
-    line-height: 18px; /* 128.571% */
+    line-height: 1.28;
     letter-spacing: 1.26px;
     margin-left: 25px;
   }
@@ -162,4 +146,24 @@ let computeShowDropdown = computed(() => {
   z-index: 10000;
   isolation: isolate;
 }
+
+
+//FOOTER slide up
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: transform 0.4s ease-out, opacity 0.2s ease; // Same as navbar
+}
+
+.slide-up-enter-from,
+.slide-up-leave-to {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.slide-up-enter-to,
+.slide-up-leave-from {
+  transform: translateY(0);
+  opacity: 1;
+}
+
 </style>

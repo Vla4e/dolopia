@@ -18,7 +18,6 @@ export function useScrollNavbar(initialVisibility = true, scrollThreshold = 10) 
         // Calculate scroll difference
         const scrollDelta = currentScrollY - lastScrollY;
 
-        // If scrolling down beyond threshold and not hovering, hide navbar
         if (scrollDelta > scrollThreshold && !isHoveringNavbar.value) {
             isNavbarVisible.value = false;
         }

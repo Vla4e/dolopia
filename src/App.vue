@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, computed, provide, onMounted, inject, onBeforeUnmount } from "vue";
+import { ref, watch, computed, provide, onMounted, inject, onBeforeUnmount, nextTick } from "vue";
 import { RouterLink, RouterView, useRoute } from "vue-router";
 
 import Navbar from "./components/Navbar.vue";
@@ -34,25 +34,43 @@ onBeforeUnmount(() => {
   emitter.off('mountFinished')
 })
 
-
 let route = useRoute();
-let showFooter = ref(true);
-let floatingFooter = ref(true);
-let computedTransition = ref('');
+
+// Scroll position preservation
+let savedScrollPosition = ref(0);
+let viewContainer = ref(null);
+
+const preserveScrollPosition = () => {
+  if (viewContainer.value) {
+    savedScrollPosition.value = viewContainer.value.scrollTop;
+  }
+};
+
+const restoreScrollPosition = () => {
+  if (viewContainer.value && savedScrollPosition.value > 0) {
+    nextTick(() => {
+      viewContainer.value.scrollTop = savedScrollPosition.value;
+      savedScrollPosition.value = 0;
+    });
+  }
+};
 
 watch(
   () => route.name,
-  () => {
-    // Update footer visibility and floating status based on route meta
-    showFooter.value = route.meta.hasFooter;
-    floatingFooter.value = route.meta.floatingFooter;
-
-    computedTransition.value = 'slide';
+  (newRoute, oldRoute) => {
+    // Preserve scroll position before route change
+    if (oldRoute) {
+      preserveScrollPosition();
+    }
+    
+    // Restore scroll position after transition
+    setTimeout(() => {
+      restoreScrollPosition();
+    }, 550); // Slightly after transition completes
   },
   { immediate: true }
 );
 </script>
-
 
 <template>
   <Transition name="fade">
@@ -69,9 +87,9 @@ watch(
 
   <Navbar />
 
-  <main class="view-container"> 
+  <main class="view-container" ref="viewContainer"> 
     <RouterView v-slot="{ Component, route }">
-      <Transition :name="computedTransition">
+      <Transition name="slide">
         <component
           :is="Component"
           :key="route.path"
@@ -84,13 +102,9 @@ watch(
 
   <ProjectCatalogMobile v-if="isMobile && route.name === 'home' && mountFinished"/>
 
-  <Transition name="slide-up">
-    <footer v-show="showFooter && !isMobile" :class="floatingFooter || !showFooter ? 'floating-footer' : ''">
-      <Footer />
-    </footer>
-  </Transition>
-</template>
+  <Footer />
 
+</template>
 
 <style lang="scss" scoped>
 .project-cards-container{
@@ -125,7 +139,6 @@ footer{
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  // margin: auto;
   transition: width 0.2s ease;
   &.full-width {
     width: 100%;
@@ -142,64 +155,40 @@ footer{
   transform: translateY(0);
 }
 
-
 /* Transitions */
 /* Page Slide */
 .slide-enter-active {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
   transition: transform 0.5s linear;
+  position: relative;
+  z-index: 2;
 }
+
 .slide-leave-active {
+  transition: transform 0.5s linear;
   position: absolute;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
-  transition: transform 0.5s linear;
+  z-index: 1;
 }
 
 .slide-enter-from {
   transform: translateX(100%);
-  z-index: 2;
 }
 
 .slide-enter-to {
   transform: translateX(0%);
-  z-index: 2;
 }
 
 .slide-leave-from {
   transform: translateX(0%);
-  z-index: 1;
 }
 
 .slide-leave-to {
-  transform: translateX(0%);
-  z-index: 1;
+  transform: translateX(-100%);
 }
 
-
-// FOOTER slide up
-.slide-up-enter-active,
-.slide-up-leave-active {
-  transition: transform 1s 0.2s ease, opacity 1s 0.2s ease;
-}
-
-.slide-up-enter-from,
-.slide-up-leave-to {
-  transform: translateY(100%);
-  opacity: 0;
-}
-
-.slide-up-enter-to,
-.slide-up-leave-from {
-  transform: translateY(0);
-  opacity: 1;
-}
 
 // Sidebar
 .sidebar-enter-active, 
@@ -223,8 +212,6 @@ footer{
   opacity: 0;
 }
 
-
-
 // Contact Form
 .contact-form-enter-active, .contact-form-leave-active{
   transition: transform 0.3s ease-out, opacity 0.3s ease-out;
@@ -244,7 +231,6 @@ footer{
   transform: translateX(-100%);
   opacity: 0;
 }
-
 
 //Modal animation
 .fade-enter-active, .fade-leave-active{

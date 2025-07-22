@@ -243,7 +243,6 @@ const panels = [
         background-image: url("@/assets/project_showcase_images/16_9/tomato_16_9.jpg");
         background-size: cover;
         background-repeat: no-repeat;
-        @m;
       }
       &-1 {
         background-image: url("@/assets/project_showcase_images/16_9/vegetable_16_9.jpg");

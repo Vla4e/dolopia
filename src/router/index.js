@@ -15,7 +15,7 @@ const router = createRouter({
         hasNavbarMobile: true,
         floatingNavbarMobile: false,
         floatingNavbar: true,
-        floatingFooter: false,
+        floatingFooter: true,
         fullWidthPage: false,
         showRouterArrow: true
       }
@@ -29,7 +29,7 @@ const router = createRouter({
         hasFooter: false,
         hasNavbarMobile: true,
         floatingNavbarMobile: true,
-        floatingNavbar: false,
+        floatingNavbar: true,
         floatingFooter: false,
         fullWidthPage: true
       }
@@ -45,7 +45,7 @@ const router = createRouter({
         hasNavbarMobile: true,
         floatingNavbarMobile: true,
         floatingNavbar: true,
-        floatingFooter: true,
+        floatingFooter: false,
         fullWidthPage: true,
         showRouterArrow: false,
         showDropdown: true
@@ -164,16 +164,16 @@ const router = createRouter({
     }
   ],
 
-  scrollBehavior(to, from, savedPosition) {
-    // If the user is routing back/forward, restore the previous scroll position
-    if (savedPosition) {
-      return savedPosition;
-    }
-    // For all other navigation, scroll to the top of the page.
-    else {
-      return { top: 0 };
-    }
-  }
+  // scrollBehavior(to, from, savedPosition) {
+  //   // If the user is routing back/forward, restore the previous scroll position
+  //   if (savedPosition) {
+  //     return savedPosition;
+  //   }
+  //   // For all other navigation, scroll to the top of the page.
+  //   else {
+  //     return { top: 0 };
+  //   }
+  // }
 });
 
 router.beforeEach(async (to, from, next) => {
