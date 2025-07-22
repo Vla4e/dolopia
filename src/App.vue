@@ -119,7 +119,7 @@ footer{
   flex: 1;
   overflow: hidden;
   width: 100%;
-  height: 100vh !important;
+  min-height: 100vh !important;
   display: flex;
   flex-direction: column;
   justify-content: center;

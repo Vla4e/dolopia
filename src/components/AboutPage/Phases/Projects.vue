@@ -1,22 +1,13 @@
 <template>
-    <!-- Phase 3 - 6 -->
-      <div v-if="phaseId === 3" class="phase phase-3" key="phase-3">
-        <AboutProjects :project="'pasta'"/>
-      </div>
-      <div v-else-if="phaseId === 4" class="phase phase-4" key="phase-4">
-        <AboutProjects :project="'tomato'"/>
-      </div>
-      <div v-else-if="phaseId === 5" class="phase phase-5" key="phase-5">
-        <AboutProjects :project="'vegetable'"/>
-      </div>
-      <div v-else-if="phaseId === 6" class="phase phase-6" key="phase-6">
-        <AboutProjects :project="'fruit'"/>
-      </div>
+  <div class="phase-container">
+    <!-- Phase 3 - 6 | transition handled within AboutProjects-->
+      <AboutProjects :project="currentProject"/>
+  </div>
 </template>
 
 <script setup>
 import AboutProjects from '../AboutProjects.vue';
-import { onMounted } from 'vue';
+import { onMounted, watch, ref } from 'vue';
 
 const props = defineProps({
   phaseId: {
@@ -24,17 +15,41 @@ const props = defineProps({
     required: true
   }
 })
-onMounted(() => {
-  console.log("PROJECTS")
-})
 
+let currentProject = ref('vegetable')
+let projects = ['vegetable', 'tomato', 'pasta', 'fruit']
+let count = 0;
+
+//Scroll through project array based on phaseId difference to previous int value
+watch(() => props.phaseId, (newPhase, oldPhase) => {
+  if(!oldPhase && newPhase !== 6){
+    count = 0;
+  } 
+  if (newPhase > oldPhase) {
+    count++
+  } else if (newPhase < oldPhase) {
+    count--
+  }
+  currentProject.value = projects[count]
+}, { immediate: true })
+
+onMounted(() => {
+  if (props.phaseId === 6) {
+    count = 3 // Set count to 3 on mount if phaseId is 6
+    currentProject.value = projects[count]
+  }
+})
 </script>
 
 <style lang="scss" scoped>
+.phase-container {
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
 .phase{
   background-color: #039EA2 !important;
+  height: 100%;
 }
-img{
-}
-
 </style>

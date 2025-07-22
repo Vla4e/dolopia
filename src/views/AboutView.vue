@@ -1,40 +1,37 @@
 <script setup>
-import { ref, computed, defineAsyncComponent, onMounted} from "vue";
 
-onMounted(() => {
-})
+import { ref, computed, defineAsyncComponent, inject, onUnmounted, watch } from "vue";
+import { useScrollDirection } from "@/composables/useScrollDirection";
 
 const phaseId = ref(0);
-const phaseCount = 18; // Total number of phases (0-18)
+const phaseCount = 15;
 
-// lazy-load, improves initial page load performance.
-const phaseComponents = [
-  defineAsyncComponent(() => import('@/components/AboutPage/Phases/Introduction.vue')),
-  defineAsyncComponent(() => import('@/components/AboutPage/Phases/Projects.vue')),
-  defineAsyncComponent(() => import('@/components/AboutPage/Phases/Beginning.vue')),
-  defineAsyncComponent(() => import('@/components/AboutPage/Phases/Advantage.vue')),
-  defineAsyncComponent(() => import('@/components/AboutPage/Phases/Mission.vue')),
+const phaseMappings = [
+  { name: 'Introduction', range: [0, 2], component: defineAsyncComponent(() => import('@/components/AboutPage/Phases/Introduction.vue')) },
+  { name: 'Projects', range: [3, 6], component: defineAsyncComponent(() => import('@/components/AboutPage/Phases/Projects.vue')) },
+  { name: 'Beginning', range: [7, 8], component: defineAsyncComponent(() => import('@/components/AboutPage/Phases/Beginning.vue')) },
+  { name: 'Advantage', range: [9, 10], component: defineAsyncComponent(() => import('@/components/AboutPage/Phases/Advantage.vue')) },
+  { name: 'Mission', range: [11, 14], component: defineAsyncComponent(() => import('@/components/AboutPage/Phases/Mission.vue')) },
 ];
 
-// WIP - rework - I don't like this
 const currentPhaseComponent = computed(() => {
-  if (phaseId.value >= 0 && phaseId.value <= 2) { // Introduction phases 0-2
-    return phaseComponents[0]
-  } else if (phaseId.value >= 3 && phaseId.value <= 6) { // Projects phases 3-6
-    return phaseComponents[1]
-  } else if (phaseId.value >= 7 && phaseId.value <= 8) { // Beginning phases 7-10
-    return phaseComponents[2]
-  } else if (phaseId.value >= 9 && phaseId.value <= 10) { // Advantage phases 11-14
-    return phaseComponents[3]
-  } else if (phaseId.value >= 11 && phaseId.value <= 14) { // Mission phases 15-18
-    return phaseComponents[4]
-  }
-  return phaseComponents[0]; //fallback to first phase.
+  const mapping = phaseMappings.find(m => 
+    phaseId.value >= m.range[0] && phaseId.value <= m.range[1]
+  );
+  // Fallback to the first component if no match is found
+  return mapping ? mapping : phaseMappings[0];
 });
 
+let isCycling = false;
+const forward = true;
+const backward = false;
 
 function cyclePhase(direction) {
-  if (direction) {
+  if(isCycling){
+    return
+  }
+  isCycling = true;
+  if (direction === forward) {
     if (phaseId.value < phaseCount - 1) {
       phaseId.value++;
     } else {
@@ -47,39 +44,87 @@ function cyclePhase(direction) {
       phaseId.value = phaseCount - 1;
     }
   }
+  setTimeout(() => {
+    isCycling = false
+  }, 500) //adjust to transition duration based on currentTransition
 }
 
+
+useScrollDirection(
+  () => cyclePhase(backward), // onScrollUp
+  () => cyclePhase(forward),  // onScrollDown
+);
+
+
 const currentTransition = computed(() => {
-  if (phaseId.value === 1) return 'fade-in-up';
-  if (phaseId.value >= 2) return 'slide-up-about';
-  return 'fade-in-up'; // Default for phase 0 or others
+  // if (phaseId.value === 1) return 'fade-in-up';
+  // if (phaseId.value >= 2) return 'slide-up-about';
+  return {name: 'fade-in-up', mode:''}; // Default for phase 0 or others
 });
 </script>
 
 <template>
-  <div class="about-container">
-    <TransitionGroup :name="currentTransition">
-      <component :is="currentPhaseComponent" :key="phaseId" :phaseId="phaseId" class="phase" />
-    </TransitionGroup>
+  <div class="about-container" :class="`container-${phaseId}`">
+    <Suspense>
+      <Transition :name="currentTransition.name" :mode="currentTransition.mode">
+        <component
+          :is="currentPhaseComponent.component"
+          :key="currentPhaseComponent.name"
+          :phaseId="phaseId"
+          class="phase"
+        />
+      </Transition>
+    </Suspense>
   </div>
 
   <!--comment in for testing during development-->
   <div class="controls">
-    <button @click="cyclePhase(0)">PREV</button>
+    <button @click="cyclePhase(backward)">PREV</button>
     <span>{{ phaseId }}</span>
-    <button @click="cyclePhase(1)">NEXT</button>
+    <button @click="cyclePhase(forward)">NEXT</button>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .about-container {
-  min-width: 100vw;
-  height: 100vh;
+  width: 100vw;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
-  overflow: hidden;
+
+  &.container{
+    &-3{
+      background-color: #8AC3C7;
+      .phase{
+        background-color: #8AC3C7;
+      }
+    }
+    &-4{
+        background-color: #039EA2;
+      .phase{
+        background-color: #039EA2;
+      }
+    }
+     &-5, &-6, &-7{
+      background-color: #039EA2;
+      .phase{
+        background-color: #039EA2;
+      }
+    }
+    &-8, &-9, &-10, &-11{
+      background-color: #e6f6f6;
+      .phase{
+        background-color: #e6f6f6;
+      }
+    }
+    &-12, &-13, &-14{
+      .phase{
+        background-color: #039EA2;
+      }
+    }
+  }
 }
 
 .phase {
@@ -123,10 +168,10 @@ const currentTransition = computed(() => {
 /* fade-in-up */
 .fade-in-up-enter-from {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(100%);
 }
 .fade-in-up-enter-active {
-  transition: all 0.5s ease;
+  transition: transform 1s ease, opacity 1s ease;
 }
 .fade-in-up-enter-to {
   opacity: 1;
@@ -137,11 +182,11 @@ const currentTransition = computed(() => {
   transform: translateY(0);
 }
 .fade-in-up-leave-active {
-  transition: all 0.5s ease;
+  transition: transform 1s ease, opacity 2s ease;
 }
 .fade-in-up-leave-to {
   opacity: 0;
-  transform: translateY(-20px);
+  transform: translateY(-100%);
 }
 
 /* slide-up-about transitions */

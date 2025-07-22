@@ -1,3 +1,5 @@
+//Sidebar menu store
+
 import { defineStore } from 'pinia';
 import { ref, reactive, computed, watch, toRaw } from 'vue';
 

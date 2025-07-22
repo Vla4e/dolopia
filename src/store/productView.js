@@ -1,3 +1,5 @@
+// Product View UI/state store
+
 // stores/useProductViewStore.js
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';

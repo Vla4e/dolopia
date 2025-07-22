@@ -1,6 +1,8 @@
 
 <script setup>
 import { watch, ref, onMounted } from 'vue';
+
+
 let dataObjects = {
   tomato: {
     heading: "Tomato-based products",
@@ -55,13 +57,18 @@ onMounted(() => {
 
 <template>
   <div class="about-singular-project" :class="props.project">
-    <div class="text-container">
-      <h2>{{ currentProjectObject.heading }}</h2>
-      <p>{{ currentProjectObject.paragraph }}</p>
-      <!-- <span style="color: black;">{{ currentProjectObject }}</span> -->
-    </div>
-    <!-- <Waterfall/> -->
-    <img :src="currentProjectObject.imageUrl" class="image" :alt="currentProjectObject.alt"/>
+    <Transition name="fade-text" mode="out-in">
+      <div class="text-container" :key="currentProjectObject.heading">
+        <h2>{{ currentProjectObject.heading }}</h2>
+        <p>{{ currentProjectObject.paragraph }}</p>
+        <!-- <span style="color: black;">{{ currentProjectObject }}</span> -->
+      </div>
+    </Transition>
+    <Transition name="slide-image" mode="out-in">
+      <div class="image-container" :key="currentProjectObject.imageUrl" >
+        <img :src="currentProjectObject.imageUrl" class="image" :alt="currentProjectObject.alt"/>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -101,11 +108,19 @@ onMounted(() => {
       }
     }
   }
-  .image{
-    height: 80%;
-    width: auto;
+  .image-container{
+    height: 100vh;
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     // max-height: 80%;
     // width: auto;
+    .image{
+      height: 75%;
+      width: auto;
+      object-fit: contain;
+    }
   }
   &.tomato{
     .image{
@@ -117,5 +132,36 @@ onMounted(() => {
       // width:40%;
     }
   }
+}
+
+.fade-text-enter-active,
+.fade-text-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-text-enter-from,
+.fade-text-leave-to {
+  opacity: 0;
+}
+
+/* Slide out vertically image animation */
+.slide-image-enter-active,
+.slide-image-leave-active {
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.slide-image-enter-from {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+.slide-image-leave-to {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+.slide-image-enter-to,
+.slide-image-leave-from {
+  opacity: 1;
 }
 </style>

@@ -1,3 +1,5 @@
+// Product properties used within views/components/router.
+
 import { defineStore } from 'pinia';
 import { ref, computed, watch } from 'vue';
 
@@ -83,9 +85,7 @@ export const useProductStoreCleanup = defineStore('productCleanup', () => {
     subcategoryToProductsMap.get(selectedSubcategoryId.value) || new Map()
   );
 
-  // =====================================
-  // CASCADING UPDATE FUNCTIONS
-  // =====================================
+
   function selectCategory(categoryId, preventCascade = false) {
     if (!CATEGORIES.includes(categoryId)) {
       console.warn(`Invalid category: ${categoryId}`);
@@ -139,9 +139,6 @@ export const useProductStoreCleanup = defineStore('productCleanup', () => {
     return true;
   }
 
-  // =====================================
-  // UNIFIED SELECTION FUNCTION
-  // =====================================
   function selectByType(type, identifier) {
     // console.log(`Selecting ${type}: ${identifier}`);
     
@@ -158,9 +155,8 @@ export const useProductStoreCleanup = defineStore('productCleanup', () => {
     }
   }
 
-  // =====================================
-  // INITIALIZATION & DEFAULTS
-  // =====================================
+
+
   function setDefaults() {
     if (CATEGORIES.length > 0) {
       selectCategory(CATEGORIES[0]);
@@ -182,9 +178,7 @@ export const useProductStoreCleanup = defineStore('productCleanup', () => {
     }
   }
 
-  // =====================================
-  // WATCHERS FOR SIDE EFFECTS
-  // =====================================
+
   watch(selectedCategoryId, (newVal) => {
     // console.log('Category changed to:', newVal);
   });
@@ -197,9 +191,8 @@ export const useProductStoreCleanup = defineStore('productCleanup', () => {
     // console.log('Product changed to:', newVal);
   });
 
-  // =====================================
-  // LEGACY COMPATIBILITY (if needed)
-  // =====================================
+
+
   const categoryByIdentifier = computed({
     get: () => selectedCategoryId.value,
     set: (val) => selectCategory(val)
@@ -215,10 +208,8 @@ export const useProductStoreCleanup = defineStore('productCleanup', () => {
     set: (val) => selectProduct(val)
   });
 
-  // =====================================
-  // RETURN STORE API
-  // =====================================
-  // console.log("CURRENT CATEGORY", currentCategory.value)
+
+  
   let flowType = ref('old');
   function setFlowType(val) {
     flowType.value = val;

@@ -1,14 +1,14 @@
 <template>
   <div class="phase-container">
     <!-- Phase 0 - Logo -->
-    <TransitionGroup>
+    <Transition name="slide-up">
       <div v-if="phaseId === 0" class="phase phase-0" key="phase-0">
         <img :src="dolopiaLogo" class="logo" alt="Dolopia Logo"/>
       </div>
 
       <!-- Phase 1 - Introduction -->
       <div v-else-if="phaseId === 1" class="phase phase-1" key="phase-1">
-        <div class="text-container">
+        <section class="text-container">
           <span class="text-row first-row large-text">Where we craft</span>
           <span class="text-row second-row large-text">high-quality, artisanal </span>
           <div class="third-row">
@@ -17,7 +17,7 @@
               bringing vibrant flavors<br/>from Greece and beyond to<br/>kitchens around the world.
             </p>
           </div>
-        </div>
+        </section>
       </div>
 
       <!-- Phase 2 - Culinary Selections -->
@@ -45,7 +45,7 @@
           </div>
         </section>
       </div>
-    </TransitionGroup>
+    </Transition>
   </div>
 </template>
 
@@ -76,7 +76,6 @@ watch(() => props.phaseId, (newPhaseId) => {
   // Reset text animation
   animateInText.value = false
   
-  // Handle phase-specific animations
   if (newPhaseId === 1) {
     setTimeout(() => {
       animateInText.value = true
@@ -98,6 +97,7 @@ onUnmounted(() => {
   width: 100%;
   position: relative;
   overflow: hidden;
+  background-color: #8AC3C7;
 }
 
 .phase {
@@ -308,18 +308,45 @@ onUnmounted(() => {
   }
 }
 
-// Vue Transitions
-.v-enter-active, .v-leave-active {
-  transition: all 0.6s ease;
-}
 
-.v-enter-from {
+/* introduction__fade-in-up */
+.introduction__fade-in-up-enter-from {
   opacity: 0;
   transform: translateY(20px);
 }
-
-.v-leave-to {
+.introduction__fade-in-up-enter-active {
+  transition: all 0.5s ease;
+}
+.introduction__fade-in-up-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+.introduction__fade-in-up-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+.introduction__fade-in-up-leave-active {
+  transition: all 0.5s ease;
+}
+.introduction__fade-in-up-leave-to {
   opacity: 0;
   transform: translateY(-20px);
+}
+
+
+.slide-up-enter-active, .slide-up-leave-active {
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.slide-up-enter-from {
+  transform: translateY(100vh);
+}
+.slide-up-enter-to {
+  transform: translateY(0);
+}
+.slide-up-leave-from {
+  transform: translateY(0);
+}
+.slide-up-leave-to {
+  transform: translateY(-100vh);
 }
 </style>

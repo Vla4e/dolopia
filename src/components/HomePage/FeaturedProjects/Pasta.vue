@@ -42,11 +42,10 @@ let hoverProp = ref(false);
 
 <template>
   <section ref="container" class="featured">
-
-    <div ref="topSection" class="top-section">
-    </div>
+    <div ref="topSection" class="top-section"></div>
 
     <div class="middle-section">
+    
       <router-link
         to="/projects/fruit-project/jam/strawberry-mint-pepper"
         class="product-image-link"
@@ -59,6 +58,7 @@ let hoverProp = ref(false);
           class="product-image"
         />
       </router-link>
+
       <div class="texts-container">
         <router-link
           to="/projects/fruit-project/jam/strawberry-mint-pepper"
@@ -108,7 +108,6 @@ let hoverProp = ref(false);
         just a touch of olive oil – and let it speak for itself.
       </p>
     </div>
-
   </section>
 </template>
 
@@ -118,11 +117,11 @@ let hoverProp = ref(false);
   color: inherit;
   display: flex;
   // align-items: flex-end;
-  .chevron-link-container{
+  .chevron-link-container {
     margin-left: 15px;
   }
 }
-.product-image-link{
+.product-image-link {
   text-decoration: none;
   color: inherit;
   display: contents;
