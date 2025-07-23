@@ -68,6 +68,7 @@ onUnmounted(() => {
 });
 </script>
 
+
 <template>
   <!-- Phase 9 -->
   <Transition name="slide-up-advantage">
@@ -75,7 +76,7 @@ onUnmounted(() => {
       <div class="image-container">
         <img :src="advantageImage" class="logo" alt="Logo"/>
       </div>
-      <div :class="{'animate-in': animateInText}" class="dolopia-advantage-container">
+      <div :class="{'animate-in': animateInText}" class="hero-text-container">
         <h2>The Dolopia Advantage</h2>
         <p>commitment to quality, authenticity and flavor</p>
       </div>
@@ -85,14 +86,11 @@ onUnmounted(() => {
     <div v-else-if="phaseId === 10" ref="phase10Ref" class="phase phase-10" key="phase-10">
       <VideoShowcase :key="'artisanal'" side="left" sectionId="artisanal"/>
       <VideoShowcase :key="'essence'" side="right" sectionId="essence"/>
-      <div :class="hasScrolledDown ? 'scrolled' : ''" class="scroll-indicator" v-if="!isAtBottom">
-        <span>Scroll down to continue</span>
-        <div class="arrow"></div>
-      </div>
       <VideoShowcase :key="'text-only'" side="right" sectionId="distribution"/>
     </div>
   </Transition>
 </template>
+
 
 <style lang="scss" scoped>
 .phase-9 {
@@ -122,39 +120,6 @@ onUnmounted(() => {
   }
 }
 
-.scroll-indicator {
-  position: absolute;
-  bottom: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: #039EA2;
-  font-family: "Kugile";
-  z-index: 10;
-  
-  .arrow {
-    width: 20px;
-    height: 20px;
-    border: 2px solid #039EA2;
-    border-left: 0;
-    border-top: 0;
-    transform: rotate(45deg);
-    margin-top: 10px;
-    animation: bounce 1.5s infinite;
-  }
-  
-  @keyframes bounce {
-    0%, 100% { transform: rotate(45deg) translateY(0); }
-    50% { transform: rotate(45deg) translateY(-10px); }
-  }
-  transition: opacity 0.5s ease;
-  &.scrolled{
-    opacity: 0;
-  }
-}
-
 .image-container {
   position: absolute;
   top: 0;
@@ -179,7 +144,7 @@ onUnmounted(() => {
   }
 }
 
-.dolopia-advantage-container{
+.hero-text-container{
   display: flex;
   flex-direction: column;
   width: 100%;

@@ -2,10 +2,10 @@
 import LandingHero from '../components/LandingHero.vue'
 
 // TODO: Merge all 4 into single component
-import Pasta from '@/components/HomePage/FeaturedProjects/Pasta.vue';
-import Tomato from '@/components/HomePage/FeaturedProjects/Tomato.vue';
-import Vegetable from '@/components/HomePage/FeaturedProjects/Vegetable.vue';
-import Fruit from '@/components/HomePage/FeaturedProjects/Fruit.vue';
+import Pasta from '@/components/HomeView/FeaturedProjects/Pasta.vue';
+import Tomato from '@/components/HomeView/FeaturedProjects/Tomato.vue';
+import Vegetable from '@/components/HomeView/FeaturedProjects/Vegetable.vue';
+import Fruit from '@/components/HomeView/FeaturedProjects/Fruit.vue';
 
 import ProjectCatalogMobile from '@/components/ProjectCatalogMobile.vue';
 
@@ -84,7 +84,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="home-container">
+  <div class="home-page-container">
 
     <div ref="heroContainer" class="hero-container">
       <LandingHero class="text-container" />
@@ -113,7 +113,7 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 /* Your existing styles remain the same */
-.home-container{
+.home-page-container{
   justify-content: flex-start;
   // padding-top: 10vh;
   .hero-container{
@@ -143,7 +143,7 @@ onUnmounted(() => {
   }
 }
 @media(max-width: 450px){
-  .home-container{
+  .home-page-container{
     padding-top: 0px;
     min-height: calc(100vw * 4.334) !important;
     .hero-container{

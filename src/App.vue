@@ -1,5 +1,14 @@
 <script setup>
-import { ref, watch, computed, provide, onMounted, inject, onBeforeUnmount, nextTick } from "vue";
+import {
+  ref,
+  watch,
+  computed,
+  provide,
+  onMounted,
+  inject,
+  onBeforeUnmount,
+  nextTick,
+} from "vue";
 import { RouterLink, RouterView, useRoute } from "vue-router";
 
 import Navbar from "./components/Navbar.vue";
@@ -10,29 +19,29 @@ import ContactForm from "./components/ContactForm/ContactForm.vue";
 import ErrorPopup from "./components/ErrorPopup/ErrorPopup.vue";
 
 import { useMenuStore } from "./store/menu";
-const menuStore = useMenuStore()
+const menuStore = useMenuStore();
 let showSidebar = computed(() => {
-  return menuStore.showSidebar
-})
+  return menuStore.showSidebar;
+});
 let showContactForm = computed(() => {
-  return menuStore.showContactForm
-})
+  return menuStore.showContactForm;
+});
 
-import { useScreenSize } from './composables/useScreenSize'
-const { isMobile, isTablet, isDesktop } = useScreenSize()
-provide('screenSize', { isMobile, isTablet, isDesktop })
+import { useScreenSize } from "./composables/useScreenSize";
+const { isMobile, isTablet, isDesktop } = useScreenSize();
+provide("screenSize", { isMobile, isTablet, isDesktop });
 
-const emitter = inject('emitter')
-let mountFinished = ref(false)
-emitter.on('mountFinished', (e) => {
+const emitter = inject("emitter");
+let mountFinished = ref(false);
+emitter.on("mountFinished", (e) => {
   setTimeout(() => {
-    mountFinished.value = true
-  }, 700)
-})
+    mountFinished.value = true;
+  }, 700);
+});
 
 onBeforeUnmount(() => {
-  emitter.off('mountFinished')
-})
+  emitter.off("mountFinished");
+});
 
 let route = useRoute();
 
@@ -62,7 +71,7 @@ watch(
     if (oldRoute) {
       preserveScrollPosition();
     }
-    
+
     // Restore scroll position after transition
     setTimeout(() => {
       restoreScrollPosition();
@@ -78,16 +87,16 @@ watch(
   </Transition>
 
   <Transition name="sidebar">
-    <Sidebar v-if="showSidebar"/>
+    <Sidebar v-if="showSidebar" />
   </Transition>
 
   <Transition name="contact-form">
-    <ContactForm v-if="showContactForm"/>
+    <ContactForm v-if="showContactForm" />
   </Transition>
 
   <Navbar />
 
-  <main class="view-container" ref="viewContainer"> 
+  <main class="view-container" ref="viewContainer">
     <RouterView v-slot="{ Component, route }">
       <Transition name="slide">
         <component
@@ -100,19 +109,18 @@ watch(
     </RouterView>
   </main>
 
-  <ProjectCatalogMobile v-if="isMobile && route.name === 'home' && mountFinished"/>
+  <ProjectCatalogMobile v-if="isMobile && route.name === 'home' && mountFinished" />
 
   <Footer />
-
 </template>
 
 <style lang="scss" scoped>
-.project-cards-container{
-  @media(max-width:450px){
+.project-cards-container {
+  @media (max-width: 450px) {
     margin-top: 20px;
   }
 }
-footer{
+footer {
   z-index: 2;
 }
 .view-container {
@@ -124,10 +132,10 @@ footer{
   flex-direction: column;
   justify-content: center;
   position: relative;
-  @media(min-width: 451px){
+  @media (min-width: 451px) {
     // position: absolute;
   }
-  @media(max-width: 450px){
+  @media (max-width: 450px) {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
@@ -140,6 +148,7 @@ footer{
   flex-direction: column;
   flex-grow: 1;
   transition: width 0.2s ease;
+  position: relative;
   &.full-width {
     width: 100%;
     margin: 0;
@@ -157,42 +166,35 @@ footer{
 
 /* Transitions */
 /* Page Slide */
-.slide-enter-active {
-  transition: transform 0.5s linear;
-  position: relative;
-  z-index: 2;
-}
-
+.slide-enter-active,
 .slide-leave-active {
-  transition: transform 0.5s linear;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: 1;
+    transition: transform 0.5s linear;
+    position: absolute; /* Keep absolute */
+    width: 100%; /* Ensure both take full width */
+    height: 100%; /* Ensure both take full height */
+    top: 0; /* Align to top */
+    left: 0; /* Align to left */
 }
 
 .slide-enter-from {
-  transform: translateX(100%);
+    transform: translateX(100%);
 }
 
 .slide-enter-to {
-  transform: translateX(0%);
+    transform: translateX(0%);
 }
 
 .slide-leave-from {
-  transform: translateX(0%);
+    transform: translateX(0%);
 }
 
 .slide-leave-to {
-  transform: translateX(-100%);
+    transform: translateX(-100%);
 }
 
-
 // Sidebar
-.sidebar-enter-active, 
-.sidebar-leave-active{
+.sidebar-enter-active,
+.sidebar-leave-active {
   transition: transform 0.3s ease-out, opacity 0.3s ease-out;
 }
 
@@ -201,7 +203,7 @@ footer{
   opacity: 0;
 }
 
-.sidebar-enter-to, 
+.sidebar-enter-to,
 .sidebar-leave-from {
   transform: translateX(0%);
   opacity: 1;
@@ -213,7 +215,8 @@ footer{
 }
 
 // Contact Form
-.contact-form-enter-active, .contact-form-leave-active{
+.contact-form-enter-active,
+.contact-form-leave-active {
   transition: transform 0.3s ease-out, opacity 0.3s ease-out;
 }
 
@@ -222,7 +225,8 @@ footer{
   opacity: 0;
 }
 
-.contact-form-enter-to, .contact-form-leave-from {
+.contact-form-enter-to,
+.contact-form-leave-from {
   transform: translateX(0%);
   opacity: 1;
 }
@@ -233,7 +237,8 @@ footer{
 }
 
 //Modal animation
-.fade-enter-active, .fade-leave-active{
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.3s ease-out;
 }
 
@@ -241,7 +246,8 @@ footer{
   opacity: 0;
 }
 
-.fade-enter-to, .fade-leave-from {
+.fade-enter-to,
+.fade-leave-from {
   opacity: 1;
 }
 

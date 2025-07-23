@@ -98,7 +98,7 @@ const panels = [
 </script>
 
 <template>
-  <div class="page-catalog">
+  <div class="projects-page-container">
     <ArrowButton
       :routePath="'/home'"
       :buttonText="''"
@@ -156,7 +156,7 @@ const panels = [
   top: 5vh;
   left: 5vh;
 }
-.page-catalog {
+.projects-page-container {
   width: 100%;
   height: 100%;
   @media (max-width: 450px) {

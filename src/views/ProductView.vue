@@ -68,7 +68,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="page-category">
+  <div class="product-page-container">
     <div v-if="!isContentReady || renderStage === 0" class="loader-container">
       <span>Loading Product...</span>
     </div>
@@ -204,7 +204,7 @@ onUnmounted(() => {
   }
 }
 
-.page-category {
+.product-page-container {
   width: 100%;
   height: 100vh;
   max-height: 100vh;

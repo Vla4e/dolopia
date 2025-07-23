@@ -1,6 +1,7 @@
 <script setup>
-import VideoShowcase from "@/components/AboutPage/VideoShowcase.vue";
+import VideoShowcase from "@/components/AboutView/VideoShowcase.vue";
 import howItStarted from "@/assets/about/beginning/how-it-all-started.png";
+// import ScrollIndicator from "../ScrollIndicator.vue";
 import { watch, ref, inject, onUnmounted, nextTick } from "vue";
 
 import { useScrollStore } from "@/store/scroll.js";
@@ -82,6 +83,7 @@ onUnmounted(() => {
       <div v-else-if="props.phaseId === 8" class="phase phase-8" key="phase-8">
         <VideoShowcase :key="'passion'" side="left" sectionId="passion" />
         <VideoShowcase :key="'quality'" side="right" sectionId="quality" />
+        <!-- <ScrollIndicator :phaseId="phaseId" :disappearAtPhaseId="9"/> -->
       </div>
     </Transition>
   </div>

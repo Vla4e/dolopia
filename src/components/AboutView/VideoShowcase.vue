@@ -43,6 +43,8 @@ const dataObject = {
     videoSource: "",
   },
 };
+
+
 const props = defineProps({
   sectionId: {
     type: String,
@@ -210,7 +212,7 @@ watch(
 
   &.passion .video-container .video {
     width: 41vw;
-    height: 85vh;
+    height: 75vh;
   }
   &.essence .video-container .video {
     width: 46vw;

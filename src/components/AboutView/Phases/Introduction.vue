@@ -26,8 +26,8 @@
           <div class="container">
             <div class="content-wrapper">
               <div class="hero-content">
-                <h2 class="section-label">Our Culinary Selections</h2>
-                <h1 id="main-heading" class="main-heading">We specialize in four distinct categories</h1>
+                <h3 class="section-label">Our Culinary Selections</h3>
+                <h2 id="main-heading" class="main-heading">We specialize in four distinct categories</h2>
                 <p class="description">
                   In addition to refining our existing offerings, we are excited to explore new categories 
                   and develop innovative recipes that reflect our commitment to culinary excellence.
@@ -46,11 +46,15 @@
         </section>
       </div>
     </Transition>
+
+    <ScrollIndicator :phaseId="props.phaseId" :disappearAtPhaseId="1"/>
+    
   </div>
 </template>
 
 <script setup>
 import dolopiaLogo from "@/assets/about/dolopia.png"
+import ScrollIndicator from "../ScrollIndicator.vue"
 import { ref, watch, onMounted, onUnmounted } from 'vue'
 
 const props = defineProps({
@@ -268,6 +272,7 @@ onUnmounted(() => {
     }
   }
 }
+
 
 @media (max-width: 768px) {
   .phase-1 {

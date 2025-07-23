@@ -150,7 +150,7 @@ watch(
 </script>
 
 <template>
-  <div class="all-products-container">
+  <div class="all-products-page-container">
     <section class="selection">
       <Transition name="slide-horizontal" mode="out-in">
         <h1 class="project-name short-slide" :key="selectedProject">{{productStore.categoryFullNames[selectedProject]}}</h1>
@@ -252,7 +252,7 @@ watch(
 
 
 <style lang="scss" scoped>
-.all-products-container {
+.all-products-page-container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;

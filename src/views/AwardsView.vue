@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from "vue";
 
-import AwardShowcase from "@/components/AwardsPage/AwardShowcase.vue";
+import AwardShowcase from "@/components/AwardsView/AwardShowcase.vue";
 
 import silver from "@/assets/awards/silver.svg";
 import gta1 from "@/assets/awards/gta1.svg";

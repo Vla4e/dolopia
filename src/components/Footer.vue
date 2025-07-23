@@ -55,7 +55,17 @@ let computeShowDropdown = computed(() => {
         <router-link to="/awards">
           <img src="@/assets/awards-icon.png" class="awards" />
         </router-link>
-        <div class="socials-container"></div>
+        <div class="socials-container">
+          <a href="https://www.facebook.com/Dolopia/" target="_blank">
+            <img src="@/assets/facebook-icon.png" class="social facebook" />
+          </a>
+          <a href="https://www.instagram.com/dolopia/" target="_blank">
+            <img src="@/assets/instagram-icon.png" class="social instagram" />
+          </a>
+          <a href="https://www.linkedin.com/company/dolopia" target="_blank">
+            <img src="@/assets/linkedin-icon.png" class="social linkedin" />
+          </a>
+        </div>
         <ArrowButton
           v-if="computeShowArrow"
           class="footer-arrow"

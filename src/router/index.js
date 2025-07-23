@@ -130,15 +130,18 @@ const router = createRouter({
       name: 'about',
       component: () => import('../views/AboutView.vue'),
       meta: { 
+        //Navbar
         hasNavbar: false,
-        hasFooter: false,
-        hasNavbarMobile: true,
+        hasNavbarMobile: false,
         floatingNavbarMobile: true,
         floatingNavbar: true,
+        //Footer
+        hasFooter: false,
         floatingFooter: true,
-        fullWidthPage: true,
+        //
         showRouterArrow: false,
-        showDropdown: false
+        showDropdown: false,
+        fullWidthPage: true
       }
     },
     {

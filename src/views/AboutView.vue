@@ -6,12 +6,14 @@ import { useScrollDirection } from "@/composables/useScrollDirection";
 const phaseId = ref(0);
 const phaseCount = 15;
 
+//In order of appearance
 const phaseMappings = [
-  { name: 'Introduction', range: [0, 2], component: defineAsyncComponent(() => import('@/components/AboutPage/Phases/Introduction.vue')) },
-  { name: 'Projects', range: [3, 6], component: defineAsyncComponent(() => import('@/components/AboutPage/Phases/Projects.vue')) },
-  { name: 'Beginning', range: [7, 8], component: defineAsyncComponent(() => import('@/components/AboutPage/Phases/Beginning.vue')) },
-  { name: 'Advantage', range: [9, 10], component: defineAsyncComponent(() => import('@/components/AboutPage/Phases/Advantage.vue')) },
-  { name: 'Mission', range: [11, 14], component: defineAsyncComponent(() => import('@/components/AboutPage/Phases/Mission.vue')) },
+  { name: 'Introduction', range: [0, 2], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/Introduction.vue')) },
+  { name: 'Projects', range: [3, 6], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/Projects.vue')) },
+  { name: 'Beginning', range: [7, 8], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/Beginning.vue')) },
+  { name: 'Advantage', range: [9, 10], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/Advantage.vue')) },
+  { name: 'Mission', range: [11, 12], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/Mission.vue')) },
+  { name: 'PrivateLabel', range: [13, 14], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/PrivateLabel.vue')) },
 ];
 
 const currentPhaseComponent = computed(() => {
@@ -48,7 +50,7 @@ function cyclePhase(direction) {
   }
   setTimeout(() => {
     isCycling = false
-  }, 1000) //adjust to transition duration based on currentTransition
+  }, 800) //adjust to transition duration based on currentTransition styling
 }
 
 let hasScrolledDown = ref(false)
@@ -66,7 +68,7 @@ const currentTransition = computed(() => {
 </script>
 
 <template>
-  <div class="about-container" :class="`container-${phaseId}`">
+  <div class="about-page-container" :class="`container-${phaseId}`">
     <Suspense>
       <Transition :name="currentTransition.name" :mode="currentTransition.mode">
         <component
@@ -78,21 +80,7 @@ const currentTransition = computed(() => {
       </Transition>
     </Suspense>
   </div>
-
-  <div @click="cyclePhase(forward)" :class="hasScrolledDown ? 'scrolled' : ''" class="scroll-indicator" v-if="!isAtBottom">
-    <span>Scroll down to continue</span>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="#131313"
-      class="bi bi-chevron-down chevron"
-      viewBox="0 0 16 16"
-    >
-      <path
-        fill-rule="evenodd"
-        d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
-      />
-    </svg>
-  </div>
+  
   <!--comment in for testing during development-->
   <div class="controls">
     <button @click="cyclePhase(backward)">PREV</button>
@@ -102,7 +90,7 @@ const currentTransition = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-.about-container {
+.about-page-container {
   width: 100vw;
   min-height: 100vh;
   display: flex;
@@ -137,7 +125,7 @@ const currentTransition = computed(() => {
     }
     &-12, &-13, &-14{
       .phase{
-        background-color: #039EA2;
+        background-color: #E6F6F6;
       }
     }
   }
@@ -150,38 +138,6 @@ const currentTransition = computed(() => {
   top: 0;
   left: 0;
   background-color: #8AC3C7;
-}
-
-.scroll-indicator {
-  position: absolute;
-  bottom: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: white;
-  font-family: "Kugile";
-  z-index: 10;
-  cursor: pointer;
-  .chevron {
-    width: 20px;
-    height: 20px;
-    stroke: white;
-    margin-top: 10px;
-    animation: bounce 1.5s infinite;
-  }
-  
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-  transition: all 0.5s ease;
-  &.scrolled{
-    opacity: 0;
-    // transform: scale(1.1);
-    letter-spacing: 4px;
-  }
 }
 
 .controls {
