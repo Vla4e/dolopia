@@ -1,238 +1,39 @@
 <script setup>
 import { ref, watch, computed, onMounted, toRaw } from "vue";
-
 import { useProductStoreCleanup } from "@/store/productCleanup";
+
 const productStoreCleanup = useProductStoreCleanup();
-
 const productData = computed(() => productStoreCleanup.currentProduct);
-const subcategoryData = computed(() => productStoreCleanup.currentSubcategory);
-const categoryByIdentifier = computed(() => productStoreCleanup.categoryByIdentifier);
-
-import candiedFruitsPlaceholder from "@/assets/products/product-images/candied-fruits-placeholder/candied-fruits.png";
-import placeholderImage from "@/assets/products/product-images/placeholder/placeholder.png";
-let fallbackImage = ref("placeholder");
-let usePlaceholder = ref(false);
-
-const images = import.meta.glob("@/assets/products/product-images/projects/**/*.png", {
-  eager: true,
-  as: "url",
-});
-const shadowsOverlaysImages = import.meta.glob(
-  "@/assets/products/product-images/shadows-overlay/**/*.png",
-  { eager: true, as: "url" }
-);
-
-const productImageMap = ref({});
-const imagesParsed = ref(false);
-const isLoading = ref(true);
-const currentImages = ref(null);
-const nextImages = ref(null);
-
-// Parse images and create product code to image info map
-const parseImages = () => {
-  const newMap = {};
-  for (const path in images) {
-    const filename = path.substring(path.lastIndexOf("/") + 1);
-    let [prefix, code] = filename.split("-");
-    if (code) {
-      code = code.split(".")[0];
-      newMap[code] = {
-        prefix: prefix,
-        fullPath: images[path],
-      };
-    }
-  }
-  productImageMap.value = newMap;
-  imagesParsed.value = true;
-};
-
-// Get images for current product
-const getProductImages = async (code) => {
-  if (!code) return null;
-
-  if (subcategoryData.value.isCandiedFruit) {
-    return {
-      mainImage: Object.values(candiedFruitsPlaceholder)[0],
-      shadow:
-        shadowsOverlaysImages[
-          "/src/assets/products/product-images/shadows-overlay/shadows/250.png"
-        ],
-      overlay:
-        shadowsOverlaysImages[
-          "/src/assets/products/product-images/shadows-overlay/overlays/250.png"
-        ],
-      code: code,
-    };
-  }
-
-  const imageInfo = productImageMap.value[code];
-  if (!imageInfo) {
-    //default placeholder
-    return {
-      mainImage: placeholderImage,
-      shadow:
-        shadowsOverlaysImages[
-          "/src/assets/products/product-images/shadows-overlay/shadows/250.png"
-        ],
-      overlay:
-        shadowsOverlaysImages[
-          "/src/assets/products/product-images/shadows-overlay/overlays/250.png"
-        ],
-      code: code,
-      preload: true,
-    };
-  }
-
-  if (categoryByIdentifier.value === "pasta-project") {
-    return {
-      mainImage: imageInfo.fullPath,
-      shadow: null,
-      overlay: null,
-      code: code,
-      preload: false,
-    };
-  }
-
-  // console.log("Will return:", imageInfo.fullPath, imageInfo.prefix);
-  return {
-    mainImage: imageInfo.fullPath,
-    shadow:
-      shadowsOverlaysImages[
-        `/src/assets/products/product-images/shadows-overlay/shadows/${imageInfo.prefix}.png`
-      ],
-    overlay:
-      shadowsOverlaysImages[
-        `/src/assets/products/product-images/shadows-overlay/overlays/${imageInfo.prefix}.png`
-      ],
-    code: code,
-    preload: true,
-  };
-};
-
-// Preload images
-const preloadImages = (imageUrls) => {
-  return Promise.all(
-    imageUrls.map((url) => {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = resolve;
-        img.onerror = reject;
-        img.src = url;
-      });
-    })
-  );
-};
-
-async function preloadWrapper(code) {
-  // console.log("PLW", code);
-  // console.log("SDICF", subcategoryData.value.isCandiedFruit);
-  isLoading.value = true;
-  try {
-    if (subcategoryData.value.isCandiedFruit) {
-      const candiedImages = {
-        mainImage: candiedFruitsPlaceholder,
-        shadow:
-          shadowsOverlaysImages[
-            `/src/assets/products/product-images/shadows-overlay/shadows/250.png`
-          ],
-        overlay:
-          shadowsOverlaysImages[
-            `/src/assets/products/product-images/shadows-overlay/overlays/250.png`
-          ],
-        code: code,
-        preload: true,
-      };
-
-      // Add this preloading logic
-      await preloadImages([
-        candiedImages.mainImage,
-        candiedImages.shadow,
-        candiedImages.overlay,
-      ]);
-
-      currentImages.value = candiedImages;
-      fallbackImage.value = candiedFruitsPlaceholder;
-      usePlaceholder.value = true;
-      isLoading.value = false;
-      return;
-    } else {
-      usePlaceholder.value = false;
-    }
-    // console.log("getting images");
-    nextImages.value = await getProductImages(code);
-    // console.log("got images");
-    if (nextImages.value && nextImages.preload) {
-      // console.log("preloading");
-      await preloadImages([
-        nextImages.value.mainImage,
-        nextImages.value.shadow,
-        nextImages.value.overlay,
-      ]);
-      // console.log("finished preloading");
-      currentImages.value = nextImages.value;
-      nextImages.value = null;
-    } else {
-      currentImages.value = nextImages.value;
-    }
-    isLoading.value = false;
-  } catch (e) {
-    usePlaceholder.value = true;
-    fallbackImage.value = "placeholder";
-    isLoading.value = false;
-  }
-}
-
-watch(
-  () => productData.value.code,
-  async (newCode) => {
-    if (newCode) {
-      await preloadWrapper(newCode);
-    }
-  }
-);
-
-onMounted(async () => {
-  parseImages();
-  if (productData.value.code) {
-    await preloadWrapper(productData.value.code);
-  }
-});
 </script>
 
 <template>
   <Transition name="fade-product-image" mode="out-in">
     <div
-      v-if="imagesParsed && currentImages && !isLoading"
-      :key="currentImages.code"
+      v-if="productData"
+      :key="productData.code"
       class="product-image"
     >
       <div class="space" />
       <img
-        v-if="categoryByIdentifier !== 'pasta-project'"
-        :src="currentImages.shadow"
+        v-if="productData.properties?.shadow"
+        :src="productData.properties.shadow"
         class="silhouette-shadow"
+        alt="Shadow image"
       />
       <img
-        v-if="usePlaceholder"
-        :src="
-          fallbackImage === 'placeholder' ? placeholderImage : candiedFruitsPlaceholder
-        "
+        v-if="productData.properties?.mainImage"
+        :src="productData.properties.mainImage"
         class="product"
         alt="Product image"
       />
-      <img v-else :src="currentImages.mainImage" class="product" alt="Product image" />
       <img
-        v-if="categoryByIdentifier !== 'pasta-project'"
-        :src="currentImages.overlay"
+        v-if="productData.properties?.overlay"
+        :src="productData.properties.overlay"
         class="highlight"
+        alt="Highlight image"
       />
     </div>
     <div v-else-if="!isLoading" class="loading-placeholder">
-      IP:{{ imagesParsed }} | CI {{ currentImages }} | IL{{ isLoading }} | UP{{
-        usePlaceholder
-      }}
-      | FI{{ fallbackImage }}
-      <!-- Add a loading spinner or placeholder here -->
       Loading...
     </div>
   </Transition>

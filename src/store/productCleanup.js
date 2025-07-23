@@ -10,6 +10,9 @@ import { categoryToSubcategory, categoryToSubcategoryNames, subcategoryFullNames
 import { subcategoryToProductCodes, subcategoryToProductsMap } from '@/assets/products/subcategoryToProducts.js';
 
 export const useProductStoreCleanup = defineStore('productCleanup', () => {
+  
+  console.log('[Pinia] productCleanup store initialized');
+
   // console.log("DEFINING STORE")
   // =====================================
   // CONSTANTS
@@ -44,7 +47,7 @@ export const useProductStoreCleanup = defineStore('productCleanup', () => {
 
   const currentSubcategory = computed(() => {
     const subcategoryId = selectedSubcategoryId.value;
-    const products = subcategoryToProductsMap.get(subcategoryId) || new Map();
+    const products = subcategoryToProductCodes.get(subcategoryId) || new Map();
     
     return {
       id: subcategoryId,
@@ -59,7 +62,7 @@ export const useProductStoreCleanup = defineStore('productCleanup', () => {
   const currentProduct = computed(() => {
     // console.log("CPRODUCT COMPUTING BEGIN", selectedProductCode.value)
     const productCode = selectedProductCode.value;
-    const product = currentSubcategory.value.products.get(productCode);
+    const product = allProductMap.get(productCode);
     // console.log("Returning:", productCode, product)
     return {
       code: productCode,

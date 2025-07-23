@@ -9,7 +9,6 @@ const route = useRoute();
 
 import { ref, computed, watch, nextTick, onMounted } from "vue";
 import { useProductStoreCleanup } from "@/store/productCleanup";
-import { splitProductName } from "@/helpers/splitProductName";
 const productStore = useProductStoreCleanup();
 
 import {
@@ -75,12 +74,10 @@ const processedProductsBySubcategory = computed(() => {
           console.warn(`Product not found for code: ${productCode}`);
           return null;
         }
-        const { firstPart, secondPart } = splitProductName(product["Product name EN"]);
+
         return {
           ...product,
-          id: productCode,
-          nameFirstPart: firstPart,
-          nameSecondPart: secondPart,
+          id: productCode
         };
       })
       .filter((p) => p !== null);
@@ -217,10 +214,10 @@ watch(
                 <div class="texts">
                   <h3 class="name">
                     <span class="top-part">
-                      {{ product.nameFirstPart }}
+                      {{ product.splitName.firstPart }}
                     </span>
                     <span class="bottom-part">
-                      {{ product.nameSecondPart }}
+                      {{ product.splitName.secondPart }}
                     </span>
                   </h3>
                   <span class="description">
@@ -268,7 +265,7 @@ watch(
     display: flex;
     width: 100%;
     color: black;
-    padding-left: 2vw; // 2.28% of whole navbar width
+    padding-left: 2vw; // rounded 2.28% of whole navbar width
     padding-right: 5vw;
     margin-bottom: 2vh;
     .project-name {
@@ -278,7 +275,7 @@ watch(
       font-size: 64px;
       font-style: normal;
       font-weight: 400;
-      line-height: 1; /* 37.5% */
+      line-height: 1;
       @media(max-width: 1600px){
         font-size: 56px;
       }
@@ -319,14 +316,14 @@ watch(
         // width: 100%;
         display: flex;
         justify-content: flex-start;
-        align-items: flex-start; // Add this
+        align-items: flex-start;
         color: #44A0AD;
         text-align: right;
         font-family: "Raleway";
         font-size: 12px;
         font-style: normal;
         font-weight: 500;
-        line-height: 16px; /* 133.333% */
+        line-height: 1.33;
         letter-spacing: 1.08px;
         margin-top: 10px;
         .subcategory{
@@ -356,7 +353,7 @@ watch(
     background: #ceebec;
     position: relative;
     .subcategory-sections{
-      display: flex; // Ensures it can control its children's alignment
+      display: flex;
       flex-direction: column;
       flex: 1;
     }

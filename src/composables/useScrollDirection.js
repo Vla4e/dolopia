@@ -9,6 +9,7 @@ export function useScrollDirection(onScrollUp, onScrollDown) {
   let scrollStore = useScrollStore();
 
   function onWheel(event) {
+    // console.count('scrolling')
     if (!scrollStore.ignoreScrollCallbacks) {
       if (event.deltaY < 0) { // Scrolling up
         if (typeof onScrollUp === 'function') {

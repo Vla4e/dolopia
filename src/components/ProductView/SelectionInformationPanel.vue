@@ -2,16 +2,14 @@
 
 <script setup>
 import { ref, watch, computed, toRaw } from "vue";
-import { splitProductName } from "@/helpers/splitProductName";
 import { useProductStoreCleanup } from "@/store/productCleanup.js";
-// Unused imports were removed
-// import { useRouteParamsStore } from "@/store/routeParams.js";
-// import Dropdown from "../Dropdown/Dropdown.vue";
-// import ManualCarousel from "../VerticalCarousel/VerticalCarousel.vue";
 
 const productStoreCleanup = useProductStoreCleanup();
-// This logic is much simpler with computed properties.
-// It automatically creates a list of subcategory objects whenever the category changes.
+let currentProduct = computed(() => {
+  return productStoreCleanup.currentProduct
+})
+
+
 const mergedSubcategoryItems = computed(() => {
   const currentCat = productStoreCleanup.currentCategory;
   if (!currentCat || !currentCat.subcategories) {
@@ -23,45 +21,6 @@ const mergedSubcategoryItems = computed(() => {
   }));
 });
 
-// Refs for the split product name
-const firstPartOfName = ref("");
-const secondPartOfName = ref("");
-
-// Watch the new, correct source for the product name
-watch(
-  () => productStoreCleanup.currentProduct.name,
-  (newProductName) => {
-    // console.log("NPN", newProductName);
-    if (!newProductName) {
-      firstPartOfName.value = "";
-      secondPartOfName.value = "";
-      return;
-    }
-    // Check if the product name contains " with " or "*"
-    const withIndex = newProductName.indexOf(" with ");
-    const asteriskIndex = newProductName.indexOf("*");
-
-    if (withIndex !== -1) {
-      // split at "with"
-      firstPartOfName.value = newProductName.slice(0, withIndex).trim();
-      secondPartOfName.value = newProductName.slice(withIndex).trim();
-    } else if (asteriskIndex !== -1) {
-      // Split at "*"
-      firstPartOfName.value = newProductName.slice(0, asteriskIndex).trim();
-      secondPartOfName.value = newProductName.slice(asteriskIndex + 1).trim();
-    } else {
-      // If neither "with" nor "*" is found, put everything in firstPart
-      firstPartOfName.value = newProductName.trim();
-      secondPartOfName.value = "";
-    }
-  },
-  {
-    immediate: true, // Run immediately to set the initial product name
-  }
-);
-
-// All the old watchers, onMounted hooks, and unnecessary functions for merging data
-// have been removed, as their logic is now handled by the 'mergedSubcategoryItems' computed property.
 </script>
 
 <template>
@@ -97,10 +56,10 @@ watch(
 
         <h2 class="product-name">
           <span class="large-text">
-            {{ firstPartOfName }}
+            {{ currentProduct.properties.splitName.firstPart }}
           </span>
           <span class="medium-text">
-            {{ secondPartOfName }}
+            {{ currentProduct.properties.splitName.secondPart }}
           </span>
         </h2>
 

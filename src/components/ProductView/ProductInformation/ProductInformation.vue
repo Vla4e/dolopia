@@ -6,30 +6,30 @@ import ProductImage from "./ProductData/ProductImage.vue";
 
 import { useProductStore } from "@/store/product";
 import { useProductStoreCleanup } from "@/store/productCleanup.js";
-import { useProductViewStore } from "@/store/productView.js"; // Import the store
+import { useProductViewStore } from "@/store/productView.js";
 
 const productStoreCleanup = useProductStoreCleanup();
-const productViewStore = useProductViewStore(); // Initialize the store
+const productViewStore = useProductViewStore();
 
-let localProductData = computed(() => {
-  return productStoreCleanup.currentProduct;
+let productData = computed(() => {
+  return productStoreCleanup.currentProduct.properties;
 });
-
-// No props needed for phase management anymore!
 
 let isTransitioning = ref(false); // Prevent actions during transition to not break animation
 
-watch(() => productViewStore.currentPhaseName, () => {
-  isTransitioning.value = true;
-  setTimeout(() => {
-    isTransitioning.value = false;
-  }, 1000); // Match this duration with your CSS transition
-});
+watch(
+  () => productViewStore.currentPhaseName,
+  () => {
+    isTransitioning.value = true;
+    setTimeout(() => {
+      isTransitioning.value = false;
+    }, 1000);
+  }
+);
 
 function selectedPhaseFromCarousel(phaseIndex) {
-    productViewStore.setPhase(productViewStore.ALL_PHASES_ARRAY[phaseIndex]);
+  productViewStore.setPhase(productViewStore.ALL_PHASES_ARRAY[phaseIndex]);
 }
-
 </script>
 
 <template>
@@ -41,58 +41,68 @@ function selectedPhaseFromCarousel(phaseIndex) {
     />
     <ProductImage
       class="image-container"
-      :class="[`image-container-${productViewStore.currentPhaseName}`, { transitioning: isTransitioning }]"
+      :class="[
+        `image-container-${productViewStore.currentPhaseName}`,
+        { transitioning: isTransitioning },
+      ]"
     />
 
     <div class="dynamic-container" :class="productViewStore.currentPhaseName">
       <Transition name="fade-slide" mode="out-in">
         <div
-          v-if="productViewStore.currentPhaseName === productViewStore.PHASES.productDescription"
+          v-if="
+            productViewStore.currentPhaseName ===
+            productViewStore.PHASES.productDescription
+          "
           key="productDescription"
           class="productDescription"
         >
           <p>
-            {{ localProductData.properties["Description EN"] }}
+            {{ productData["Description EN"] }}
           </p>
         </div>
 
         <div
-          v-else-if="productViewStore.currentPhaseName === productViewStore.PHASES.informationWheel"
+          v-else-if="
+            productViewStore.currentPhaseName === productViewStore.PHASES.informationWheel
+          "
           key="informationWheel"
           class="information-wheel"
         >
           <div class="info serving">
             <h2 class="heading">Serving Suggestion</h2>
             <p class="text">
-              {{ localProductData.properties["Serving suggestion EN"] }}
+              {{ productData["Serving suggestion EN"] }}
             </p>
           </div>
 
-          <div v-if="localProductData.properties['Award']" class="info awards">
+          <div v-if="productData['Award']" class="info awards">
             <h2 class="heading">Awards</h2>
             <p class="text">
-              {{ localProductData.properties["Award"] }}
+              {{ productData["Award"] }}
             </p>
           </div>
-          <div
-            v-if="localProductData.properties['consumers comments']"
-            class="info awards review"
-          >
+          <div v-if="productData['consumers comments']" class="info awards review">
             <h2 class="heading">User Reviews</h2>
             <p class="text">
-              {{ localProductData.properties["consumers comments"] }}
+              {{ productData["consumers comments"] }}
             </p>
           </div>
 
           <div class="info vegetarian-tags">
             <h2 class="heading">Tags</h2>
             <p class="text">
-              {{ localProductData.properties["Tags Eng"] }}
+              {{ productData["Tags Eng"] }}
             </p>
           </div>
         </div>
 
-        <ProductData v-else-if="productViewStore.currentPhaseName === productViewStore.PHASES.nutritionalData" key="nutritionalData" />
+        <ProductData
+          v-else-if="
+            productViewStore.currentPhaseName === productViewStore.PHASES.nutritionalData
+          "
+          key="nutritionalData"
+        />
       </Transition>
     </div>
 
@@ -219,7 +229,7 @@ function selectedPhaseFromCarousel(phaseIndex) {
         font-size: 20px;
         font-style: normal;
         font-weight: 700;
-        line-height: 24px; /* 120% */
+        line-height: 24px;
         letter-spacing: 1px;
         text-transform: capitalize;
         margin-bottom: 15px;
@@ -230,7 +240,7 @@ function selectedPhaseFromCarousel(phaseIndex) {
         font-size: 16px;
         font-style: normal;
         font-weight: 400;
-        line-height: 24px; /* 150% */
+        line-height: 24px;
       }
       &.serving {
         margin-left: -5%;
@@ -280,15 +290,13 @@ function selectedPhaseFromCarousel(phaseIndex) {
   }
 }
 
-
 .fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: all 0.5s ease;
 }
-.fade-slide-enter-active.productDescription{
-    transition: all 0.5s ease 0.5s !important;
+.fade-slide-enter-active.productDescription {
+  transition: all 0.5s ease 0.5s !important;
 }
-
 
 .fade-slide-enter-from,
 .fade-slide-leave-to {
@@ -317,6 +325,4 @@ function selectedPhaseFromCarousel(phaseIndex) {
     transform: translateX(-100%);
   }
 }
-
-/* Add more specific styles as needed */
 </style>

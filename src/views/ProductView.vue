@@ -5,12 +5,13 @@ import SelectionInformationPanel from "@/components/ProductView/SelectionInforma
 import ArrowButton from "@/components/ArrowButton.vue";
 
 import { ref, onMounted, inject, onUnmounted } from "vue";
-import { useProductViewStore } from "@/store/productView.js"; // Import the store
 import { useScrollDirection } from "@/composables/useScrollDirection";
 import IconScrollDown from "@/components/icons/IconScrollDown.vue";
 
+import { useProductViewStore } from "@/store/productView.js";
+const productViewStore = useProductViewStore();
+
 const { isMobile } = inject("screenSize");
-const productViewStore = useProductViewStore(); // Initialize the store
 
 // Handle global scroll for desktop
 const scrollUp = true;
@@ -26,33 +27,84 @@ useScrollDirection(
   }
 );
 
-onMounted(() => {
+async function startStagedRender() {
+  
+  // attempt frame-by-frame rendering for better performance and no animation lagging.
+  const nextFrame = () => new Promise(resolve => requestAnimationFrame(resolve));
+
+  isContentReady.value = true;
+  await nextFrame();
+
+  // Stage 1
+  renderStage.value = 1;
+  await nextFrame();
+
+  // Stage 2
+  renderStage.value = 2;
+  await nextFrame();
+
+  // Stage 3
+  renderStage.value = 3;
+}
+
+let isContentReady = ref(false)
+let renderStage = ref(0);
+
+onMounted( async () => {
   if (isMobile.value) {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
   }
+
+  await startStagedRender();
 });
+
 onUnmounted(() => {
   productViewStore.setPhase('overview')
 })
+
 </script>
 
 <template>
   <div class="page-category">
-    <ArrowButton
-      :routePath="'/catalog'"
-      :buttonText="''"
-      :showArrow="true"
-      :arrowDirection="'left'"
-      :showDropdown="false"
-      v-if="!isMobile"
-      class="catalog-arrow"
-    />
+    <div v-if="!isContentReady || renderStage === 0" class="loader-container">
+      <span>Loading Product...</span>
+    </div>
 
+    <!-- Stage 1 -->
+    <template v-if="isContentReady && renderStage >= 1">
+      <ArrowButton
+        :routePath="'/catalog'"
+        :buttonText="''"
+        :showArrow="true"
+        :arrowDirection="'left'"
+        :showDropdown="false"
+        v-if="!isMobile"
+        class="catalog-arrow"
+      />
+      
+      <ArrowButton
+        :routePath="'/all-products'"
+        :buttonText="'View other products'"
+        :showArrow="true"
+        :arrowDirection="'right'"
+        :showDropdown="false"
+        v-if="!isMobile"
+        class="all-products-arrow"
+      />
+    </template>
+    
+    <div v-if="!isMobile && renderStage >= 1" :class="!productViewStore.isOverviewActive ? 'inactive' : ''" class="left-panel">
+      <div @click="productViewStore.toggleOverview()" class="open-panel"></div>
+    </div>
+    
+
+    <!-- Stage 2 -->
     <Transition name="slide-text" mode="out-in">
       <SelectionInformationPanel
+        v-if="renderStage >= 2"
         v-show="
           !isMobile &&
           (productViewStore.currentPhaseName === productViewStore.PHASES.productDescription ||
@@ -61,14 +113,12 @@ onUnmounted(() => {
       />
     </Transition>
 
-    <div v-if="!isMobile" :class="!productViewStore.isOverviewActive ? 'inactive' : ''" class="left-panel">
-      <div @click="productViewStore.toggleOverview()" class="open-panel"></div>
-    </div>
+    <IconScrollDown v-if="renderStage >= 2" v-show="productViewStore.isOverviewActive" class="icon-scroll-down"/>
 
-    <IconScrollDown v-show="productViewStore.isOverviewActive" class="icon-scroll-down"/>
 
+    <!-- Stage 3  -->
     <div
-      v-if="!isMobile"
+      v-if="!isMobile && renderStage >= 3"
       @click="productViewStore.toggleOverview()"
       class="right-panel"
       :class="productViewStore.isOverviewActive ? 'active' : ''"
@@ -78,19 +128,21 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <ArrowButton
-      :routePath="'/all-products'"
-      :buttonText="'View other products'"
-      :showArrow="true"
-      :arrowDirection="'right'"
-      :showDropdown="false"
-      v-if="!isMobile"
-      class="all-products-arrow"
-    />
   </div>
 </template>
 
 <style lang="scss" scoped>
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  color: #44a0ad;
+  font-family: "Raleway", sans-serif;
+  font-size: 1.2rem;
+}
 .all-products-arrow {
   position: absolute;
   bottom: 5vh;
