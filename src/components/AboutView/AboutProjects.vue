@@ -98,7 +98,8 @@ onMounted(() => {
     p{
       color: #FFF;
       font-family: "Raleway";
-      font-size: 16px;
+      font-size: 20px;
+      letter-spacing: 2px;
       font-style: normal;
       font-weight: 400;
       line-height: 25px; /* 156.25% */

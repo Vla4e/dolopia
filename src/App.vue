@@ -10,7 +10,6 @@ import {
   nextTick,
 } from "vue";
 import { RouterLink, RouterView, useRoute } from "vue-router";
-
 import Navbar from "./components/Navbar.vue";
 import Footer from "./components/Footer.vue";
 import Sidebar from "./components/Sidebar/Sidebar.vue";
@@ -43,42 +42,42 @@ onBeforeUnmount(() => {
   emitter.off("mountFinished");
 });
 
-let route = useRoute();
+// let route = useRoute();
+// //
+// // Scroll position preservation
+// let savedScrollPosition = ref(0);
+// let viewContainer = ref(null);
 
-// Scroll position preservation
-let savedScrollPosition = ref(0);
-let viewContainer = ref(null);
+// const preserveScrollPosition = () => {
+//   if (viewContainer.value) {
+//     savedScrollPosition.value = viewContainer.value.scrollTop;
+//   }
+// };
 
-const preserveScrollPosition = () => {
-  if (viewContainer.value) {
-    savedScrollPosition.value = viewContainer.value.scrollTop;
-  }
-};
+// const restoreScrollPosition = () => {
+//   if (viewContainer.value && savedScrollPosition.value > 0) {
+//     nextTick(() => {
+//       viewContainer.value.scrollTop = savedScrollPosition.value;
+//       savedScrollPosition.value = 0;
+//     });
+//   }
+// };
 
-const restoreScrollPosition = () => {
-  if (viewContainer.value && savedScrollPosition.value > 0) {
-    nextTick(() => {
-      viewContainer.value.scrollTop = savedScrollPosition.value;
-      savedScrollPosition.value = 0;
-    });
-  }
-};
+// watch(
+//   () => route.name,
+//   (newRoute, oldRoute) => {
+//     // Preserve scroll position before route change
+//     if (oldRoute) {
+//       preserveScrollPosition();
+//     }
 
-watch(
-  () => route.name,
-  (newRoute, oldRoute) => {
-    // Preserve scroll position before route change
-    if (oldRoute) {
-      preserveScrollPosition();
-    }
-
-    // Restore scroll position after transition
-    setTimeout(() => {
-      restoreScrollPosition();
-    }, 550); // Slightly after transition completes
-  },
-  { immediate: true }
-);
+//     // Restore scroll position after transition
+//     setTimeout(() => {
+//       restoreScrollPosition();
+//     }, 550); // Slightly after transition completes
+//   },
+//   { immediate: true }
+// );
 </script>
 
 <template>

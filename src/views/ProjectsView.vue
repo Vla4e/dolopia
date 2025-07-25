@@ -7,7 +7,7 @@ const { isMobile } = inject("screenSize");
 const panels = [
   {
     category: {
-      name: "the tomato project",
+      name: "the tomato <br/> project",
       description: "Savor the taste of tradition with Dolopias Finest Tomato Creations",
       route: "tomato-project",
     },
@@ -29,7 +29,7 @@ const panels = [
   },
   {
     category: {
-      name: "the vegetable project",
+      name: "the vegetable <br/> project",
       description:
         "Authentic Mediterranean flavors, rooted in heritage, perfected for modern palates.",
       route: "vegetable-project",
@@ -52,7 +52,7 @@ const panels = [
   },
   {
     category: {
-      name: "The FRUIT Project",
+      name: "The FRUIT <br/> Project",
       description: "Authentic fruit delights with a creative modern twist",
       route: "fruit-project",
     },
@@ -74,7 +74,7 @@ const panels = [
   },
   {
     category: {
-      name: "The PASTA Project",
+      name: "The PASTA <br/> Project",
       description: "Crafted with care: artisanal pasta, naturally dried, richly flavored",
       route: "pasta-project",
     },
@@ -116,7 +116,7 @@ const panels = [
       >
         <div class="panel-half text-panel">
           <div class="category">
-            <router-link :to="`/projects/${panel.category.route}`" class="category-name">{{ panel.category.name }}</router-link>
+            <router-link :to="`/projects/${panel.category.route}`" class="category-name" v-html="panel.category.name"></router-link>
             <span class="category-description">{{ panel.category.description }}</span>
           </div>
 
@@ -198,26 +198,34 @@ const panels = [
           margin-right: auto;
           margin-bottom: 5%;
           &-name {
+            color: #000;
+            text-align: center;
             font-family: "Century Gothic";
-            font-size: 24px;
+            font-size: 36px;
             font-style: normal;
             font-weight: 400;
-            color: black;
+            line-height: 1.2; /* 66.667% */
             text-transform: uppercase;
-            text-align: center;
-            letter-spacing: 0%;
             transition: none;
             &:hover{
               transform: scale(1.05);
             }
+            @media(max-width: 1600px) and (max-height: 900px){
+              font-size: 28px;
+            }
           }
           &-description {
+            color: #000;
+            text-align: center;
             font-family: "Raleway";
             font-size: 14px;
             font-style: normal;
             font-weight: 400;
-            color: black;
-            text-align: center;
+            line-height: 1.3; /* 128.571% */
+            letter-spacing: 1.26px;
+            @media(max-width: 1600px) and (max-height: 900px){
+              font-size: 12px;
+            }
           }
         }
         .subcategory-list {
@@ -227,12 +235,18 @@ const panels = [
           margin-left: auto;
           margin-right: auto;
           .subcategory {
+            color: #000;
+            text-align: center;
             font-family: "Century Gothic";
             font-size: 16px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 24px; /* 150% */
             text-transform: uppercase;
-            color: black;
-            text-align: center;
             transition: none;
+            @media(max-width: 1600px) and (max-height: 900px){
+              font-size: 14px;
+            }
             &:hover{
               transform: scale(1.05);
             }

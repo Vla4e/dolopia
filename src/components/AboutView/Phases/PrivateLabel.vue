@@ -233,12 +233,12 @@ onUnmounted(() => {});
 
     p {
       color: #000;
-      font-family: Belleza;
-      font-size: 27px;
+      font-family: "Belleza";
+      font-size: 22px;
+      letter-spacing: 1px;
       font-style: normal;
       font-weight: 400;
-      line-height: 1; /* 100% */
-      letter-spacing: 1.08px;
+      line-height: 1.2; /* 100% */
       @media (max-width: 1600px) and (max-height: 900px) {
         font-size: 20px;
       }

@@ -8,6 +8,7 @@ import Vegetable from '@/components/HomeView/FeaturedProjects/Vegetable.vue';
 import Fruit from '@/components/HomeView/FeaturedProjects/Fruit.vue';
 
 import ProjectCatalogMobile from '@/components/ProjectCatalogMobile.vue';
+import FeaturedProductGenerated from '@/components/HomeView/FeaturedProjects/FeaturedProductGenerated.vue';
 
 import { inject, nextTick, onMounted, onUnmounted, ref } from 'vue';
 const { isMobile } = inject('screenSize')
@@ -15,7 +16,7 @@ const emitter = inject('emitter')
 
 let showFeaturedDisclaimer = ref(false);
 let heroContainer = ref();
-let tomatoSection = ref();
+let firstFeaturedSection = ref();
 
 let heroObserver;
 let tomatoSectionObserver;
@@ -59,17 +60,18 @@ onMounted( async () => {
     heroObserver.observe(heroContainer.value);
   }
 
-  // Observer for the first featured section (Tomato)
-  if (tomatoSection.value) {
+  // Observer for the first featured section
+  if (firstFeaturedSection.value) {
+    console.log("FIRSTFEATUREDSECTION", firstFeaturedSection.value[0])
     const firstFeaturedOptions = {
         root: null,
         rootMargin: "0px",
         threshold: [0, 0.01, 0.1, 0.2, 0.3, 0.5, 0.7, 0.9]
     };
     tomatoSectionObserver = new IntersectionObserver(tomatoSectionObserverCallback, firstFeaturedOptions);
-    tomatoSectionObserver.observe(tomatoSection.value);
+    tomatoSectionObserver.observe(firstFeaturedSection.value[0]);
   } else {
-      console.error("tomatoSection ref is null/undefined during onMounted. Check template ref assignment.");
+      console.error("firstFeaturedSection ref is null/undefined during onMounted. Check template ref assignment.");
   }
 })
 
@@ -81,6 +83,100 @@ onUnmounted(() => {
     tomatoSectionObserver.disconnect();
   }
 })
+
+const products = [
+  {
+    layoutType: 'tomato',
+    product: {
+      route: '/projects/tomato-project/pasta-sauces/feta-cheese-savory',
+      imageSrc: new URL('@/assets/landing/sections/tomato-group.png', import.meta.url).href,
+      name: {
+        large: 'Tomato sauce',
+        small: 'with Feta and savory'
+      },
+      taglines: [
+        { text: 'Thick, Creamy <b>Intensely Greek</b>' }
+      ],
+      description: `Dolopia's Tomato Sauce with Feta and Savory brings the<br />
+      warmth of a summer garden straight to your plate. Made with<br />sun-ripened tomatoes, real chunks of Greek Feta, and the <br />earthy
+      aroma of savory, this sauce turns any pasta into a rustic <br />
+      Mediterranean experience.`,
+      closingTagline: 'Tasty, Tangy <b>Irresistible</b>',
+      projectInfo: `It's part of our Tomato project - a celebration of authentic traditional tomato sauces. Alongside classic<br />
+      Mediterranean flavors, you'll find bold creations like our oriental sauce with 12 spices, or our oven-baked<br />
+      aubergines in tomato sauce, inspired by the beloved Mousaka.`
+    }
+  },
+  {
+    layoutType: 'vegetable',
+    product: {
+      route: '/projects/vegetable-project/appetizer/aubergine-salad-smoked-tea',
+      imageSrc: new URL('@/assets/landing/sections/vegetable-group.png', import.meta.url).href,
+      name: {
+        large: 'Aubergine Salad',
+        small: 'with Smoked tea'
+      },
+      taglines: [
+        { text: 'Smoky, Silky, <b>Unforgettable</b>', class: 'no-break' },
+        { text: '<b>Rooted in <br />Mediterranean simplicity</b> Crafted with care', class: 'lt-1' }
+      ],
+      description: `One of Dolopia’s oldest recipes and still our biggest success, this<br />
+      aubergine salad redefines tradition. Instead of smoking the <br />aubergines, we
+      infuse the velvety pulp with smoked tea – a subtle <br />twist that preserves
+      purity while adding mystery. A hint of garlic, a <br />drizzle of extra virgin
+      olive oil, and fresh ingredients only <br />– no additives, ever.`,
+      projectInfo: `Part of our Vegetable Project, under the Salads & Spreads subcategory, it shares the spotlight with red pepper
+      <br />creations and slow-cooked vegetables in EVO oil`
+    }
+  },
+  {
+    layoutType: 'pasta',
+    product: {
+      route: '/projects/pasta-project/seafood-pasta/orzo-seafood',
+      imageSrc: new URL('@/assets/landing/sections/pasta-group.png', import.meta.url).href,
+      name: {
+        large: 'Two-Coloured',
+        small: 'Seafood Orzo'
+      },
+      taglines: [
+        { text: 'Seafood elegance<br /><b>Shaped into orzo</b>' }
+      ],
+      description: `Dolopia’s Two-Coloured Seafood Orzo brings together two worlds: jet-black<br />
+      orzo with squid ink and golden orzo infused with shellfish essence. It’s a visual <br />
+      and culinary ode to the Greek seaside, where simplicity meets bold taste. <br />
+      Part of our Pasta Project, this creation stands alongside traditional pastas <br />
+      made with goat or sheep milk, vibrant vegan blends with vegetables and <br />
+      spices, and other specialty shapes.`,
+      closingTagline: 'Where simplicity meets<br /><b>Bold taste</b>',
+      projectInfo: `Every piece of pasta is air-dried slowly, never heat-treated – so the aromas stay locked inside. With no<br />
+      added salt and a naturally rough surface for sauces to cling to, it’s designed to carry flavor in every bite. <br />
+      Pair it with seafood, lemon zest, or just a touch of olive oil – and let it speak for itself.`
+    }
+  },
+  {
+    layoutType: 'fruit',
+    product: {
+      route: '/projects/fruit-project/jam/strawberry-mint-pepper',
+      imageSrc: new URL('@/assets/landing/sections/fruit-group.png', import.meta.url).href,
+      name: {
+        large: 'Strawberry',
+        small: 'with Mint and Pepper Jam'
+      },
+      taglines: [
+        { text: 'A bold twist on <b>classic sweetness</b>', class: 'lt-1 no-break' },
+        { text: '<b>Sweet & Fresh</b> with Spicy notes', class: 'lt-2' }
+      ],
+      description: `Dolopia's Strawberry with Mint and Pepper Jam blends ripe<br />
+      strawberries with fresh mint and a subtle hint of pepper, creating a<br />
+      vibrant balance of sweet, fresh, and spicy notes. Perfect on its own<br />
+      or paired with cheeses, it's equally delicious as a regular jam or a<br />
+      creative filling for pastries and desserts.`,
+      projectInfo: `Part of our Fruit Project, this jam joins a family of unique creations like fine cut lemon marmalade with extra<br />
+      virgin olive oil and luscious candied cherries with bitter almonds – all made without colours, colour stabilizers,<br />
+      or any other additives. Clean label, pure taste.`
+    }
+  }
+];
 </script>
 
 <template>
@@ -92,22 +188,19 @@ onUnmounted(() => {
 
     <img class="landing-mobile" v-if="isMobile" src="@/assets/landing/landing-mobile-smallest.png"/>
 
-    <div v-if="!isMobile" class="project-section" id="tomato" key="phase-4" ref="tomatoSection">
-      <Tomato/>
-    </div>
-    <div v-if="!isMobile" class="project-section gradient" key="phase-3">
-      <Vegetable :project="'pasta'"/>
-    </div>
-    <div v-if="!isMobile" class="project-section" key="phase-5">
-      <Pasta :project="'vegetable'"/>
-    </div>
-    <div v-if="!isMobile" class="project-section gradient" key="phase-6">
-      <Fruit :project="'fruit'"/>
-    </div>
     <Transition name="slide-disclaimer" mode="in-out">
       <div v-show="showFeaturedDisclaimer" class="featured-products-disclaimer">Featured products</div>
     </Transition>
 
+    <!-- Example usage of the new FeaturedProductGenerated.vue -->
+    <div
+      v-for="(prod, idx) in products"
+      :key="prod.layoutType + idx"
+      class="project-section"
+      :ref="idx === 0 ? 'firstFeaturedSection' : null"
+    >
+      <FeaturedProductGenerated :layoutType="prod.layoutType" :product="prod.product" />
+    </div>
   </div>
 </template>
 
@@ -136,6 +229,11 @@ onUnmounted(() => {
   }
   .project-section{
     background: #CEEBEC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
     &.gradient{
       background: url("@/assets/landing/gradient-background.png");
       background-size: cover;

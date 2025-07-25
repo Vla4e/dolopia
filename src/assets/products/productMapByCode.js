@@ -225,7 +225,7 @@ export const productMapByCode = new Map([
             "name": "Red Sweet Pepper Pate extra hot - with chilli Carolina Reaper",
             "subcategory": "red-pepper-pate",
             "code": "PPCR150",
-            "path": "extra-hot-carolina-reaper",
+            "path": "extra-hot-carolina-reaper-pate",
             "category": "vegetable"
         }
     ],

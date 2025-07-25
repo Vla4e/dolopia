@@ -123,7 +123,7 @@ footer {
     justify-content: space-between;
     min-width: 15%;
     margin-left: 5%;
-    margin-top: 5vh;
+    margin-top: 30px;
     .social {
       max-height: 16px;
       transition: transform 0.3s ease;

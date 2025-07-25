@@ -157,7 +157,7 @@ watch(
       </Transition>
 
       <div class="menus">
-        <div class="projects">
+        <nav class="projects">
           <div
             v-for="(project, idx) in projects"
             @click="selectProject(project)"
@@ -167,9 +167,9 @@ watch(
             >
               {{ productStore.categoryFullNames[project] }}
             </div>
-        </div>
+        </nav>
 
-        <div class="subcategories">
+        <nav class="subcategories">
           <div
             v-for="subcategory in subcategoryKeysArray"
             @click="selectSubcategory(subcategory)"
@@ -179,7 +179,7 @@ watch(
           >
             {{ subcategoryFullNames[subcategory] }}
             </div>
-        </div>
+        </nav>
       </div>
     </section>
 
@@ -225,7 +225,7 @@ watch(
                   </span>
                 </div>
 
-                <img :src="product.mainImage" class="image" :alt="product['Product name EN']" />
+                <img :src="product.mainImage" class="image" :alt="product['Product name EN']" loading="lazy" />
 
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -404,7 +404,7 @@ watch(
     }
 
     .product-grid {
-      width: 75%;
+      width: 80%;
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       padding-top: 5vh;
