@@ -51,14 +51,15 @@ const [shadowsMap, overlaysMap] = (() => {
 
 // Function to get image URLs for a single product code
 function getImageUrlsForCode(code, useCompressed = true) {
-  const mainImageMap = useCompressed ? compressedMainImageMap : uncompressedMainImageMap;
-  
+  const mainImageMap = uncompressedMainImageMap;
+  const mainImageMapCompressed = compressedMainImageMap;
   // Special case for candied fruits
   const placeholder = code === 'GTL280' 
     ? candiedFruitsPlaceholder 
     : placeholderImageGeneral;
 
   const imageInfo = mainImageMap[code];
+  const imageInfoCompressed = mainImageMapCompressed[code];
   if (!imageInfo) {
     return {
       mainImage: placeholder,
@@ -69,6 +70,7 @@ function getImageUrlsForCode(code, useCompressed = true) {
   } else {
     return {
       mainImage: imageInfo.url,
+      mainImageCompressed: imageInfoCompressed.url,
       shadow: shadowsMap[imageInfo.prefix] || null,
       overlay: overlaysMap[imageInfo.prefix] || null,
       preload: true
@@ -84,6 +86,7 @@ export function initializeProductImages(useCompressed = true) {
     
     // Modify the existing product data object in place
     productData.mainImage = imageUrls.mainImage;
+    productData.mainImageCompressed = imageUrls.mainImageCompressed;
     productData.shadow = imageUrls.shadow;
     productData.overlay = imageUrls.overlay;
     productData.preload = imageUrls.preload;

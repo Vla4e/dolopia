@@ -36,7 +36,7 @@ function selectPhase(phaseIndex){
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 50px;
+  // width: 50px;
   cursor: pointer;
   @media (max-width: 450px){
     flex-direction: row;

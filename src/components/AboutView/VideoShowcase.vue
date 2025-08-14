@@ -9,28 +9,51 @@ import essenceImage from "@/assets/about/essence.jpg";
 const dataObject = {
   passion: {
     heading: "",
-    paragraph: `Dolopia Savour Creations began with our shared love for cooking and a passion for sharing authentic flavors. As a couple with roots outside of Greece, we spent countless hours experimenting with local ingredients and preparing meals for friends and family. When friends from abroad visited us, they expected to taste the typical Greek dishes like moussaka or gyros. Instead, they were delighted by lesser-known traditional recipes, such as Hilopites with octopus and tomato sauce.`,
+    paragraph: `Dolopia Savour Creations began with our shared love for cooking and a <br/>
+    passion for sharing authentic flavors. As a couple with roots outside of<br/>
+    Greece, we spent countless hours experimenting with local ingredients<br/>
+    and preparing meals for friends and family. When friends from abroad<br/>
+    visited us, they expected to taste the typical Greek dishes like<br/>
+    moussaka or gyros. Instead, they were delighted by lesser-known<br/>
+    traditional recipes, such as Hilopites with octopus and tomato sauce.`,
     flavourText: "Passion for sharing <br/> authentic flavors",
     videoSource: passionVideo,
   },
   quality: {
     heading: "Bringing unique tastes </br> to the world",
-    paragraph: `Realizing that many unique flavors remained largely undiscovered outside of Greece, we decided to start a business that would bring these tastes to the world. What began with just a few sauces and candied fruits has grown into a diverse range of high-quality products, each crafted with care, using fresh ingredients and traditional methods.`,
-    flavourText: "High-quality products,crafted with care",
+    paragraph: `Realizing that many unique flavors remained largely<br/>
+    undiscovered outside of Greece, we decided to start a business<br/>
+    that would bring these tastes to the world. What began with<br/>
+    just a few sauces and candied fruits has grown into a diverse<br/>
+    range of high-quality products, each crafted with care, using<br/>
+    fresh ingredients and traditional methods.`,
+    flavourText: "Savor the essence of <br/> Mediterranean cuisine",
     videoSource: qualityVideo,
   },
   artisanal: {
     heading: "",
     paragraph:
-      "At Dolopia Savour Creations, we take pride in our commitment to quality, authenticity, and flavor. Our products stand out for several reasons. First and foremost, we use only the freshest, locally sourced ingredients, ensuring that every bite reflects vibrant flavors. Our artisanal production methods involve small-batch crafting, allowing us to maintain a personal touch and a level of care that large manufacturers cannot replicate.",
-    flavourText: "Artisanal production methods",
+      `At Dolopia Savour Creations, we take pride in our commitment<br/>
+      to quality, authenticity, and flavor. Our products stand out for<br/>
+      several reasons. First and foremost, we use only the freshest,<br/>
+      locally sourced ingredients, ensuring that every bite reflects<br/>
+      vibrant flavors. Our artisanal production methods involve<br/>
+      small-batch crafting, allowing us to maintain a personal touch<br/>
+      and a level of care that large manufacturers cannot replicate.",
+    flavourText: "Artisanal production methods`,
     videoSource: artisanalVideo,
   },
   essence: {
     heading: "No artificial additives no preservatives",
     paragraph:
-      "We avoid artificial additives, preservatives, and shortcuts, opting instead for time-honored techniques that enhance the natural taste of our ingredients. This dedication to purity means that our pasta, sauces, and spreads not only taste better but are also healthier options for you and your family. With Dolopia, you can savor the essence of Mediterranean cuisine, bringing authentic flavors to your table with ease and confidence.",
-    flavourText: "Savor the essence of Mediterranean cuisine",
+      `We avoid artificial additives, preservatives, and shortcuts, opting<br/>
+      instead for time-honored techniques that enhance the natural taste<br/>
+      of our ingredients. This dedication to purity means that our pasta,<br/>
+      sauces, and spreads not only taste better but are also healthier<br/>
+      options for you and your family. With Dolopia, you can savor the<br/>
+      essence of Mediterranean cuisine, bringing authentic flavors to your<br/>
+      table with ease and confidence.",
+    flavourText: "Savor the essence of Mediterranean cuisine`,
     videoSource: highQualityProductsVideo,
   },
   distribution: {
@@ -106,14 +129,16 @@ watch(
     </div>
 
     <div class="text-container">
-      <span
-        v-if="side === 'left'"
-        class="flavour-text"
-        v-html="currentDataObject.flavourText"
-      ></span>
-      <h2 v-if="currentDataObject.heading" v-html="currentDataObject.heading"></h2>
-      <p v-if="currentDataObject.paragraph">{{ currentDataObject.paragraph }}</p>
-      <p v-if="currentDataObject.paragraph2">{{ currentDataObject.paragraph2 }}</p>
+      <div class="text-wrapper">
+        <span
+          v-if="side === 'left'"
+          class="flavour-text"
+          v-html="currentDataObject.flavourText"
+        ></span>
+        <h2 v-if="currentDataObject.heading" v-html="currentDataObject.heading"></h2>
+        <p v-if="currentDataObject.paragraph" v-html="currentDataObject.paragraph"></p>
+        <p v-if="currentDataObject.paragraph2" v-html="currentDataObject.paragraph2"></p>
+      </div>
     </div>
   </div>
 </template>
@@ -132,11 +157,9 @@ watch(
   .media-wrapper,
   .text-container {
     width: 50%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 0 5vw;
     box-sizing: border-box;
   }
 
@@ -148,7 +171,18 @@ watch(
       align-items: center; // Center video in its column
     }
     .text-container {
-      align-items: flex-start; // Align text content to the left
+      align-items: center; // Align text content to the left
+      
+      margin-top: 10vh;
+      margin-right: 10vw;
+    }
+    .flavour-text{
+      position: absolute;
+      transform: translateY(-100%);  
+      right: -50px;
+      word-break: keep-all;
+      white-space: nowrap;
+      padding: 50px;
     }
   }
 
@@ -157,27 +191,47 @@ watch(
     flex-direction: row-reverse; // Swap visual order
     .media-wrapper {
       align-items: center; // Center video and its text below
+      position: relative;
+      margin-top: -10vh;
     }
     .text-container {
-      align-items: flex-end; // Align text content to the right
+      align-items: center; // Align text content to the right
+      
+      // margin-top: 10vh;
+      margin-right: 10vw;
       h2,
       p {
         text-align: right;
       }
+    }
+    .flavour-text{
+      position:absolute;
+      bottom: 0;
+      right: 0;
+      transform: translateY(115%);
+      font-size: 90px;
+      text-align: right;
+      word-break: keep-all;
+      white-space: nowrap;
     }
   }
 
   // == ELEMENT STYLES ==
 
   .video-container {
+    object-fit: contain;
     video,
     img {
+    object-fit: cover !important;
       display: block;
       object-fit: cover;
     }
   }
 
   .text-container {
+    .text-wrapper{
+      position: relative;
+    }
     h2 {
       color: #000;
       font-family: "Belleza";
@@ -196,17 +250,21 @@ watch(
       &:not(:last-child) {
         margin-bottom: 1em;
       }
+      @media(min-width: 1920px){
+        font-size: 18px;
+      }
     }
   }
 
   .flavour-text {
-    color: #8ac3c7;
+    color: #039EA2;
     font-family: "Kugile";
-    font-size: 2.5rem;
-    line-height: 1.1;
-    margin-top: 25px;
+    font-size: 90px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.1; /* 100% */
+    background-color: rgba(230, 246, 246, 0.70);
   }
-
   // == PRE-CALCULATED VIDEO SIZES (PLACEHOLDERS) ==
   // Define fixed width/height for videos in each section here
 

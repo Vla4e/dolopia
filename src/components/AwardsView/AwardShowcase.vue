@@ -57,7 +57,7 @@ watch(
       tempAwardProps.push({
         award: item.Award,
         name: item["Product name EN"],
-        imageUrl: productImages[val].mainImage,
+        imageUrl: productImages[val].mainImageCompressed,
         description: item["Short Description EN"],
         comments: item["consumers comments"],
         path: item.path,

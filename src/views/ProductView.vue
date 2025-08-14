@@ -297,11 +297,9 @@ onUnmounted(() => {
 }
 
 .icon-scroll-down{
-  width: 100px;
-  height: 100px;
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 60%;
+  right: 13px;
   z-index: 2000;
 }
 

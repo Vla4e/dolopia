@@ -65,7 +65,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Apricot",
                 "secondPart": "with orange & peppermint"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -134,7 +135,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Lemon",
                 "secondPart": "with olive oil"
-            }
+            },
+            "awardType": "silver"
         }
     ],
     [
@@ -203,7 +205,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Plum",
                 "secondPart": "with cinnamon"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -272,7 +275,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Sweet Orange",
                 "secondPart": "with chocolate"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -341,7 +345,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Sweet orange",
                 "secondPart": ""
-            }
+            },
+            "awardType": "silver"
         }
     ],
     [
@@ -410,7 +415,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Strawberry",
                 "secondPart": "with mint & pepper"
-            }
+            },
+            "awardType": "gta1"
         }
     ],
     [
@@ -479,7 +485,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Blood orange",
                 "secondPart": "with bergamot"
-            }
+            },
+            "awardType": "gta1"
         }
     ],
     [
@@ -548,7 +555,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Peach",
                 "secondPart": "with rose geranium"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -617,7 +625,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Sticky fig relish",
                 "secondPart": "with vinegar variety"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -686,7 +695,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Candied Ginger",
                 "secondPart": "with lavender"
-            }
+            },
+            "awardType": "gta1"
         }
     ],
     [
@@ -755,7 +765,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Candied Fresh Walnuts",
                 "secondPart": "with cloves"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -824,7 +835,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Candied Cherries",
                 "secondPart": "with bitter almond"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -893,7 +905,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Aubergine salad",
                 "secondPart": "with smoked tea"
-            }
+            },
+            "awardType": "gta1"
         }
     ],
     [
@@ -962,7 +975,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Aubergine salad Mount Athos Recipe",
                 "secondPart": ""
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -1031,7 +1045,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Aubergine pate",
                 "secondPart": "with sesame paste  hot"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -1100,7 +1115,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Bouyiourntí Tomato&Pepper Spread",
                 "secondPart": "with Katiki cheese"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -1169,7 +1185,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Bouyiourntí spicy Tomato&Pepper Spread",
                 "secondPart": "with Feta cheese"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -1238,7 +1255,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Grilled vegetables",
                 "secondPart": "with herbs"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -1307,7 +1325,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Marinated mushrooms",
                 "secondPart": "with herbs in oil"
-            }
+            },
+            "awardType": "gta2"
         }
     ],
     [
@@ -1376,7 +1395,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Red Sweet Pepper Pate",
                 "secondPart": ""
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -1445,7 +1465,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Red Sweet Pepper Pate spicy",
                 "secondPart": "with chilli Ghost Pepper"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -1514,7 +1535,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Red Sweet Pepper Pate hot",
                 "secondPart": "with chilli Trinidad Scorpion"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -1583,7 +1605,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Red Sweet Pepper Pate extra hot",
                 "secondPart": "with chilli Carolina Reaper"
-            }
+            },
+            "awardType": "gta1"
         }
     ],
     [
@@ -1652,7 +1675,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Artichoques pate a la polita",
                 "secondPart": ""
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -1721,7 +1745,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Tomato sauce",
                 "secondPart": "with olives & capers"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -1790,7 +1815,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Tomato sauce",
                 "secondPart": "with oranges and red sweet peppers"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -1859,7 +1885,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Tomato sauce",
                 "secondPart": "with garlic & basil"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -1928,7 +1955,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Tomato sauce oriental",
                 "secondPart": "with 12 spices"
-            }
+            },
+            "awardType": "gta1"
         }
     ],
     [
@@ -1997,7 +2025,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Oven baked Aubergines in tomato sauce",
                 "secondPart": ""
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -2066,7 +2095,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Tomato sauce",
                 "secondPart": "with Feta cheese and savory"
-            }
+            },
+            "awardType": "gta2"
         }
     ],
     [
@@ -2135,7 +2165,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Tomato sauce",
                 "secondPart": "with tuna & Ouzo"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -2204,7 +2235,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Tomato sauce",
                 "secondPart": "with seafood & Retsina"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -2273,7 +2305,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Homemade ketchup classic",
                 "secondPart": ""
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -2342,7 +2375,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Grill  Ketchup smoked",
                 "secondPart": ""
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -2411,7 +2445,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Homemade ketchup spicy",
                 "secondPart": ""
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -2480,7 +2515,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Homemade ketchup extra hot",
                 "secondPart": "with chilli Carolina Reaper"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -2549,7 +2585,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Orzo",
                 "secondPart": "with goat milk"
-            }
+            },
+            "awardType": "gta1"
         }
     ],
     [
@@ -2565,7 +2602,6 @@ export const allProductMap = new Map([
             "Subtitle EN": null,
             "Subtitle DE": null,
             "Subtitle GR": null,
-            "Short Description EN": "Enjoy our Short Tagliatelle with Goat Milk (Hilopitaki), a creamy pasta made with goat milk mixed into the dough. Perfect for light meals or hearty sauces, it's a Mediterranean delight!",
             "Short Description EN": "Enjoy our Short Tagliatelle with Goat Milk (Hilopitaki), a creamy pasta made with goat milk mixed into the dough. Perfect for light meals or hearty sauces, it’s a Mediterranean delight!",
             "Description EN": "Experience our Short Tagliatelle with Goat Milk (Hilopitaki), a delightful twist on a traditional Greek pasta. Made with high-quality goat milk mixed directly into the dough, this short, ribbon-like pasta offers a rich, creamy flavor in every bite. Crafted using bronze dies, it features a textured surface that enhances its ability to hold sauces. Air-dried at room temperature, our Hilopitaki maintains its authentic flavor and nutritional value. Enjoy it tossed with fresh herbs and sautéed vegetables for a light meal or paired with a robust sauce for a comforting dish. This versatile pasta brings a taste of the Mediterranean to your dining table, perfect for any occasion.",
             "Description DE": null,
@@ -2619,7 +2655,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Short Tagliatelle",
                 "secondPart": "with goat milk"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -2688,7 +2725,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Tagliatelle",
                 "secondPart": "with goat milk"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -2757,7 +2795,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Short Macaroni",
                 "secondPart": "with goat milk"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -2826,7 +2865,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Trachanas",
                 "secondPart": "with goat milk"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -2895,7 +2935,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Tagliatelle  Hilopites",
                 "secondPart": "with sheep milk"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -2964,7 +3005,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Short Tagliatelle",
                 "secondPart": "with sheep milk"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -3033,7 +3075,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Trachanas",
                 "secondPart": "with sheep milk"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -3102,7 +3145,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Vegie  Gemelli",
                 "secondPart": "with tomato, carrot and spinach"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -3171,7 +3215,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Vegie  Orzo",
                 "secondPart": "with tomato, carrot and spinach"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -3240,7 +3285,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Gemelli",
                 "secondPart": "with porcini mushroom"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -3309,7 +3355,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Orzo",
                 "secondPart": "with pepper variety  HOT"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -3378,7 +3425,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Gemelli",
                 "secondPart": "with ground red smoked pepper"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -3447,7 +3495,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Orzo",
                 "secondPart": "with saffron"
-            }
+            },
+            "awardType": "gta1"
         }
     ],
     [
@@ -3516,7 +3565,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Tagliatelle",
                 "secondPart": "with saffron"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -3585,7 +3635,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Tagliatelle",
                 "secondPart": "with nettle"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -3654,7 +3705,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Tagliatelle",
                 "secondPart": "with squid ink"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -3723,7 +3775,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Orzo",
                 "secondPart": "with squid ink"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -3792,7 +3845,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Orzo",
                 "secondPart": "with seafood"
-            }
+            },
+            "awardType": "gta1"
         }
     ],
     [
@@ -3861,7 +3915,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Tagliatelle",
                 "secondPart": "with shellfish"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -3930,7 +3985,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Orzo",
                 "secondPart": "with shellfish"
-            }
+            },
+            "awardType": null
         }
     ],
     [
@@ -3999,7 +4055,8 @@ export const allProductMap = new Map([
             "splitName": {
                 "firstPart": "Short Macaroni",
                 "secondPart": "with seafood"
-            }
+            },
+            "awardType": null
         }
     ]
 ])

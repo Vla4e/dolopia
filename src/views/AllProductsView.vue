@@ -178,7 +178,9 @@ watch(
             :class="{'active': subcategory === selectedSubcategory}"
           >
             {{ subcategoryFullNames[subcategory] }}
-            </div>
+          </div>
+          
+          <div class="subcategory filler" />
         </nav>
       </div>
     </section>
@@ -207,8 +209,10 @@ watch(
               <router-link
                 v-for="(product, index) in products"
                 :key="product.id" class="grid-item"
+                :class="product.keyToSubcategory"
                 :style="{ '--delay': `${0.4 + index * 0.1}s` }"
                 :to="'/projects/'+ selectedProject + '/' + subcategoryKey + '/' + product.path"
+                :title="`View ${product['Product name EN']} from the ${productStore.categoryFullNames[selectedProject]} - ${subcategoryFullNames[subcategoryKey]} category in more detail`"
               >
 
                 <div class="texts">
@@ -225,7 +229,7 @@ watch(
                   </span>
                 </div>
 
-                <img :src="product.mainImage" class="image" :alt="product['Product name EN']" loading="lazy" />
+                <img :src="product.mainImageCompressed" class="image" :alt="product['Product name EN']" loading="lazy" />
 
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -259,7 +263,7 @@ watch(
   justify-content: flex-start;
   min-height: 100vh;
   width: 100%;
-  padding-top: 20vh;
+  padding-top: 12vh;
   background-color: #E6F6F6;
   .selection {
     display: flex;
@@ -278,6 +282,12 @@ watch(
       line-height: 1;
       @media(max-width: 1600px){
         font-size: 56px;
+      }
+      @media(min-width: 2560px){
+        font-size: 72px;
+      }
+      @media(min-width: 3200px){
+        font-size: 86px;
       }
     }
     .menus {
@@ -298,8 +308,20 @@ watch(
         font-weight: 700;
         line-height: 16px; /* 114.286% */
         letter-spacing: 1.26px;
+        @media(min-width: 1920px){
+          font-size: 20px;
+        }
+        @media(min-width: 2560px){
+          font-size: 22px;
+          margin-bottom: 30px;
+        }
+        @media(min-width: 3200px){
+          font-size: 36px;
+        }
         .project{
           transition: color 0.3s ease-out, font-weight 0.3s ease-out;
+          min-width: 180px;
+          text-align: start;
           cursor: pointer;
           
           // &:not(:last-child)::after {
@@ -309,6 +331,20 @@ watch(
           &.active {
             color: #000;
             font-weight: 700;
+            font-family: "Century Gothic";
+            font-size: 64px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 1;
+            @media(max-width: 1600px){
+              font-size: 56px;
+            }
+            @media(min-width: 2560px){
+              font-size: 72px;
+            }
+            @media(min-width: 3200px){
+              font-size: 86px;
+            }
           }
         }
       }
@@ -326,16 +362,33 @@ watch(
         line-height: 1.33;
         letter-spacing: 1.08px;
         margin-top: 10px;
+        @media(min-width: 1920px){
+          font-size: 18px;
+        }
+        @media(min-width: 2560px){
+          font-size: 20px;
+        }
+        @media(min-width: 3200px){
+          font-size: 26px;
+        }
         .subcategory{
-          margin-right: 20px;
+          // min-width: 180px;
           flex-shrink: 0;
+          margin-right: 25px;
+          // text-align: start;
           cursor: pointer;
           // background: red;
-          &::after, &::before {
+          &:not(.filler)::before,
+          &:not(.filler)::after {
             content: " | ";
           }
+
           &.active{
             color: #000;
+          }
+          
+          .filler{
+            min-width: 120px;
           }
         }
       }
@@ -400,6 +453,12 @@ watch(
         @media(max-width: 1600px){
           font-size: 36px;
         }
+        @media(min-width: 2560px){
+          font-size: 48px;
+        }
+        @media(min-width: 3200px){
+          font-size: 54px;
+        }
       }
     }
 
@@ -444,6 +503,15 @@ watch(
               line-height: 1; /* 75% */
               letter-spacing: 2.88px;
               margin-bottom: 10px;
+              @media(max-width: 1600px) and (max-height: 900px){
+                font-size: 28px;
+              }
+              @media(min-width: 2560px){
+                font-size: 36px;
+              }
+              @media(min-width: 3200px){
+                font-size: 44px;
+              }
             }
             .bottom-part {
               color: #000;
@@ -454,6 +522,12 @@ watch(
               line-height: 1; /* 171.429% */
               letter-spacing: 1.26px;
               margin-bottom: 10px;
+              @media(min-width: 2560px){
+                font-size: 20px;
+              }
+              @media(min-width: 3200px){
+                font-size: 28px;
+              }
             }
           }
           .description {
@@ -466,6 +540,12 @@ watch(
             width: 70%;
             margin-left: auto;
             margin-right: auto;
+            @media(min-width: 2560px){
+              font-size: 16px;
+            }
+            @media(min-width: 3200px){
+              font-size: 20px;
+            }
           }
         }
         .image {
@@ -475,6 +555,9 @@ watch(
 
           transition: transform 0.3s ease-out; // image pop
           z-index: 3;
+          @media(min-width: 2560px){
+            height: 90%;
+          }
           // width: 70%;
         }
         .chevron{
@@ -499,11 +582,20 @@ watch(
           }
         }
       }
+
       &.pasta-project{
         .image{
           height: 70%;
         }
       }
+        .grid-item{
+          &.ketchup{
+            .image{
+              bottom: -15%;
+            }
+          }
+        }
+      
     }
   }
 }

@@ -176,6 +176,9 @@ onUnmounted(() => {});
     width: 70%;
     height: 60%;
     margin: auto;
+    @media(min-width: 1920px){
+      height: 50%;
+    }
   }
   h2 {
     height: 60%;
@@ -201,7 +204,7 @@ onUnmounted(() => {});
       color: #000;
       text-align: center;
       font-family: "Raleway";
-      font-size: 16px;
+      font-size: 20px;
       font-style: normal;
       font-weight: 400;
       line-height: 1.5; /* 150% */

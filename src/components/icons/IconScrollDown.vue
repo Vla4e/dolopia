@@ -1,6 +1,6 @@
 <template>
-  <div class="scroll-down-container">
-    <svg class="scroll-down-svg" viewBox="0 0 40 80">
+  <div class="scroll-down-indicator-container">
+    <svg class="scroll-down-indicator-svg" viewBox="0 0 40 80">
       <rect
         class="scroll-rectangle"
         fill="none"
@@ -27,15 +27,15 @@ defineOptions({
 </script>
 
 <style scoped>
-.scroll-down-container {
+.scroll-down-indicator-container {
   /* CSS Variables - Customize these to change the icon */
   --icon-width: 40px;
   --icon-height: 80px;
   /* Colors */
-  --icon-color: #3f3f3d;
-  --circle-color: #3f3f3d;
-  --arrow-color: #3f3f3d;
-  --stroke-color: #3f3f3d;
+  --icon-color: #2B565D;
+  --circle-color: #2B565D;
+  --arrow-color: #2B565D;
+  --stroke-color: #2B565D;
   --stroke-width: 2px;
   
   /* Rectangle dimensions and position */
@@ -68,7 +68,7 @@ defineOptions({
   color: var(--icon-color);
 }
 
-.scroll-down-svg {
+.scroll-down-indicator-svg {
   width: var(--icon-width);
   height: var(--icon-height);
   overflow: visible;
@@ -98,7 +98,7 @@ defineOptions({
 }
 
 /* MODIFIED: Keyframes updated to include a pause */
-@keyframes scroll-down {
+@keyframes scroll-down-indicator {
   0% {
     transform: translateY(0);
   }
@@ -117,7 +117,7 @@ defineOptions({
 }
 
 /* MODIFIED: Keyframes updated to include a pause */
-@keyframes scroll-down-arrow {
+@keyframes scroll-down-indicator-arrow {
   0% {
     transform: translateY(0);
   }
@@ -136,10 +136,10 @@ defineOptions({
 }
 
 .animated-circle {
-  animation: scroll-down var(--animation-duration) var(--animation-timing) infinite;
+  animation: scroll-down-indicator var(--animation-duration) var(--animation-timing) infinite;
 }
 
 .animated-arrow {
-  animation: scroll-down-arrow var(--animation-duration) var(--animation-timing) infinite;
+  animation: scroll-down-indicator-arrow var(--animation-duration) var(--animation-timing) infinite;
 }
 </style>

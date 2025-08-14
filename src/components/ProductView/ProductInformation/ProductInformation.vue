@@ -118,7 +118,7 @@ function selectedPhaseFromCarousel(phaseIndex) {
 <style scoped lang="scss">
 .phase-carousel {
   position: absolute;
-  right: 1%;
+  right: 10px;
 }
 .product-overview {
   position: relative;

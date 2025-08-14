@@ -18,10 +18,25 @@
         <div class="content-wrapper">
           <div class="hero-content">
             <h3 class="section-label">Private Label by Dolopia</h3>
-            <h2 id="main-heading" class="main-heading">
-              Tradition, Expertise,
-              <br />and Innovation in <br />Every Jar
-            </h2>
+
+            <div class="row">
+              <h2 id="main-heading" class="main-heading">
+                Tradition, Expertise,
+                <br />and Innovation in <br />Every Jar
+              </h2>
+
+              <div class="right">
+                <p class="highlight-text">
+                  While the vision of making authentic
+                  <br />Greek flavours accessible to food lovers <br />around the globe
+                  comes to life through <br />Dolopia’s own product line, it extends far
+                  <br />beyond. The same dedication, expertise, <br />and craftsmanship
+                  are also offered to <br />selected partners through tailored
+                  <br />Private Label solutions.
+                </p>
+              </div>
+            </div>
+
             <p class="description">
               Dolopia provides full-service Private Label production for businesses
               <br />looking to expand their offerings with high-quality, Mediterranean
@@ -31,18 +46,6 @@
               <br />food technology and artisanal methods, Dolopia becomes a reliable
               <br />partner for bringing Greek excellence to shelves around the world —
               <br />under another brand, yet with the same soul.
-            </p>
-          </div>
-          <div class="hero-content right">
-            <p class="highlight-text">
-              While the vision of making authentic
-              <br/>Greek flavours accessible to food lovers
-              <br/>around the globe comes to life through
-              <br/>Dolopia’s own product line, it extends far
-              <br/>beyond. The same dedication, expertise,
-              <br/>and craftsmanship are also offered to
-              <br/>selected partners through tailored
-              <br/>Private Label solutions.
             </p>
           </div>
         </div>
@@ -185,7 +188,7 @@ onUnmounted(() => {});
     .content-wrapper {
       display: flex;
       align-items: center;
-      justify-content: space-around;
+      justify-content: center;
       height: 70%;
       width: 80%;
       margin: auto;
@@ -194,14 +197,16 @@ onUnmounted(() => {});
     .hero-content {
       color: white;
       height: 100%;
+      width: 80%;
       display: flex;
       flex-direction: column;
       // align-items: center;
-      justify-content: space-around;
+      justify-content: center;
       // width: 45%;
-      &.right{
-        height: 80%;
-        justify-content: flex-start;
+      .row{
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5vh;
       }
     }
 
@@ -214,6 +219,7 @@ onUnmounted(() => {});
       line-height: 1.2; /* 120% */
       letter-spacing: 0.8px;
       text-transform: uppercase;
+      margin-bottom: 5vh;
       @media (max-width: 1600px) and (max-height: 900px) {
         font-size: 14px;
       }
@@ -227,7 +233,7 @@ onUnmounted(() => {});
       font-weight: 400;
       line-height: 1.2; /* 120% */
       @media (max-width: 1600px) and (max-height: 900px) {
-        font-size: 60px;
+        font-size: 54px;
       }
     }
 
@@ -240,16 +246,16 @@ onUnmounted(() => {});
       font-weight: 400;
       line-height: 1.2; /* 100% */
       @media (max-width: 1600px) and (max-height: 900px) {
-        font-size: 20px;
+        font-size: 18px;
       }
     }
   }
-  .arrow-button{
+  .arrow-button {
     position: absolute;
     bottom: 50px;
     right: 50px;
     z-index: 10;
-    span{
+    span {
       color: #000;
       font-family: "Century Gothic";
       font-size: 20px;

@@ -1,59 +1,77 @@
-
 <script setup>
-import { ref, computed, inject } from 'vue';
+import { ref, computed, inject } from "vue";
 
-const { isMobile } = inject('screenSize')
+const { isMobile } = inject("screenSize");
 const panels = [
-    {
-      category: {
-        name: 'the tomato project',
-        description: 'Savor the taste of tradition with Dolopias Finest Tomato Creations',
-        route: 'tomato-project',
-        subcategoryRoute: 'pasta-sauces',
-        imageUrl: new URL('@/assets/project_showcase_images/mobile/tomato-project.png', import.meta.url).href
-      },
+  {
+    category: {
+      name: "the tomato project",
+      description: "Savor the taste of tradition with Dolopias Finest Tomato Creations",
+      route: "tomato-project",
+      subcategoryRoute: "pasta-sauces",
+      imageUrl: new URL(
+        "@/assets/project_showcase_images/mobile/tomato-project.png",
+        import.meta.url
+      ).href,
     },
-    {
-      category: {
-        name: 'the vegetable project',
-        description: 'Authentic Mediterranean flavors, rooted in heritage, perfected for modern palates.',
-        route: 'vegetable-project',
-        subcategoryRoute: 'jam',
-        imageUrl: new URL('@/assets/project_showcase_images/mobile/vegetable-project.png', import.meta.url).href,
-      },
+  },
+  {
+    category: {
+      name: "the vegetable project",
+      description:
+        "Authentic Mediterranean flavors, rooted in heritage, perfected for modern palates.",
+      route: "vegetable-project",
+      subcategoryRoute: "jam",
+      imageUrl: new URL(
+        "@/assets/project_showcase_images/mobile/vegetable-project.png",
+        import.meta.url
+      ).href,
     },
-    {
-      category: {
-        name: 'The PASTA Project',
-        description: 'Crafted with care: artisanal pasta, naturally dried, richly flavored',
-        route: 'pasta-project',
-        subcategoryRoute: 'traditional-pasta',
-        imageUrl: new URL('@/assets/project_showcase_images/mobile/pasta-project.png', import.meta.url).href
-      },
+  },
+  {
+    category: {
+      name: "The PASTA Project",
+      description: "Crafted with care: artisanal pasta, naturally dried, richly flavored",
+      route: "pasta-project",
+      subcategoryRoute: "traditional-pasta",
+      imageUrl: new URL(
+        "@/assets/project_showcase_images/mobile/pasta-project.png",
+        import.meta.url
+      ).href,
     },
-    {
-      category: {
-        name: 'The FRUIT Project',
-        description: 'Authentic fruit delights with a creative modern twist',
-        route: 'fruit-project',
-        subcategoryRoute: 'appetizer',
-        imageUrl: new URL('@/assets/project_showcase_images/mobile/fruit-project.png', import.meta.url).href
-      },
-    }
-  ]
+  },
+  {
+    category: {
+      name: "The FRUIT Project",
+      description: "Authentic fruit delights with a creative modern twist",
+      route: "fruit-project",
+      subcategoryRoute: "appetizer",
+      imageUrl: new URL(
+        "@/assets/project_showcase_images/mobile/fruit-project.png",
+        import.meta.url
+      ).href,
+    },
+  },
+];
 </script>
 
 <template>
   <div class="project-cards-container">
-    <router-link 
-      class="project-card" 
-      :class="`project-card-${idx}`" 
+    <router-link
+      class="project-card"
+      :class="`project-card-${idx}`"
       v-for="(panel, idx) in panels"
       :key="idx"
-      :to="{ name : 'catalog', query: { category: panel.category.route, subcategory: panel.category.subcategoryRoute }}"
+      :to="{
+        name: 'catalog',
+        query: {
+          category: panel.category.route,
+          subcategory: panel.category.subcategoryRoute,
+        },
+      }"
     >
       <div class="image-container">
-        <img loading="lazy" :src="panel.category.imageUrl" :alt="panel.category.name">
+        <img loading="lazy" :src="panel.category.imageUrl" :alt="panel.category.name" />
       </div>
       <div class="text-container">
         <h2>{{ panel.category.name }}</h2>
@@ -63,25 +81,25 @@ const panels = [
   </div>
 </template>
 
-
 <style lang="scss" scoped>
-.project-cards-container{
+.project-cards-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 95%;
-  margin-left: auto;
-  margin-right: auto;
+  padding-left: 2.5%;
+  padding-right: 2.5%;
+  padding-top: 2.5vw;
   z-index: 2;
+  background: #ceebec;
 
-  .project-card{
+  .project-card {
     position: relative;
     border-radius: 20px;
     width: 100%;
     margin-bottom: 20px;
     overflow: hidden;
 
-    .image-container{
+    .image-container {
       width: 100%;
       img {
         width: 100%;
@@ -90,7 +108,7 @@ const panels = [
       }
     }
 
-    .text-container{
+    .text-container {
       position: absolute;
       top: 0;
       left: 0;
@@ -101,7 +119,7 @@ const panels = [
       display: flex;
       flex-direction: column;
       justify-content: center;
-      h2{
+      h2 {
         color: #000;
         font-family: "Century Gothic";
         font-size: 20px;
@@ -111,7 +129,7 @@ const panels = [
         text-transform: uppercase;
         margin-bottom: 15px;
       }
-      p{
+      p {
         color: #000;
         font-family: "Raleway";
         font-size: 11px;
@@ -122,10 +140,12 @@ const panels = [
         text-transform: capitalize;
       }
     }
-    &-0, &-2{
+    &-0,
+    &-2 {
     }
-    &-1, &-3{
-      .text-container{
+    &-1,
+    &-3 {
+      .text-container {
         left: 50%;
       }
     }

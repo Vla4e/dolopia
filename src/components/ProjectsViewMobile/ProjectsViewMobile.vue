@@ -186,7 +186,7 @@ watch(() => subcategoryData.value.productIdentifiers, () => {
           <img class="background" :src="cardBackgroundPlaceholder"/>
           <img v-if="mapLoaded" class="highlight" :src="productImageMap[key].overlay"/>
           <img v-if="mapLoaded" class="shadow-silhouette" :src="productImageMap[key].shadow"/>
-          <img v-if="mapLoaded" class="product" :src="productImageMap[key].mainImage"/>
+          <img v-if="mapLoaded" class="product" :src="productImageMap[key].mainImageCompressed"/>
         </div>
         
         <!-- <SelectionInformationPanel class="current-selection-info"/> -->

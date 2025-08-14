@@ -115,7 +115,7 @@ onUnmounted(() => {
   overflow-x: hidden;
   scroll-behavior: smooth;
   .video-showcase:last-child {
-    margin-top: 10vh;
+    // margin-top: 10vh;
   }
 }
 .image-container {

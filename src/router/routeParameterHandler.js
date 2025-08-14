@@ -4,11 +4,6 @@ import { productMapByCode } from '@/assets/products/productMapByCode';
 import { productMapByPath } from '@/assets/products/productMapByPath';
 import { useProductStoreCleanup } from '@/store/productCleanup';
 
-/**
- * [Internal] Updates the Pinia store with the validated product details.
- * @param {object} params - The route parameters { category, subcategory }.
- * @param {string} productCode - The validated product code.
- */
 function _updateProductStore(params, productCode) {
   const productStoreCleanup = useProductStoreCleanup();
   productStoreCleanup.updateFromParams({
@@ -18,11 +13,6 @@ function _updateProductStore(params, productCode) {
   });
 }
 
-/**
- * [Internal] Gets the default product path for a given subcategory.
- * @param {string} subcategoryIdentifier - The identifier for the subcategory.
- * @returns {string|null} The path of the default product or null if not found.
- */
 function _getDefaultProductPathForSubcategory(subcategoryIdentifier) {
   const firstProductCode = subcategoryToProductCodes.get(subcategoryIdentifier)?.[0];
   if (!firstProductCode) return null;
@@ -31,12 +21,6 @@ function _getDefaultProductPathForSubcategory(subcategoryIdentifier) {
   return product?.path || null;
 }
 
-/**
- * [Internal] A pure function to sequentially validate product route parameters.
- * It does NOT modify state.
- * @param {object} params - The route parameters { category, subcategory, productName }.
- * @returns {object} A resolution object: { status: 'VALID'|'REDIRECT'|'NOT_FOUND', payload: ... }
- */
 async function _resolveProjectRoute(params) {
   const { category, subcategory, product: productName } = params;
 
@@ -70,7 +54,7 @@ async function _resolveProjectRoute(params) {
   const productCode = productMapByPath.get(productName)?.code;
   const isProductInSubcategory = productCode && subcategoryToProductCodes.get(subcategory)?.includes(productCode);
   if (isProductInSubcategory) {
-    // The URL is fully valid.
+    // The URL is fully valid./+*/
     return { status: 'VALID', payload: { productCode } };
   } else {
     // The product is invalid for the given subcategory, so redirect to its default product.
@@ -86,12 +70,6 @@ async function _resolveProjectRoute(params) {
   }
 }
 
-/**
- * The main exported wrapper function called by the router guard.
- * It orchestrates validation and state updates for the product route.
- * @param {object} params - The route parameters from Vue Router.
- * @returns {object} The final resolution object for the router guard.
- */
 export async function handleProjectRouteParameters(params) {
   const resolution = await _resolveProjectRoute(params);
 
