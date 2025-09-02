@@ -72,3 +72,18 @@ export const subcategoryFullNames = {
   "vegan-pasta": "Vegan pasta",
   "seafood-pasta": "Seafood pasta"
 };
+//String.split() target is &
+export const subcategoryFullNamesWithSplitTargets = {
+  "jam": "Jam",
+  "marmalade": "Marmalade",
+  "candied-fruit": "Candied &Fruit",
+  "appetizer": "Appetizer",
+  "vegetable-in-oil": "Vegetables &in oil",
+  "red-pepper-pate": "Red &pepper &pate",
+  "pasta-sauces": "Pasta &sauce",
+  "tomato-creations": "Tomato &creations",
+  "ketchup": "Ketchup",
+  "traditional-pasta": "Traditional &pasta",
+  "vegan-pasta": "Vegan &pasta",
+  "seafood-pasta": "Seafood &pasta"
+};

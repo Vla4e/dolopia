@@ -1,4 +1,5 @@
 //Slide current element up out of viewport, slide next element from bottom to top of viewport
+// slide-up-reusable
 .slide-up-reusable-enter-active,
 .slide-up-reusable-leave-active {
   transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
@@ -14,4 +15,26 @@
 }
 .slide-up-reusable-leave-to {
   transform: translateY(-100vh);
+}
+
+
+//Fade opacity in and out
+// fade-in-out
+.fade-in-out-enter-active {
+  transition: opacity 0.3s ease-out;
+}
+.fade-in-out-enter-from {
+  opacity: 0;
+}
+.fade-in-out-enter-to {
+  opacity: 1;
+}
+.fade-in-out-leave-active {
+  transition: all 0.3s ease-out;
+}
+.fade-in-out-leave-from {
+  opacity: 1;
+}
+.fade-in-out-leave-to {
+  opacity: 0;
 }

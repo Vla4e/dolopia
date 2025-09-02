@@ -1,5 +1,7 @@
 <script setup>
 import BurgerIcon from './BurgerIcon.vue';
+import Search from './Search.vue';
+
 import { inject, ref, watch, computed } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -80,8 +82,12 @@ const finalFloatingNavbar = computed(() => {
               <div @click="toggleContactForm()" class="navbar-link">
                 Contact
               </div>
+              <router-link to="/all-products" class="navbar-link">
+                Products
+              </router-link>
             </div>
-            <img v-if="!menuStore.showContactForm" src="@/assets/search-icon.png" style="opacity: 0.1;" class="search-icon"/>
+            <!-- <img v-if="!menuStore.showContactForm" src="@/assets/search-icon.png" style="opacity: 0.1;" class="search-icon"/> -->
+            <Search v-if="!menuStore.showContactForm && !isMobile"></Search>
           </div>
         </nav>
       </div>

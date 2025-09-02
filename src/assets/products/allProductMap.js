@@ -61,7 +61,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "apricot-orange-peppermint",
+            "pathSlug": "apricot-orange-peppermint",
             "splitName": {
                 "firstPart": "Apricot",
                 "secondPart": "with orange & peppermint"
@@ -131,7 +131,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "lemon-olive-oil",
+            "pathSlug": "lemon-olive-oil",
             "splitName": {
                 "firstPart": "Lemon",
                 "secondPart": "with olive oil"
@@ -201,7 +201,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "plum-cinnamon",
+            "pathSlug": "plum-cinnamon",
             "splitName": {
                 "firstPart": "Plum",
                 "secondPart": "with cinnamon"
@@ -271,7 +271,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "sweet-orange-chocolate",
+            "pathSlug": "sweet-orange-chocolate",
             "splitName": {
                 "firstPart": "Sweet Orange",
                 "secondPart": "with chocolate"
@@ -341,7 +341,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "sweet-orange",
+            "pathSlug": "sweet-orange",
             "splitName": {
                 "firstPart": "Sweet orange",
                 "secondPart": ""
@@ -411,7 +411,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "strawberry-mint-pepper",
+            "pathSlug": "strawberry-mint-pepper",
             "splitName": {
                 "firstPart": "Strawberry",
                 "secondPart": "with mint & pepper"
@@ -481,7 +481,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "blood-orange-bergamot",
+            "pathSlug": "blood-orange-bergamot",
             "splitName": {
                 "firstPart": "Blood orange",
                 "secondPart": "with bergamot"
@@ -551,7 +551,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "peach-rose-geranium",
+            "pathSlug": "peach-rose-geranium",
             "splitName": {
                 "firstPart": "Peach",
                 "secondPart": "with rose geranium"
@@ -621,7 +621,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "sticky-fig-relish",
+            "pathSlug": "sticky-fig-relish",
             "splitName": {
                 "firstPart": "Sticky fig relish",
                 "secondPart": "with vinegar variety"
@@ -691,7 +691,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "ginger-lavender",
+            "pathSlug": "ginger-lavender",
             "splitName": {
                 "firstPart": "Candied Ginger",
                 "secondPart": "with lavender"
@@ -761,7 +761,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "fresh-walnuts-cloves",
+            "pathSlug": "fresh-walnuts-cloves",
             "splitName": {
                 "firstPart": "Candied Fresh Walnuts",
                 "secondPart": "with cloves"
@@ -831,7 +831,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "cherries-bitter-almond",
+            "pathSlug": "cherries-bitter-almond",
             "splitName": {
                 "firstPart": "Candied Cherries",
                 "secondPart": "with bitter almond"
@@ -901,7 +901,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "aubergine-salad-smoked-tea",
+            "pathSlug": "aubergine-salad-smoked-tea",
             "splitName": {
                 "firstPart": "Aubergine salad",
                 "secondPart": "with smoked tea"
@@ -971,7 +971,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "aubergine-salad-mount-athos",
+            "pathSlug": "aubergine-salad-mount-athos",
             "splitName": {
                 "firstPart": "Aubergine salad Mount Athos Recipe",
                 "secondPart": ""
@@ -1041,7 +1041,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "hot-aubergine-pate-sesame",
+            "pathSlug": "hot-aubergine-pate-sesame",
             "splitName": {
                 "firstPart": "Aubergine pate",
                 "secondPart": "with sesame paste  hot"
@@ -1111,7 +1111,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "bouyiournti-katiki-cheese",
+            "pathSlug": "bouyiournti-katiki-cheese",
             "splitName": {
                 "firstPart": "Bouyiourntí Tomato&Pepper Spread",
                 "secondPart": "with Katiki cheese"
@@ -1181,7 +1181,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "spicy-bouyiournti-feta-cheese",
+            "pathSlug": "spicy-bouyiournti-feta-cheese",
             "splitName": {
                 "firstPart": "Bouyiourntí spicy Tomato&Pepper Spread",
                 "secondPart": "with Feta cheese"
@@ -1251,7 +1251,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "grilled-vegetables-herbs",
+            "pathSlug": "grilled-vegetables-herbs",
             "splitName": {
                 "firstPart": "Grilled vegetables",
                 "secondPart": "with herbs"
@@ -1321,7 +1321,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "marinated-mushrooms-herbs",
+            "pathSlug": "marinated-mushrooms-herbs",
             "splitName": {
                 "firstPart": "Marinated mushrooms",
                 "secondPart": "with herbs in oil"
@@ -1391,7 +1391,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "red-pepper-pate-sweet",
+            "pathSlug": "red-pepper-pate-sweet",
             "splitName": {
                 "firstPart": "Red Sweet Pepper Pate",
                 "secondPart": ""
@@ -1461,7 +1461,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "spicy-ghost-pepper",
+            "pathSlug": "spicy-ghost-pepper",
             "splitName": {
                 "firstPart": "Red Sweet Pepper Pate spicy",
                 "secondPart": "with chilli Ghost Pepper"
@@ -1531,7 +1531,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "hot-trinidad-scorpion",
+            "pathSlug": "hot-trinidad-scorpion",
             "splitName": {
                 "firstPart": "Red Sweet Pepper Pate hot",
                 "secondPart": "with chilli Trinidad Scorpion"
@@ -1601,7 +1601,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "extra-hot-carolina-reaper-pate",
+            "pathSlug": "extra-hot-carolina-reaper-pate",
             "splitName": {
                 "firstPart": "Red Sweet Pepper Pate extra hot",
                 "secondPart": "with chilli Carolina Reaper"
@@ -1671,7 +1671,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "artichoke-pate-a-la-polita",
+            "pathSlug": "artichoke-pate-a-la-polita",
             "splitName": {
                 "firstPart": "Artichoques pate a la polita",
                 "secondPart": ""
@@ -1741,7 +1741,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "olives-capers",
+            "pathSlug": "olives-capers",
             "splitName": {
                 "firstPart": "Tomato sauce",
                 "secondPart": "with olives & capers"
@@ -1811,7 +1811,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "oranges-red-peppers",
+            "pathSlug": "oranges-red-peppers",
             "splitName": {
                 "firstPart": "Tomato sauce",
                 "secondPart": "with oranges and red sweet peppers"
@@ -1881,7 +1881,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "garlic-basil",
+            "pathSlug": "garlic-basil",
             "splitName": {
                 "firstPart": "Tomato sauce",
                 "secondPart": "with garlic & basil"
@@ -1951,7 +1951,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "oriental-12-spices",
+            "pathSlug": "oriental-12-spices",
             "splitName": {
                 "firstPart": "Tomato sauce oriental",
                 "secondPart": "with 12 spices"
@@ -2021,7 +2021,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "oven-baked-aubergines",
+            "pathSlug": "oven-baked-aubergines",
             "splitName": {
                 "firstPart": "Oven baked Aubergines in tomato sauce",
                 "secondPart": ""
@@ -2091,7 +2091,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "feta-cheese-savory",
+            "pathSlug": "feta-cheese-savory",
             "splitName": {
                 "firstPart": "Tomato sauce",
                 "secondPart": "with Feta cheese and savory"
@@ -2161,7 +2161,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "tuna-ouzo",
+            "pathSlug": "tuna-ouzo",
             "splitName": {
                 "firstPart": "Tomato sauce",
                 "secondPart": "with tuna & Ouzo"
@@ -2231,7 +2231,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "seafood-retsina",
+            "pathSlug": "seafood-retsina",
             "splitName": {
                 "firstPart": "Tomato sauce",
                 "secondPart": "with seafood & Retsina"
@@ -2301,7 +2301,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "classic",
+            "pathSlug": "classic",
             "splitName": {
                 "firstPart": "Homemade ketchup classic",
                 "secondPart": ""
@@ -2371,7 +2371,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "smoked-grill",
+            "pathSlug": "smoked-grill",
             "splitName": {
                 "firstPart": "Grill  Ketchup smoked",
                 "secondPart": ""
@@ -2441,7 +2441,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "spicy",
+            "pathSlug": "spicy",
             "splitName": {
                 "firstPart": "Homemade ketchup spicy",
                 "secondPart": ""
@@ -2511,7 +2511,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "extra-hot-carolina-reaper",
+            "pathSlug": "extra-hot-carolina-reaper",
             "splitName": {
                 "firstPart": "Homemade ketchup extra hot",
                 "secondPart": "with chilli Carolina Reaper"
@@ -2581,7 +2581,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "orzo-goat-milk",
+            "pathSlug": "orzo-goat-milk",
             "splitName": {
                 "firstPart": "Orzo",
                 "secondPart": "with goat milk"
@@ -2651,7 +2651,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "short-tagliatelle-goat-milk",
+            "pathSlug": "short-tagliatelle-goat-milk",
             "splitName": {
                 "firstPart": "Short Tagliatelle",
                 "secondPart": "with goat milk"
@@ -2721,7 +2721,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "tagliatelle-goat-milk",
+            "pathSlug": "tagliatelle-goat-milk",
             "splitName": {
                 "firstPart": "Tagliatelle",
                 "secondPart": "with goat milk"
@@ -2791,7 +2791,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "short-macaroni-goat-milk",
+            "pathSlug": "short-macaroni-goat-milk",
             "splitName": {
                 "firstPart": "Short Macaroni",
                 "secondPart": "with goat milk"
@@ -2861,7 +2861,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "trachanas-goat-milk",
+            "pathSlug": "trachanas-goat-milk",
             "splitName": {
                 "firstPart": "Trachanas",
                 "secondPart": "with goat milk"
@@ -2931,7 +2931,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "hilopites-sheep-milk",
+            "pathSlug": "hilopites-sheep-milk",
             "splitName": {
                 "firstPart": "Tagliatelle  Hilopites",
                 "secondPart": "with sheep milk"
@@ -3001,7 +3001,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "short-tagliatelle-sheep-milk",
+            "pathSlug": "short-tagliatelle-sheep-milk",
             "splitName": {
                 "firstPart": "Short Tagliatelle",
                 "secondPart": "with sheep milk"
@@ -3071,7 +3071,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "trachanas-sheep-milk",
+            "pathSlug": "trachanas-sheep-milk",
             "splitName": {
                 "firstPart": "Trachanas",
                 "secondPart": "with sheep milk"
@@ -3141,7 +3141,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "gemelli-tomato-carrot-spinach",
+            "pathSlug": "gemelli-tomato-carrot-spinach",
             "splitName": {
                 "firstPart": "Vegie  Gemelli",
                 "secondPart": "with tomato, carrot and spinach"
@@ -3211,7 +3211,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "orzo-tomato-carrot-spinach",
+            "pathSlug": "orzo-tomato-carrot-spinach",
             "splitName": {
                 "firstPart": "Vegie  Orzo",
                 "secondPart": "with tomato, carrot and spinach"
@@ -3281,7 +3281,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "gemelli-porcini-mushroom",
+            "pathSlug": "gemelli-porcini-mushroom",
             "splitName": {
                 "firstPart": "Gemelli",
                 "secondPart": "with porcini mushroom"
@@ -3351,7 +3351,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "hot-orzo-pepper",
+            "pathSlug": "hot-orzo-pepper",
             "splitName": {
                 "firstPart": "Orzo",
                 "secondPart": "with pepper variety  HOT"
@@ -3421,7 +3421,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "gemelli-smoked-red-pepper",
+            "pathSlug": "gemelli-smoked-red-pepper",
             "splitName": {
                 "firstPart": "Gemelli",
                 "secondPart": "with ground red smoked pepper"
@@ -3491,7 +3491,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "orzo-saffron",
+            "pathSlug": "orzo-saffron",
             "splitName": {
                 "firstPart": "Orzo",
                 "secondPart": "with saffron"
@@ -3561,7 +3561,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "tagliatelle-saffron",
+            "pathSlug": "tagliatelle-saffron",
             "splitName": {
                 "firstPart": "Tagliatelle",
                 "secondPart": "with saffron"
@@ -3631,7 +3631,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "tagliatelle-nettle",
+            "pathSlug": "tagliatelle-nettle",
             "splitName": {
                 "firstPart": "Tagliatelle",
                 "secondPart": "with nettle"
@@ -3701,7 +3701,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "tagliatelle-squid-ink",
+            "pathSlug": "tagliatelle-squid-ink",
             "splitName": {
                 "firstPart": "Tagliatelle",
                 "secondPart": "with squid ink"
@@ -3771,7 +3771,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "orzo-squid-ink",
+            "pathSlug": "orzo-squid-ink",
             "splitName": {
                 "firstPart": "Orzo",
                 "secondPart": "with squid ink"
@@ -3841,7 +3841,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "orzo-seafood",
+            "pathSlug": "orzo-seafood",
             "splitName": {
                 "firstPart": "Orzo",
                 "secondPart": "with seafood"
@@ -3911,7 +3911,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "tagliatelle-shellfish",
+            "pathSlug": "tagliatelle-shellfish",
             "splitName": {
                 "firstPart": "Tagliatelle",
                 "secondPart": "with shellfish"
@@ -3981,7 +3981,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "orzo-shellfish",
+            "pathSlug": "orzo-shellfish",
             "splitName": {
                 "firstPart": "Orzo",
                 "secondPart": "with shellfish"
@@ -4051,7 +4051,7 @@ export const allProductMap = new Map([
             "What about Bundles????": null,
             "extra product or collection of single products": null,
             "https://yoast.com/meta-descriptions/": null,
-            "path": "short-macaroni-seafood",
+            "pathSlug": "short-macaroni-seafood",
             "splitName": {
                 "firstPart": "Short Macaroni",
                 "secondPart": "with seafood"

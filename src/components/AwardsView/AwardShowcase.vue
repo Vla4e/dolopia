@@ -51,16 +51,16 @@ watch(
 
     tempAwardProps = [];
     awardPropIdList.value = awardedProductMap[value.name];
-    let productImages = await getProductCodeToImageUrlMap(awardPropIdList.value, true); // 2nd argument is useCompressed images
+    // let productImages = await getProductCodeToImageUrlMap(awardPropIdList.value, true); // 2nd argument is useCompressed images
     awardPropIdList.value.forEach((val) => {
       let item = allProductMap.get(val);
       tempAwardProps.push({
         award: item.Award,
         name: item["Product name EN"],
-        imageUrl: productImages[val].mainImageCompressed,
+        imageUrl: item.mainImageCompressed,
         description: item["Short Description EN"],
         comments: item["consumers comments"],
-        path: item.path,
+        path: item.pathSlug,
         category: item.keyToCategory,
         subcategory: item.keyToSubcategory,
       });

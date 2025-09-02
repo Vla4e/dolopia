@@ -1,9 +1,10 @@
 <script setup>
-import ProjectsViewMobile from "@/components/ProjectsViewMobile/ProjectsViewMobile.vue";
 import ArrowButton from "@/components/ArrowButton.vue";
-import { inject, onMounted } from "vue";
+import { inject } from "vue";
+
 const { isMobile } = inject("screenSize");
 
+//TODO: solve with existing data in /src/products
 const panels = [
   {
     category: {
@@ -13,19 +14,18 @@ const panels = [
     },
     subcategories: [
       {
-        name: "PASTA SAUCES",
-        route: "pasta-sauces",
+        name: "Pasta sauces",
+        route: "pasta-sauce",
       },
       {
-        name: "TOMATO CREATIONS",
+        name: "Tomato creations",
         route: "tomato-creations",
       },
       {
-        name: "HOMEMADE KETCHUP",
-        route: "ketchup",
+        name: "Ketchups",
+        route: "Ketchup",
       },
     ],
-    imageUrl: new URL("@/assets/tomato-project.png", import.meta.url).href,
   },
   {
     category: {
@@ -36,7 +36,7 @@ const panels = [
     },
     subcategories: [
       {
-        name: "appetizer",
+        name: "appetizers",
         route: "appetizer",
       },
       {
@@ -44,11 +44,10 @@ const panels = [
         route: "vegetable-in-oil",
       },
       {
-        name: "Red pepper pate",
+        name: "Red pepper pates",
         route: "red-pepper-pate",
       },
     ],
-    imageUrl: new URL("@/assets/vegetable-project.png", import.meta.url).href,
   },
   {
     category: {
@@ -70,7 +69,6 @@ const panels = [
         route: "candied-fruit",
       },
     ],
-    imageUrl: new URL("@/assets/fruit-project.png", import.meta.url).href,
   },
   {
     category: {
@@ -92,7 +90,6 @@ const panels = [
         route: "seafood-pasta",
       },
     ],
-    imageUrl: new URL("@/assets/pasta-project.png", import.meta.url).href,
   },
 ];
 </script>
@@ -107,7 +104,7 @@ const panels = [
       :showDropdown="false"
       v-if="!isMobile"
     />
-    <div v-if="!isMobile" class="panel-container">
+    <div class="panel-container">
       <div
         v-for="(panel, idx) in panels"
         :key="idx"
@@ -116,7 +113,11 @@ const panels = [
       >
         <div class="panel-half text-panel">
           <div class="category">
-            <router-link :to="`/projects/${panel.category.route}`" class="category-name" v-html="panel.category.name"></router-link>
+            <router-link
+              :to="`/projects/${panel.category.route}`"
+              class="category-name"
+              v-html="panel.category.name"
+            ></router-link>
             <span class="category-description">{{ panel.category.description }}</span>
           </div>
 
@@ -124,15 +125,13 @@ const panels = [
             <router-link
               v-for="subcategory in panel.subcategories"
               :key="subcategory.name"
-              :to="
-                {
-                  name: 'subcategory-overview',
-                  params: {
-                    category: panel.category.route,
-                    subcategory: subcategory.route,
-                  },
-                }
-              "
+              :to="{
+                name: 'subcategory-overview',
+                params: {
+                  category: panel.category.route,
+                  subcategory: subcategory.route,
+                },
+              }"
               class="subcategory"
             >
               {{ subcategory.name }}
@@ -140,12 +139,10 @@ const panels = [
           </div>
         </div>
 
-        <div class="panel-half image-panel">
-          <!-- <img :src="panel.imageUrl" class="category-image"/> -->
+        <div v-if="!isMobile" class="panel-half filler-panel">
         </div>
       </div>
     </div>
-    <ProjectsViewMobile v-if="isMobile" />
   </div>
 </template>
 
@@ -168,23 +165,36 @@ const panels = [
     grid-template-columns: 50% 50%;
     flex-grow: 1;
     max-height: 100vh;
+    @media (max-width: 450px) {
+      display: flex;
+      flex-direction: column;
+      width: 100vw;
+    }
     .panel {
       width: 100%;
       height: 100%;
+      aspect-ratio: 16 / 9;
       display: flex;
       justify-content: space-around;
       align-items: center;
-      // flex-direction: column;
-      // border: 1px solid gray;
+
+      @media (max-width: 450px) {
+        height: auto;
+        aspect-ratio: 9 / 16;
+        background-position: center;
+        // padding-bottom: 45%; //move centered text up by 45% of panel height
+      }
       .panel-half {
         width: 100%;
         height: 100%;
-        // background: #CEEAEC;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        // border: 1px solid black;
+        @media (max-width: 450px){
+          justify-content: flex-start;
+          padding-top: 15%;
+        }
         .category-image {
           width: 100%;
           height: 100%;
@@ -204,13 +214,13 @@ const panels = [
             font-size: 36px;
             font-style: normal;
             font-weight: 400;
-            line-height: 1.2; /* 66.667% */
+            line-height: 1.2;
             text-transform: uppercase;
             transition: none;
-            &:hover{
+            &:hover {
               transform: scale(1.05);
             }
-            @media(max-width: 1600px) and (max-height: 900px){
+            @media (max-width: 1600px) and (max-height: 900px) {
               font-size: 28px;
             }
           }
@@ -221,9 +231,9 @@ const panels = [
             font-size: 14px;
             font-style: normal;
             font-weight: 400;
-            line-height: 1.3; /* 128.571% */
+            line-height: 1.3;
             letter-spacing: 1.26px;
-            @media(max-width: 1600px) and (max-height: 900px){
+            @media (max-width: 1600px) and (max-height: 900px) {
               font-size: 12px;
             }
           }
@@ -234,6 +244,10 @@ const panels = [
           max-width: 80%;
           margin-left: auto;
           margin-right: auto;
+          @media(max-width: 450px){
+            row-gap: 10px;
+            margin-top: 15px;
+          }
           .subcategory {
             color: #000;
             text-align: center;
@@ -241,13 +255,13 @@ const panels = [
             font-size: 16px;
             font-style: normal;
             font-weight: 400;
-            line-height: 24px; /* 150% */
+            line-height: 24px;
             text-transform: uppercase;
             transition: none;
-            @media(max-width: 1600px) and (max-height: 900px){
+            @media (max-width: 1600px) and (max-height: 900px) {
               font-size: 14px;
             }
-            &:hover{
+            &:hover {
               transform: scale(1.05);
             }
           }
@@ -257,28 +271,40 @@ const panels = [
         background-image: url("@/assets/project_showcase_images/16_9/tomato_16_9.jpg");
         background-size: cover;
         background-repeat: no-repeat;
+        @media (max-width: 450px) {
+          background-image: url("@/assets/project_showcase_images/mobile/tomato-project.png");
+        }
       }
       &-1 {
         background-image: url("@/assets/project_showcase_images/16_9/vegetable_16_9.jpg");
         background-size: cover;
         background-repeat: no-repeat;
+        @media (max-width: 450px) {
+          background-image: url("@/assets/project_showcase_images/mobile/vegetable-project.png");
+        }
       }
       &-2 {
         background-image: url("@/assets/project_showcase_images/16_9/fruit_16_9.jpg");
         background-size: cover;
         background-repeat: no-repeat;
+        @media (max-width: 450px) {
+          background-image: url("@/assets/project_showcase_images/mobile/fruit-project.png");
+        }
       }
       &-3 {
         background-image: url("@/assets/project_showcase_images/16_9/pasta_16_9.jpg");
         background-size: cover;
         background-repeat: no-repeat;
+        @media (max-width: 450px) {
+          background-image: url("@/assets/project_showcase_images/mobile/pasta-project.png");
+        }
       }
       &-0,
       &-1 {
         .text-panel {
           order: 1;
         }
-        .image-panel {
+        .filler-panel {
           order: 2;
         }
       }
@@ -287,13 +313,9 @@ const panels = [
         .text-panel {
           order: 2;
         }
-        .image-panel {
+        .filler-panel {
           order: 1;
         }
-      }
-      .text-panel {
-      }
-      .image-panel {
       }
     }
   }

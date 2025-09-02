@@ -85,6 +85,11 @@ export function initializeProductImages(useCompressed = true) {
     const imageUrls = getImageUrlsForCode(code, useCompressed);
     
     // Modify the existing product data object in place
+    if(!imageUrls.mainImageCompressed){
+      imageUrls.mainImageCompressed = imageUrls.mainImage
+    }
+    // console.log(!!imageUrls.mainImageCompressed)
+    // console.log(!!imageUrls.mainImage)
     productData.mainImage = imageUrls.mainImage;
     productData.mainImageCompressed = imageUrls.mainImageCompressed;
     productData.shadow = imageUrls.shadow;

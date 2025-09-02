@@ -10,7 +10,7 @@ const panels = [
       route: "tomato-project",
       subcategoryRoute: "pasta-sauces",
       imageUrl: new URL(
-        "@/assets/project_showcase_images/mobile/tomato-project.png",
+        "@/assets/project_showcase_images/tomato-project.png",
         import.meta.url
       ).href,
     },
@@ -23,7 +23,7 @@ const panels = [
       route: "vegetable-project",
       subcategoryRoute: "jam",
       imageUrl: new URL(
-        "@/assets/project_showcase_images/mobile/vegetable-project.png",
+        "@/assets/project_showcase_images/vegetable-project.png",
         import.meta.url
       ).href,
     },
@@ -35,7 +35,7 @@ const panels = [
       route: "pasta-project",
       subcategoryRoute: "traditional-pasta",
       imageUrl: new URL(
-        "@/assets/project_showcase_images/mobile/pasta-project.png",
+        "@/assets/project_showcase_images/pasta-project.png",
         import.meta.url
       ).href,
     },
@@ -47,7 +47,7 @@ const panels = [
       route: "fruit-project",
       subcategoryRoute: "appetizer",
       imageUrl: new URL(
-        "@/assets/project_showcase_images/mobile/fruit-project.png",
+        "@/assets/project_showcase_images/fruit-project.png",
         import.meta.url
       ).href,
     },

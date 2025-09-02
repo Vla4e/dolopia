@@ -35,6 +35,21 @@ const router = createRouter({
       }
     },
     {
+      // Alias for /catalog page
+      path: '/projects',
+      name: 'projects-overview',
+      component: () => import('../views/ProjectsView.vue'),
+      meta: { 
+        hasNavbar: false,
+        hasFooter: false,
+        hasNavbarMobile: true,
+        floatingNavbarMobile: true,
+        floatingNavbar: false,
+        floatingFooter: false,
+        fullWidthPage: true
+      }
+    },
+    {
       // Leads to AllProductsView with defaulted tomato-project
       path: '/all-products', 
       name: 'all-products',
@@ -49,21 +64,6 @@ const router = createRouter({
         fullWidthPage: true,
         showRouterArrow: false,
         showDropdown: true
-      }
-    },
-    {
-      // Alias for /all-products page
-      path: '/projects',
-      name: 'projects-overview',
-      component: () => import('../views/ProjectsView.vue'),
-      meta: { 
-        hasNavbar: false,
-        hasFooter: false,
-        hasNavbarMobile: true,
-        floatingNavbarMobile: true,
-        floatingNavbar: false,
-        floatingFooter: false,
-        fullWidthPage: true
       }
     },
     {
@@ -182,9 +182,12 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   console.log("Router: TO ->", JSON.parse(JSON.stringify(to)));
   try {
-    await preloadRouteComponents(to); 
+    await preloadRouteComponents(to);
+    console.log("Successful preload")
     if (to.name === 'projects') {
+      console.log("going to projects", to.params)
       const resolution = await handleProjectRouteParameters(to.params)
+      console.log("Handled route params -> ", resolution)
       switch (resolution.status) {
         case 'VALID':
           next();
