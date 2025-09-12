@@ -337,17 +337,18 @@ function cycleAward(direction) {
   transform: translateX(100%);
 }
 
-/* Styling for navigation buttons */
+
 .nav-button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  // background: rgba(255, 0, 0, 0.7); // Example styling
+  background: none;
+  background-color: none;
   color: white;
   padding: 10px 15px;
   border: none;
   cursor: pointer;
-  z-index: 10; // Ensure buttons are on top
+  z-index: 10;
   .chevron{
     width: 30px;
     height: 30px;

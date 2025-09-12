@@ -1,15 +1,18 @@
 <script setup>
-import {
-  ref,
-  watch,
-  computed,
-  provide,
-  onMounted,
-  inject,
-  onBeforeUnmount,
-  nextTick,
-} from "vue";
-import { RouterLink, RouterView, useRoute } from "vue-router";
+// App.vue
+//Vue
+import { ref, computed, provide, inject, onBeforeUnmount, nextTick, watch } from "vue";
+import { RouterView, useRouter, useRoute } from "vue-router";
+
+let route = useRoute();
+let router = useRouter();
+let isRoutingToAboutView = ref(false);
+router.beforeResolve((to, from) => {
+  if (to.name === "about") {
+    isRoutingToAboutView.value = true;
+  }
+});
+//Components
 import Navbar from "./components/Navbar.vue";
 import Footer from "./components/Footer.vue";
 import Sidebar from "./components/Sidebar/Sidebar.vue";
@@ -17,6 +20,7 @@ import ProjectCatalogMobile from "./components/ProjectCatalogMobile.vue";
 import ContactForm from "./components/ContactForm/ContactForm.vue";
 import ErrorPopup from "./components/ErrorPopup/ErrorPopup.vue";
 
+//Stores
 import { useMenuStore } from "./store/menu";
 const menuStore = useMenuStore();
 let showSidebar = computed(() => {
@@ -26,10 +30,12 @@ let showContactForm = computed(() => {
   return menuStore.showContactForm;
 });
 
+//Composables
 import { useScreenSize } from "./composables/useScreenSize";
 const { isMobile, isTablet, isDesktop } = useScreenSize();
 provide("screenSize", { isMobile, isTablet, isDesktop });
 
+//Eventbus
 const emitter = inject("emitter");
 let mountFinished = ref(false);
 emitter.on("mountFinished", (e) => {
@@ -37,47 +43,64 @@ emitter.on("mountFinished", (e) => {
     mountFinished.value = true;
   }, 700);
 });
-
 onBeforeUnmount(() => {
   emitter.off("mountFinished");
 });
 
-// let route = useRoute();
-// //
-// // Scroll position preservation
-// let savedScrollPosition = ref(0);
-// let viewContainer = ref(null);
+//Transition optimization and smoothness
+import { useTransitionStore } from "./store/transition";
+const transitionStore = useTransitionStore();
+const routerWrapper = ref(null);
 
-// const preserveScrollPosition = () => {
-//   if (viewContainer.value) {
-//     savedScrollPosition.value = viewContainer.value.scrollTop;
-//   }
-// };
+const onBeforeLeave = (el) => {
+  // window.scrollTo({
+  //   top: 0,
+  //   // behavior: "smooth",
+  // });
+  if (isRoutingToAboutView.value) return;
+  console.log("OnBeforeLeave, route ->", route.name);
+  if (routerWrapper.value && el) {
+    const rect = el.getBoundingClientRect();
 
-// const restoreScrollPosition = () => {
-//   if (viewContainer.value && savedScrollPosition.value > 0) {
-//     nextTick(() => {
-//       viewContainer.value.scrollTop = savedScrollPosition.value;
-//       savedScrollPosition.value = 0;
-//     });
-//   }
-// };
+    el.style.position = "absolute";
+    el.style.top = "0";
+    el.style.left = "0";
+    el.style.width = "100%";
+    console.log("I set the height -> ", routerWrapper.value.style.minHeight);
+  }
+};
 
-// watch(
-//   () => route.name,
-//   (newRoute, oldRoute) => {
-//     // Preserve scroll position before route change
-//     if (oldRoute) {
-//       preserveScrollPosition();
-//     }
+const onBeforeEnter = (el) => {
+  console.log("onBeforeEnter, route ->", route.name);
 
-//     // Restore scroll position after transition
-//     setTimeout(() => {
-//       restoreScrollPosition();
-//     }, 550); // Slightly after transition completes
-//   },
-//   { immediate: true }
-// );
+  if (route.name !== "about") {
+    transitionStore.setTransitioning(false);
+  }
+  transitionStore.setTransitioning(true);
+  if (el && routerWrapper.value) {
+    el.style.position = "absolute";
+    el.style.top = "0";
+    el.style.left = "0";
+    el.style.width = "100%";
+  }
+};
+
+const onAfterEnter = (el) => {
+  console.log("onAfterEnter, route ->", route.name);
+  transitionStore.setTransitioning(false);
+
+  if (routerWrapper.value) {
+    routerWrapper.value.style.minHeight = "";
+    console.log("Should've set minHeight -> ", routerWrapper.value.style.minHeight);
+  }
+
+  if (el) {
+    el.style.position = "";
+    el.style.top = "";
+    el.style.left = "";
+    el.style.width = "";
+  }
+};
 </script>
 
 <template>
@@ -96,16 +119,18 @@ onBeforeUnmount(() => {
   <Navbar />
 
   <main class="view-container" ref="viewContainer">
-    <RouterView v-slot="{ Component, route }">
-      <Transition name="slide">
-        <component
-          :is="Component"
-          :key="route.path"
-          class="page-container"
-          :class="{ 'full-width': $route.meta.fullWidthPage }"
-        />
-      </Transition>
-    </RouterView>
+    <div class="router-wrapper" ref="routerWrapper">
+      <RouterView v-slot="{ Component, route }">
+        <Transition
+          name="slide"
+          @before-leave="onBeforeLeave"
+          @before-enter="onBeforeEnter"
+          @after-enter="onAfterEnter"
+        >
+          <component :is="Component" :key="route.path" class="page-container" />
+        </Transition>
+      </RouterView>
+    </div>
   </main>
 
   <ProjectCatalogMobile v-if="isMobile && route.name === 'home' && mountFinished" />
@@ -131,14 +156,21 @@ footer {
   flex-direction: column;
   justify-content: center;
   position: relative;
-  @media (min-width: 451px) {
-    // position: absolute;
-  }
+
   @media (max-width: 450px) {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
 }
+
+.router-wrapper {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
 .page-container {
   height: 100%;
   min-height: 100vh;
@@ -146,12 +178,7 @@ footer {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  transition: width 0.2s ease;
   position: relative;
-  &.full-width {
-    width: 100%;
-    margin: 0;
-  }
 }
 
 .floating-footer {
@@ -163,32 +190,26 @@ footer {
   transform: translateY(0);
 }
 
-/* Transitions */
-/* Page Slide */
+//Transitions
 .slide-enter-active,
 .slide-leave-active {
-    transition: transform 0.5s linear;
-    position: absolute; /* Keep absolute */
-    width: 100%; /* Ensure both take full width */
-    height: 100%; /* Ensure both take full height */
-    top: 0; /* Align to top */
-    left: 0; /* Align to left */
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .slide-enter-from {
-    transform: translateX(100%);
+  transform: translateX(100%);
 }
 
 .slide-enter-to {
-    transform: translateX(0%);
+  transform: translateX(0%);
 }
 
 .slide-leave-from {
-    transform: translateX(0%);
+  transform: translateX(0%);
 }
 
 .slide-leave-to {
-    transform: translateX(-100%);
+  transform: translateX(-100%);
 }
 
 // Sidebar

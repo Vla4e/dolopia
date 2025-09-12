@@ -1,6 +1,6 @@
 <template>
   <router-link :to="routePath" class="arrow-button">
-    <Dropdown v-if="showDropdown" @selectionChange="switchText" />
+    <!-- <Dropdown v-if="showDropdown" @selectionChange="switchText" /> -->
     <span v-if="buttonText !== ''" class="text">{{ buttonText }}</span>
     <img
       v-show="showArrow"
@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import Dropdown from "./Dropdown/Dropdown.vue";
+// import Dropdown from "./Dropdown/Dropdown.vue";
 import { onMounted, ref } from "vue";
 
 
@@ -37,11 +37,11 @@ const props = defineProps({
     required: false,
     default: true,
   },
-  showDropdown: {
-    type: Boolean,
-    required: false,
-    default: true,
-  },
+  // showDropdown: {
+  //   type: Boolean,
+  //   required: false,
+  //   default: true,
+  // },
   arrowDirection: {
     type: String,
     required: false,

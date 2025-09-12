@@ -1,3 +1,4 @@
+// Great Taste Award 1 star
 export const gta1 = [
   "MFM260",
   "MSP280",
@@ -9,12 +10,12 @@ export const gta1 = [
   "KRS500",
   "KLSA500"
 ]
-
+// Great Taste Award 2 star
 export const gta2 = [
   "MMML200",
   "STF8250"
 ]
-
+// Dalemaine Silver Award
 export const silver = [
   "MLE280",
   "MPO280"

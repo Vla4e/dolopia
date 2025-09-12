@@ -52,7 +52,6 @@
       </div>
       <ArrowButton
         :routePath="'/projects'"
-        :showDropdown="false"
         :buttonText="'Explore'"
       />
     </section>

@@ -1,14 +1,10 @@
 <script setup>
 import VideoShowcase from "@/components/AboutView/VideoShowcase.vue";
 import howItStarted from "@/assets/about/beginning/how-it-all-started.png";
-// import ScrollIndicator from "../ScrollIndicator.vue";
-import { watch, ref, inject, onUnmounted, nextTick } from "vue";
-
-import { useScrollStore } from "@/store/scroll.js";
-const scroll = useScrollStore();
+import { watch, ref } from "vue";
+import { useWithinPhaseScroll } from "@/composables/useWithinPhaseScroll";
 
 const animateInText = ref(false);
-const isAtBottom = ref(false);
 
 const props = defineProps({
   phaseId: {
@@ -17,17 +13,22 @@ const props = defineProps({
   },
 });
 
-const checkScrollEnd = (event) => {
-  const element = event.target;
-  // Check if scrolled to the bottom (with a small threshold for precision)
-  if (element.scrollHeight - element.scrollTop <= element.clientHeight + 1) {
-    isAtBottom.value = true;
-    scroll.ignoreScrollCallbacks = false;
-  } else {
-    isAtBottom.value = false;
-    scroll.ignoreScrollCallbacks = true;
+// Initialize the phase scroll composable
+const {
+  isAtTop,
+  isAtBottom,
+  initializeScrollablePhase,
+  initializeStaticPhase
+} = useWithinPhaseScroll({
+  containerSelector: '.phase-8',
+  scrollThreshold: 5,
+  onPhaseEnter: (context) => {
+    console.log('Phase scroll initialized:', context);
+  },
+  onPhaseExit: () => {
+    console.log('Phase scroll cleaned up');
   }
-};
+});
 
 watch(
   () => props.phaseId,
@@ -37,35 +38,23 @@ watch(
     // Reset text animation
     animateInText.value = false;
 
-
     if (newPhaseId === 7) {
+      // Static phase - just enable normal phase cycling
+      initializeStaticPhase();
+      
       setTimeout(() => {
         animateInText.value = true;
       }, 300);
-      scroll.ignoreScrollCallbacks = false;
     }
 
     if (newPhaseId === 8) {
-      await nextTick();
-      scroll.ignoreScrollCallbacks = true;
-      const phase8Element = document.querySelector(".phase-8");
-      if (phase8Element) {
-        phase8Element.addEventListener("scroll", checkScrollEnd);
-      }
+      // Scrollable phase - set up internal scrolling with boundary detection
+      await initializeScrollablePhase();
     }
   },
   { immediate: true }
 );
-
-onUnmounted(() => {
-  const phase8Element = document.querySelector(".phase-8");
-  if (phase8Element) {
-    phase8Element.removeEventListener("scroll", checkScrollEnd);
-  }
-  scroll.ignoreScrollCallbacks = false;
-});
 </script>
-
 
 <template>
   <div class="phase-container">
@@ -83,7 +72,12 @@ onUnmounted(() => {
       <div v-else-if="props.phaseId === 8" class="phase phase-8" key="phase-8">
         <VideoShowcase :key="'passion'" side="left" sectionId="passion" />
         <VideoShowcase :key="'quality'" side="right" sectionId="quality" />
-        <!-- <ScrollIndicator :phaseId="phaseId" :disappearAtPhaseId="9"/> -->
+        
+        <!-- Debug info - remove in production -->
+        <div class="debug-info" style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 10px; font-size: 12px;">
+          At Top: {{ isAtTop }}<br>
+          At Bottom: {{ isAtBottom }}
+        </div>
       </div>
     </Transition>
   </div>

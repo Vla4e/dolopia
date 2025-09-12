@@ -35,7 +35,6 @@ const checkScrollEnd = (event) => {
 };
 
 watch(() => props.phaseId, async (newPhaseId) => {
-  console.log("Got phaseId ADVANTAGE", newPhaseId);
   
   // Reset text animation
   animateInText.value = false;

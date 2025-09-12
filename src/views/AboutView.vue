@@ -1,5 +1,5 @@
 <script setup>
-
+//AboutView.vue
 import { ref, computed, defineAsyncComponent, inject, onUnmounted, watch } from "vue";
 import { useScrollDirection } from "@/composables/useScrollDirection";
 
@@ -53,6 +53,7 @@ function cyclePhase(direction) {
   }, 800) //adjust to transition duration based on currentTransition styling
 }
 
+//Scroll override disabled within Advantage, Beginning.vue via useScrollStore to allow for native scrolling through component.
 let hasScrolledDown = ref(false)
 useScrollDirection(
   () => cyclePhase(backward), // onScrollUp

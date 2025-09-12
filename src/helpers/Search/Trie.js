@@ -60,6 +60,29 @@ class ProductSearchTrie {
     }
   }
 
+  insertWordsForMatching(productId, text, priority) {
+    const normalizedText = this.normalize(text);
+    const words = normalizedText.split(' ')
+      .filter(word => word.length > 0 && !STOP_WORDS.has(word));
+
+    words.forEach(word => {
+      // Index each word for prefix matching
+      let node = this.root;
+      for (const char of word) {
+        if (!node.children[char]) {
+          node.children[char] = new TrieNode();
+        }
+        node = node.children[char];
+        
+        // Store product at every node for prefix matching within words
+        const existingProduct = node.products.get(productId);
+        if (!existingProduct || priority < existingProduct.priority) {
+          node.products.set(productId, { priority, matchType: 'prefix' });
+        }
+      }
+    });
+  }
+
   // insert words for exact matching
   insertForExactMatching(productId, text, priority) {
     const normalizedText = this.normalize(text);
@@ -84,7 +107,6 @@ class ProductSearchTrie {
   }
 
   findMatches(query) {
-    console.log("Finding matches")
     const normalizedQuery = this.normalize(query);
     if (!normalizedQuery) return [];
 
@@ -95,7 +117,7 @@ class ProductSearchTrie {
       }
       node = node.children[char];
     }
-    
+    console.log("node ->", node)
     return this.collectAllProducts(node);
   }
 
@@ -167,7 +189,8 @@ class ProductSearchTrie {
     
     productMap.forEach((product, productId) => {
       if (product['Product name EN']) {
-        this.insertForPrefixMatching(productId, product['Product name EN'], Priority.NORMAL);
+        // this.insertForPrefixMatching(productId, product['Product name EN'], Priority.NORMAL);
+        this.insertWordsForMatching(productId, product['Product name EN'], Priority.NORMAL);
       }
       
       if (product['keyToSubcategory']) {

@@ -101,7 +101,6 @@ const panels = [
       :buttonText="''"
       :showArrow="true"
       :arrowDirection="'left'"
-      :showDropdown="false"
       v-if="!isMobile"
     />
     <div class="panel-container">

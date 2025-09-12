@@ -12,12 +12,23 @@ const { isFooterVisible, handleMouseEnter, handleMouseLeave } = useScrollFooter(
 
 let showFooterRouteMeta = ref(true);
 let floatingFooter = ref(true);
+let pinnedFooter = ref(false);
 
 watch(
   () => route.name,
   () => {
-    showFooterRouteMeta.value = route.meta.hasFooter;
-    floatingFooter.value = route.meta.floatingFooter;
+    const footerMeta = isMobile.value ? route.meta.footer?.mobile : route.meta.footer?.desktop;
+    
+    if (footerMeta) {
+      showFooterRouteMeta.value = footerMeta.show;
+      floatingFooter.value = footerMeta.floating;
+      pinnedFooter.value = footerMeta.pinned || false;
+    } else {
+      // Fallback to default values
+      showFooterRouteMeta.value = true;
+      floatingFooter.value = true;
+      pinnedFooter.value = false;
+    }
   },
   { immediate: true }
 );
@@ -31,23 +42,33 @@ const finalFloatingFooter = computed(() => {
   return floatingFooter.value || !isFooterVisible.value;
 });
 
+const footerClasses = computed(() => {
+  const classes = [];
+  
+  if (finalFloatingFooter.value) {
+    classes.push('floating-footer');
+    
+    if (pinnedFooter.value) {
+      classes.push('pinned');
+    }
+  }
+  
+  return classes.join(' ');
+});
+
 let computeShowArrow = computed(() => {
   if (route.meta?.showRouterArrow) {
     return true;
   } else return false;
 });
-let computeShowDropdown = computed(() => {
-  if (route.meta?.showDropdown) {
-    return true;
-  } else return false;
-});
+
 </script>
 
 <template>
   <Transition name="slide-up">
     <footer
       v-show="finalShowFooter"
-      :class="{ 'floating-footer': finalFloatingFooter }"
+      :class="footerClasses"
       @mouseenter="handleMouseEnter"
       @mouseleave="handleMouseLeave"
     >
@@ -70,7 +91,6 @@ let computeShowDropdown = computed(() => {
           v-if="computeShowArrow"
           class="footer-arrow"
           :routePath="'/catalog'"
-          :showDropdown="false"
           :buttonText="'Explore projects'"
         />
       </div>
@@ -81,12 +101,25 @@ let computeShowDropdown = computed(() => {
 <style lang="scss" scoped>
 footer {
   z-index: 2;
+  
   &.floating-footer {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     z-index: 1000;
+    
+    &.pinned {
+      position: absolute !important;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+      background: linear-gradient(
+        to top,
+        rgba(255, 255, 255, 0.95) 0%,
+        rgba(255, 255, 255, 0.9) 100%
+      );
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
   }
 }
 
@@ -157,7 +190,6 @@ footer {
   isolation: isolate;
 }
 
-
 //FOOTER slide up
 .slide-up-enter-active,
 .slide-up-leave-active {
@@ -175,5 +207,4 @@ footer {
   transform: translateY(0);
   opacity: 1;
 }
-
 </style>

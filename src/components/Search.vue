@@ -9,26 +9,26 @@ import { allProductMap } from "@/assets/products/allProductMap";
 import { subcategoryFullNames } from "@/assets/products/categoryToSubcategory";
 
 import { useTrieStore } from "@/store/trie";
-const trieStore = useTrieStore();
-let { TrieTree } = trieStore;
+import { ProductSearchTrie as TrieTree } from "@/helpers/Search/Trie";
+// const trieStore = useTrieStore();
+// let { TrieTree } = trieStore;
+
 
 import { useDebounceFn, useEventListener } from "@vueuse/core";
 let isSearching = ref(false);
 let showResults = ref(false);
-
-let searchInput = ref();
 let searchTerm = ref("");
 const minimumSearchTermLength = 3;
 let searchResults = ref([]);
 let searchResultsMapped = ref([]);
-
+const debounceDelay = 150; //ms
 const debouncedSearch = useDebounceFn(
   (term) => {
     if (term.length < minimumSearchTermLength) {
       // exit if search term is too short
+      searchResultsMapped.value = [];
       return;
     }
-
     searchResults.value = TrieTree.findMatches(term);
 
     let tempArray = [];
@@ -37,34 +37,31 @@ const debouncedSearch = useDebounceFn(
       tempArray.push(allProductMap.get(res.productId));
     });
     searchResultsMapped.value = tempArray; //assign to rerender only once instead of per iteration
-    isSearching.value = false
+    isSearching.value = false;
     showResults.value = true;
-    console.log("Should show results")
   },
-  300,
+  debounceDelay,
   { maxWait: 600 }
 );
-
 watch(searchTerm, async (val) => {
   isSearching.value = true;
   debouncedSearch(val);
 });
 
+let searchInputContainer = ref();
 onMounted(() => {
-  console.log("Search input val", searchInput.value);
-  if (searchInput.value) {
-    searchInput.value.addEventListener("focusout", ()=> {
-      showResults.value = false;
-    });
-    searchInput.value.addEventListener("focusin", ()=> {
-      showResults.value = true;
-    });
-  }
+  //automatic cleanup on listeners done by vueuse lib via useEventListener
+  useEventListener(searchInputContainer, "focusout", () => {
+    showResults.value = false;
+  });
+  useEventListener(searchInputContainer, "focusin", () => {
+    showResults.value = true;
+  });
 });
 </script>
 
 <template>
-  <div ref="searchInput" class="search-container">
+  <div ref="searchInputContainer" class="search-container">
     <div class="input-container">
       <img
         src="@/assets/search-icon.png"
@@ -76,11 +73,16 @@ onMounted(() => {
       <!-- <span class="clear-input">x</span> -->
       <Transition name="fade-in-out">
         <ul v-show="showResults" class="results">
-          <li v-for="result in searchResultsMapped" class="result-item">
+          <li
+            v-if="searchResultsMapped.length"
+            v-for="result in searchResultsMapped"
+            class="result-item"
+          >
             <router-link
               :to="
                 '/projects/' +
-                result.keyToCategory + '-project' +
+                result.keyToCategory +
+                '-project' +
                 '/' +
                 result.keyToSubcategory +
                 '/' +
@@ -98,6 +100,13 @@ onMounted(() => {
               </span>
             </router-link>
           </li>
+          <li v-else-if="searchTerm.length > 3" class="result-item result-link">
+            <div class="result-link result-link-no-result">
+              <span class="result-name"
+                >Oops, couldn't find anything for "{{ searchTerm }}"</span
+              >
+            </div>
+          </li>
         </ul>
       </Transition>
     </div>
@@ -113,21 +122,24 @@ onMounted(() => {
   position: relative;
   .input-container {
     display: flex;
-    width: 60%;
+    width: 45%;
     justify-content: flex-end;
     .input-field {
-      width: 20%;
+      width: 35%;
       -webkit-transition: width 0.2s ease-out;
       -moz-transition: width 0.2s ease-out;
       -o-transition: width 0.2s ease-out;
       transition: width 0.2s ease-out;
       padding: 5px;
+      border: 1px solid #131313;
+      border-radius: 2px;
+      outline: none !important;
       &:active,
       &:focus {
-        width: 60%;
+        width: 100%;
       }
 
-      &::placeholder{
+      &::placeholder {
         color: #4b4b4b;
         font-family: "Century Gothic";
         font-size: 14px;
@@ -135,7 +147,7 @@ onMounted(() => {
         font-weight: 400;
       }
     }
-    .clear-input{
+    .clear-input {
       position: absolute;
       color: black;
       right: 4px;
@@ -146,7 +158,7 @@ onMounted(() => {
     height: 24px;
     margin-right: 5px;
     &.searching {
-      animation: spin 1s linear infinite;
+      animation: pulsate 1s linear infinite;
       transform-origin: center;
     }
   }
@@ -155,6 +167,7 @@ onMounted(() => {
     flex-direction: column;
     // width: 100%;
     max-width: 100%;
+    width: 55%;
     max-height: 40vh;
     position: absolute;
     transform: translateY(50px);
@@ -163,6 +176,7 @@ onMounted(() => {
     padding-inline-start: 0px;
     overflow-y: scroll;
     background: whitesmoke;
+    row-gap: 10px;
     .result-item {
       display: flex;
       align-items: center;
@@ -170,9 +184,6 @@ onMounted(() => {
       cursor: pointer;
       &:not(:last-child) {
         margin-bottom: 5px;
-      }
-      &:hover {
-        background: gainsboro;
       }
       .result-link {
         width: 100%;
@@ -186,7 +197,7 @@ onMounted(() => {
       .result-name {
         width: 70%;
         color: #000;
-        font-family: "Century Gothic";
+        font-family: "Raleway";
         font-size: 16px;
         font-style: normal;
         font-weight: 400;
@@ -195,10 +206,16 @@ onMounted(() => {
         text-transform: capitalize;
         padding: 5px 10px;
         width: 60%;
+        transition: transform 0.3s ease;
+      }
+      &:hover {
+        .result-name {
+          transform: scale(105%);
+        }
       }
       .result-subcategory {
         color: #000;
-        font-family: "Century Gothic";
+        font-family: "Raleway";
         font-size: 14px;
         font-style: normal;
         font-weight: 400;
@@ -207,34 +224,37 @@ onMounted(() => {
         text-transform: capitalize;
         width: 20%;
       }
-      @media(max-width: 1024px){
-        .result-name{
+      @media (max-width: 1024px) {
+        .result-name {
           font-size: 14px;
           padding-left: 5px;
         }
-        .result-subcategory{
+        .result-subcategory {
           font-size: 12px;
         }
-        .result-image{
+        .result-image {
           width: 75px;
+        }
+      }
+      .result-link-no-result{
+        .result-image{
+          width: 0;
+        }
+        .result-subcategory{
+          width: 0;
+        }
+        .result-name{
+          width: 100%;
         }
       }
     }
   }
 }
 
-@keyframes spin {
-  0% {
-    transform: scale(100%);
-  }
-  33% {
-    transform: scale(90%);
-  }
-  66% {
-    transform: scale(100%);
-  }
-  100% {
-    transform: scale(110%);
-  }
+@keyframes pulsate {
+  0% { transform: scale(100%); }
+  33% { transform: scale(90%); }
+  66% { transform: scale(100%); }
+  100% { transform: scale(110%); }
 }
 </style>

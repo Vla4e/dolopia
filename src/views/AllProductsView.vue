@@ -377,7 +377,7 @@ function onBeforeLeave(el) {
           color: #44a0ad;
           text-align: right;
           font-family: "Raleway";
-          font-size: 30px;
+          font-size: 25px;
           font-style: normal;
           line-height: 1.15;
           letter-spacing: 1.26px;
@@ -389,26 +389,26 @@ function onBeforeLeave(el) {
             color: #000;
             font-weight: 700;
             font-family: "Raleway";
-            font-size: 34px;
+            font-size: 30px;
             font-style: normal;
             font-weight: 400;
           }
           @media (max-width: 1600px) {
-            font-size: 56px;
+            font-size: 25px;
             &.active {
-              font-size: 61px;
+              font-size: 30px;
             }
           }
           @media (min-width: 2560px) {
-            font-size: 72px;
+            font-size: 40px;
             &.active {
-              font-size: 79px;
+              font-size: 45px;
             }
           }
           @media (min-width: 3200px) {
-            font-size: 86px;
+            font-size: 50px;
             &.active {
-              font-size: 94px;
+              font-size: 55px;
             }
           }
         }
@@ -451,7 +451,7 @@ function onBeforeLeave(el) {
             line-height: 1.33;
             letter-spacing: 1.08px;
             @media (min-width: 1920px) {
-              font-size: 18px;
+              font-size: 16px;
             }
             @media (min-width: 2560px) {
               font-size: 20px;

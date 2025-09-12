@@ -1,4 +1,5 @@
 // composables/useTextSizing.js
+// TODO: replace with images -> width: 100%. No need to manually adjust text
 import { ref, nextTick, onUnmounted } from 'vue'
 
 export function useTextSizing() {
@@ -86,13 +87,14 @@ export function useTextSizing() {
   async function updateWordFontSizes(containerElement, text, options = {}) {
     const newFontSizes = await calculateWordFontSizes(containerElement, text, options)
     wordFontSizes.value = newFontSizes
-
-    const spanElements = Array.from(containerElement.children)
-    spanElements.forEach((span, id) => {
-      if (id < wordFontSizes.value.length) {
-        span.style.fontSize = wordFontSizes.value[id] + 'px'
-      }
-    })
+    if(containerElement?.children){
+      const spanElements = Array.from(containerElement.children)
+      spanElements.forEach((span, id) => {
+        if (id < wordFontSizes.value.length) {
+          span.style.fontSize = wordFontSizes.value[id] + 'px'
+        }
+      })
+    }
   }
   
   function createResizeHandler(callback, delay = 150) {

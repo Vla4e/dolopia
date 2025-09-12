@@ -1,6 +1,49 @@
+//index.js router
 import { createRouter, createWebHistory } from 'vue-router';
 import { handleProjectRouteParameters } from './routeParameterHandler';
 import { isRouteLoading, preloadRouteComponents } from './routePreloader';
+
+
+/*
+floating - doesn't take up viewport space
+pinned - stays on top of page, doesn't take up viewport space
+otherwise - stays on top, takes up viewport space (pushes down components)
+*/
+const DEFAULT_NAVBAR_META = {
+  navbar: {
+    desktop: {
+      show: false,
+      floating: false,
+      pinned: false,
+    },
+    mobile: {
+      show: false,
+      floating: false,
+      pinned: false,
+    }
+  },
+
+  footer: {
+    desktop: {
+      show: true,
+      floating: true,
+      pinned: false,
+    },
+    mobile: {
+      show: true,
+      floating: true,
+      pinned: false,
+    }
+  },
+
+  showRouterArrow: false,
+};
+
+// merge default and override it with params
+const createRouteMeta = (overrides = {}) => ({
+  ...DEFAULT_NAVBAR_META,
+  ...overrides
+});
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,98 +52,169 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: () => import('../views/HomeView.vue'),
-      meta: { 
-        hasNavbar: true,
-        hasFooter: true,
-        hasNavbarMobile: true,
-        floatingNavbarMobile: false,
-        floatingNavbar: true,
-        floatingFooter: true,
-        fullWidthPage: false,
+      meta: createRouteMeta({
+        navbar: {
+          desktop: {
+            show: true,
+            floating: true,
+            pinned: false,
+          },
+          mobile: {
+            show: true,
+            floating: true,
+            pinned: true,
+          }
+        },
+        footer: {
+          desktop: {
+            show: true,
+            floating: true,
+            pinned: false
+          },
+          mobile: {
+            show: false,
+            floating: false,
+            pinned: false
+          }
+        },
         showRouterArrow: true
-      }
+      })
     },
+
     {
       path: '/catalog',
       name: 'catalog',
       component: () => import('../views/ProjectsView.vue'),
-      meta: { 
-        hasNavbar: false,
-        hasFooter: false,
-        hasNavbarMobile: true,
-        floatingNavbarMobile: true,
-        floatingNavbar: true,
-        floatingFooter: false,
-        fullWidthPage: true
-      }
+      meta: createRouteMeta({
+        navbar: {
+          desktop: {
+            show: false,
+            floating: true,
+            pinned: false,
+          },
+          mobile: {
+            show: true,
+            floating: true,
+            pinned: false,
+          }
+        },
+        footer: {
+          desktop: {
+            show: false,
+            floating: false,
+          },
+          mobile: {
+            show: false,
+            floating: false,
+          }
+        }
+      })
     },
+
     {
       // Alias for /catalog page
       path: '/projects',
       name: 'projects-overview',
       component: () => import('../views/ProjectsView.vue'),
-      meta: { 
-        hasNavbar: false,
-        hasFooter: false,
-        hasNavbarMobile: true,
-        floatingNavbarMobile: true,
-        floatingNavbar: false,
-        floatingFooter: false,
-        fullWidthPage: true
-      }
+      meta: createRouteMeta({
+        navbar: {
+          desktop: {
+            show: false,
+            floating: false,
+            pinned: false,
+          },
+          mobile: {
+            show: true,
+            floating: true,
+            pinned: false,
+          }
+        },
+        footer: {
+          desktop: {
+            show: false,
+            floating: false,
+          },
+          mobile: {
+            show: false,
+            floating: false,
+          }
+        }
+      })
     },
+
     {
       // Leads to AllProductsView with defaulted tomato-project
       path: '/all-products', 
       name: 'all-products',
-      component: () => import('../views/AllProductsView.vue'), // Remove the redirect, use a component instead
-      meta: { 
-        hasNavbar: true,
-        hasFooter: true,
-        hasNavbarMobile: true,
-        floatingNavbarMobile: true,
-        floatingNavbar: true,
-        floatingFooter: false,
-        fullWidthPage: true,
-        showRouterArrow: false,
-        showDropdown: true
-      }
+      component: () => import('../views/AllProductsView.vue'),
+      meta: createRouteMeta({
+        navbar: {
+          desktop: {
+            show: true,
+            floating: true,
+            pinned: false,
+          },
+          mobile: {
+            show: true,
+            floating: true,
+            pinned: false,
+          }
+        },
+        footer: {
+          desktop: {
+            show: true,
+            floating: false,
+          },
+          mobile: {
+            show: true,
+            floating: false,
+          }
+        },
+      })
     },
+
     {
       // Leads to all products view with preselected project (:category)
       path: '/projects/:category',
       name: 'category-overview',
       component: () => import('../views/AllProductsView.vue'),
       props: true,
-      meta: {
-        hasNavbar: true,
-        hasFooter: true,
-        hasNavbarMobile: true,
-        floatingNavbarMobile: true,
-        floatingNavbar: true,
-        floatingFooter: true,
-        fullWidthPage: true,
-        showRouterArrow: false,
-        showDropdown: true
-      }
+      meta: createRouteMeta({
+        navbar: {
+          desktop: {
+            show: true,
+            floating: true,
+            pinned: false,
+          },
+          mobile: {
+            show: true,
+            floating: true,
+            pinned: false,
+          }
+        },
+      })
     },
+
     {
       // Leads to all products view with preselected project and subcategory
       path: '/projects/:category/:subcategory',
       name: 'subcategory-overview',
       component: () => import('../views/AllProductsView.vue'),
       props: true,
-      meta: {
-        hasNavbar: true,
-        hasFooter: true,
-        hasNavbarMobile: true,
-        floatingNavbarMobile: true,
-        floatingNavbar: true,
-        floatingFooter: true,
-        fullWidthPage: true,
-        showRouterArrow: false,
-        showDropdown: true
-      }
+      meta: createRouteMeta({
+        navbar: {
+          desktop: {
+            show: true,
+            floating: true,
+            pinned: false,
+          },
+          mobile: {
+            show: true,
+            floating: true,
+            pinned: false,
+          }
+        },
+      })
     },
 
     {
@@ -113,52 +227,70 @@ const router = createRouter({
         subcategory: route.params.subcategory,
         product: route.params.product,
       }),
-      meta: { 
-        hasNavbar: true,
-        hasFooter: true,
-        hasNavbarMobile: true,
-        floatingNavbarMobile: true,
-        floatingNavbar: true,
-        floatingFooter: true,
-        fullWidthPage: true,
-        showRouterArrow: false,
-        showDropdown: true
-      }
+      meta: createRouteMeta({
+        navbar: {
+          desktop: {
+            show: true,
+            floating: true,
+            pinned: false,
+          },
+          mobile: {
+            show: true,
+            floating: true,
+            pinned: false,
+          }
+        },
+      })
     },
+
     {
       path: '/about',
       name: 'about',
       component: () => import('../views/AboutView.vue'),
-      meta: { 
-        //Navbar
-        hasNavbar: false,
-        hasNavbarMobile: false,
-        floatingNavbarMobile: true,
-        floatingNavbar: true,
-        //Footer
-        hasFooter: false,
-        floatingFooter: true,
-        //
-        showRouterArrow: false,
-        showDropdown: false,
-        fullWidthPage: true
-      }
+      meta: createRouteMeta({
+        navbar: {
+          desktop: {
+            show: true,
+            floating: true,
+            pinned: false,
+          },
+          mobile: {
+            show: false,
+            floating: true,
+            pinned: false,
+          }
+        },
+        footer: {
+          desktop: {
+            show: false,
+            floating: true,
+          },
+          mobile: {
+            show: false,
+            floating: true,
+          }
+        }
+      })
     },
+
     {
       path: '/awards',
       name: 'awards',
       component: () => import('../views/AwardsView.vue'),
-      meta: { 
-        hasNavbar: true,
-        hasFooter: true,
-        hasNavbarMobile: true,
-        floatingNavbarMobile: true,
-        floatingNavbar: true,
-        floatingFooter: true,
-        fullWidthPage: true,
-        showRouterArrow: false,
-        showDropdown: false
-      }
+      meta: createRouteMeta({
+        navbar: {
+          desktop: {
+            show: true,
+            floating: true,
+            pinned: false,
+          },
+          mobile: {
+            show: true,
+            floating: true,
+            pinned: false,
+          }
+        }
+      })
     },
     {
       path: '/:pathMatch(.*)*',
@@ -179,15 +311,12 @@ const router = createRouter({
   // }
 });
 
+
 router.beforeEach(async (to, from, next) => {
-  console.log("Router: TO ->", JSON.parse(JSON.stringify(to)));
   try {
     await preloadRouteComponents(to);
-    console.log("Successful preload")
     if (to.name === 'projects') {
-      console.log("going to projects", to.params)
       const resolution = await handleProjectRouteParameters(to.params)
-      console.log("Handled route params -> ", resolution)
       switch (resolution.status) {
         case 'VALID':
           next();

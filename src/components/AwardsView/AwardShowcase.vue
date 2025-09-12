@@ -19,6 +19,7 @@ let awardedProductMap = {
   gta2: gta2Awarded,
   silver: silverAwarded,
 };
+
 let awardTexts = {
   gta1: "One Golden Star",
   gta2: "Two Golden Stars",
@@ -85,12 +86,12 @@ const carouselSettings = ref({
 const breakpoints = {
   // 700px and up
   700: {
-    itemsToShow: 3,
+    itemsToShow: 3.5,
     snapAlign: 'start',
   },
   // 1024 and up
   1024: {
-    itemsToShow: 3,
+    itemsToShow: 3.5,
     snapAlign: 'start',
   },
 };
@@ -144,7 +145,6 @@ const breakpoints = {
       </div>
     </section>
     <div class="blue-background" />
-    <div class="line" style="position: absolute; left: 50%; width: 1000px; height: 3px; background: red;"></div>
   </div>
 </template>
 
@@ -291,7 +291,7 @@ const breakpoints = {
   .product-image {
     max-width: 100%;
     width: auto !important;
-    height: 350px !important;
+    height: 300px !important;
     margin-left: -27.5%; // value equal to whitespace between actual product in image and its left edge - added to align image with text above.
     transition: transform 0.3s ease;
     display: block;
@@ -303,7 +303,7 @@ const breakpoints = {
 
     position: absolute;
     left: 0%;
-    top: 350px;
+    top: 300px;
 
     width: 120%;
     padding: 10px;
