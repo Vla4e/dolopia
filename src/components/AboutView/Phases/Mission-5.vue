@@ -1,47 +1,49 @@
 <template>
-  <Transition name="slide-up-mission">
-    <section v-if="phaseId === 11" class="phase phase-11" key="phase-11">
-      <div class="image-container">
-        <img :src="missionHeroImage" class="background" alt="Background" />
-      </div>
-      <div :class="{ 'animate-in': animateInText }" class="hero-text-container">
-        <h2>Our mission</h2>
-        <p>
-          To preserve and elevate Greek culinary <br />
-          heritage to the world
-        </p>
-      </div>
-    </section>
-
-    <section v-else-if="phaseId === 12" class="phase phase-12" key="phase-12">
-      <div class="phase-content">
-        <h2>
-          Our goal is to not only preserve the
-          <br/>rich culinary heritage of Greece but to
-          <br/>elevate it, making it accessible to food 
-          <br/>lovers around the globe
-        </h2>
-        <div class="paragraph-container">
+  <div class="phase-container">
+    <Transition name="slide-up-reusable">
+      <section v-if="phaseId === 11" class="phase phase-11" key="phase-11">
+        <div class="image-container">
+          <img :src="missionHeroImage" class="background" alt="Background" />
+        </div>
+        <div :class="{ 'animate-in': animateInText }" class="hero-text-container">
+          <h2>Our mission</h2>
           <p>
-            At Dolopia Savour Creations, we believe in the power of continuous
-            improvement. Our passion for high-quality, authentic flavors drives
-            <br/>us to refine our methods and enhance our products constantly. We are dedicated to
-            sourcing the finest ingredients and
-            <br/>employing innovative techniques to ensure
-            that every product we create meets our high standards for taste and quality.
-          </p>
-          <p>
-            Our team is already hard at work experimenting with new flavors and
-            ingredients, ensuring that we remain at the forefront of the artisanal
-            <br/>foodn movement. As we continue to grow, our mission remains the same: to bring the
-            best of Greek and Mediterranean cuisine to your
-            <br/>table, enriching your culinary
-            experiences with every product we offer.
+            To preserve and elevate Greek culinary <br />
+            heritage to the world
           </p>
         </div>
-      </div>
-    </section>
-  </Transition>
+      </section>
+
+      <section v-else-if="phaseId === 12" class="phase phase-12" key="phase-12">
+        <div class="phase-content">
+          <h2>
+            Our goal is to not only preserve the
+            <br/>rich culinary heritage of Greece but to
+            <br/>elevate it, making it accessible to food 
+            <br/>lovers around the globe
+          </h2>
+          <div class="paragraph-container">
+            <p>
+              At Dolopia Savour Creations, we believe in the power of continuous
+              improvement. Our passion for high-quality, authentic flavors drives
+              <br/>us to refine our methods and enhance our products constantly. We are dedicated to
+              sourcing the finest ingredients and
+              <br/>employing innovative techniques to ensure
+              that every product we create meets our high standards for taste and quality.
+            </p>
+            <p>
+              Our team is already hard at work experimenting with new flavors and
+              ingredients, ensuring that we remain at the forefront of the artisanal
+              <br/>foodn movement. As we continue to grow, our mission remains the same: to bring the
+              best of Greek and Mediterranean cuisine to your
+              <br/>table, enriching your culinary
+              experiences with every product we offer.
+            </p>
+          </div>
+        </div>
+      </section>
+    </Transition>
+  </div>
 </template>
 
 <script setup>
@@ -84,6 +86,12 @@ onUnmounted(() => {});
 </script>
 
 <style lang="scss" scoped>
+.phase-container{
+  min-height: 100vh;
+  width: 100vw;
+  // position: relative;
+  overflow: hidden;
+}
 .phase-11 {
   position: absolute;
   width: 100%;
@@ -173,8 +181,8 @@ onUnmounted(() => {});
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    width: 70%;
-    height: 60%;
+    width: 80%;
+    height: 65%;
     margin: auto;
     @media(min-width: 1920px){
       height: 50%;
@@ -190,6 +198,10 @@ onUnmounted(() => {});
     font-weight: 400;
     line-height: 1.2; /* 116.667% */
     letter-spacing: 2.4px;
+    margin-bottom: 2vh;
+    @media(max-width: 1920px){
+      font-size: 56px;
+    }
     @media (max-width: 1600px) and (max-height: 900px) {
       font-size: 48px;
     }
@@ -212,25 +224,26 @@ onUnmounted(() => {});
       @media (max-width: 1600px) and (max-height: 900px) {
         font-size: 14px;
       }
+      margin-bottom: 2vh;
     }
   }
 }
 
-/* slide-up-advantage transitions */
-.slide-up-advantage-enter-active,
-.slide-up-advantage-leave-active {
+/* slide-up-mission transitions */
+.slide-up-mission-enter-active,
+.slide-up-mission-leave-active {
   transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.slide-up-advantage-enter-from {
+.slide-up-mission-enter-from {
   transform: translateY(100vh);
 }
-.slide-up-advantage-enter-to {
+.slide-up-mission-enter-to {
   transform: translateY(0);
 }
-.slide-up-advantage-leave-from {
+.slide-up-mission-leave-from {
   transform: translateY(0);
 }
-.slide-up-advantage-leave-to {
+.slide-up-mission-leave-to {
   transform: translateY(-100vh);
 }
 </style>

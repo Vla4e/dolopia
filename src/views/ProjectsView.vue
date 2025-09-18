@@ -1,4 +1,5 @@
 <script setup>
+//ProjectsView
 import ArrowButton from "@/components/ArrowButton.vue";
 import { inject } from "vue";
 
@@ -165,9 +166,12 @@ const panels = [
     flex-grow: 1;
     max-height: 100vh;
     @media (max-width: 450px) {
+      background: linear-gradient(to right, #92C5C9, #9FCCD1);
       display: flex;
       flex-direction: column;
       width: 100vw;
+      max-height: 1000vh !important;
+      padding-top: 10vh;
     }
     .panel {
       width: 100%;
@@ -192,7 +196,7 @@ const panels = [
         align-items: center;
         @media (max-width: 450px){
           justify-content: flex-start;
-          padding-top: 15%;
+          padding-top: 8vh;
         }
         .category-image {
           width: 100%;

@@ -6,14 +6,14 @@ import { useScrollDirection } from "@/composables/useScrollDirection";
 const phaseId = ref(0);
 const phaseCount = 15;
 
-//In order of appearance
+//In order of appearance // range = range of phases belonging to component
 const phaseMappings = [
-  { name: 'Introduction', range: [0, 2], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/Introduction.vue')) },
-  { name: 'Projects', range: [3, 6], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/Projects.vue')) },
-  { name: 'Beginning', range: [7, 8], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/Beginning.vue')) },
-  { name: 'Advantage', range: [9, 10], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/Advantage.vue')) },
-  { name: 'Mission', range: [11, 12], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/Mission.vue')) },
-  { name: 'PrivateLabel', range: [13, 14], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/PrivateLabel.vue')) },
+  { name: 'Introduction', range: [0, 2], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/Introduction-1.vue')) },
+  { name: 'Projects', range: [3, 6], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/Projects-2.vue')) },
+  { name: 'Beginning', range: [7, 8], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/Beginning-3.vue')) },
+  { name: 'Advantage', range: [9, 10], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/Advantage-4.vue')) },
+  { name: 'Mission', range: [11, 12], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/Mission-5.vue')) },
+  { name: 'PrivateLabel', range: [13, 14], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/PrivateLabel-6.vue')) },
 ];
 
 const currentPhaseComponent = computed(() => {
@@ -29,7 +29,10 @@ const forward = true;
 const backward = false;
 
 function cyclePhase(direction) {
-  console.log("IsCycling->", isCycling)
+  console.log("IsCycling->", isCycling, phaseId)
+  if(phaseId.value === 14 && direction === forward){
+    return
+  }
   if(isCycling){
     return
   }
@@ -83,11 +86,11 @@ const currentTransition = computed(() => {
   </div>
   
   <!--comment in for testing during development-->
-  <div class="controls">
+  <!-- <div class="controls">
     <button @click="cyclePhase(backward)">PREV</button>
     <span>{{ phaseId }}</span>
     <button @click="cyclePhase(forward)">NEXT</button>
-  </div>
+  </div> -->
 </template>
 
 <style lang="scss" scoped>

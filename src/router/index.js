@@ -15,11 +15,15 @@ const DEFAULT_NAVBAR_META = {
       show: false,
       floating: false,
       pinned: false,
+      blur: false,
+      theme: 'dark'
     },
     mobile: {
       show: false,
       floating: false,
       pinned: false,
+      blur: false,
+      theme: 'dark'
     }
   },
 
@@ -40,10 +44,21 @@ const DEFAULT_NAVBAR_META = {
 };
 
 // merge default and override it with params
-const createRouteMeta = (overrides = {}) => ({
-  ...DEFAULT_NAVBAR_META,
-  ...overrides
-});
+const deepMerge = (target, source) => {
+  const result = { ...target };
+  
+  for (const key in source) {
+    if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+      result[key] = deepMerge(result[key] || {}, source[key]);
+    } else {
+      result[key] = source[key];
+    }
+  }
+  
+  return result;
+};
+
+const createRouteMeta = (overrides = {}) => deepMerge(DEFAULT_NAVBAR_META, overrides);
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -58,11 +73,15 @@ const router = createRouter({
             show: true,
             floating: true,
             pinned: false,
+            blur: true,
+            theme: 'dark'
           },
           mobile: {
             show: true,
             floating: true,
             pinned: true,
+            blur: false,
+            theme: 'dark' // DO THIS DIFFERENTLYYYYYYYYY
           }
         },
         footer: {
@@ -89,13 +108,15 @@ const router = createRouter({
         navbar: {
           desktop: {
             show: false,
-            floating: true,
+            floating: false,
             pinned: false,
+            blur: true
           },
           mobile: {
             show: true,
             floating: true,
             pinned: false,
+            blur: false
           }
         },
         footer: {
@@ -120,13 +141,15 @@ const router = createRouter({
         navbar: {
           desktop: {
             show: false,
-            floating: false,
+            floating: true,
             pinned: false,
+            blur: false
           },
           mobile: {
             show: true,
-            floating: true,
+            floating: false,
             pinned: false,
+            blur: true
           }
         },
         footer: {
@@ -158,6 +181,7 @@ const router = createRouter({
             show: true,
             floating: true,
             pinned: false,
+            theme: "light"
           }
         },
         footer: {
@@ -190,6 +214,7 @@ const router = createRouter({
             show: true,
             floating: true,
             pinned: false,
+            theme: "light"
           }
         },
       })
@@ -212,6 +237,7 @@ const router = createRouter({
             show: true,
             floating: true,
             pinned: false,
+            theme: "light"
           }
         },
       })

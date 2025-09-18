@@ -19,15 +19,20 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits([
+  'accordionToggle'
+])
 let toggled = ref(false);
-function toggleAccordion() {
+function toggleAccordion(e) {
+  console.log("SHOULD TOGGLE")
   toggled.value = !toggled.value;
+  emit('accordionToggle', toggled.value)
 }
 </script>
 
 <template>
   <div :key="heading" class="accordion-container">
-    <h2 @click="toggleAccordion()" class="heading">
+    <h2 @click="toggleAccordion" class="heading">
       <span>{{ heading }}</span>
       <img :class="toggled ? 'toggled' : ''" class="chevron" :src="chevron" />
     </h2>

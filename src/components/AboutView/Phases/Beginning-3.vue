@@ -58,7 +58,7 @@ watch(
 
 <template>
   <div class="phase-container">
-    <Transition name="slide-up-beginning">
+    <Transition name="slide-up-reusable">
       <section v-if="props.phaseId === 7" class="phase phase-7" key="phase-7">
         <div class="image-container">
           <img :src="howItStarted" class="background" alt="Background" />

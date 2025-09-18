@@ -39,8 +39,8 @@ const dataObject = {
       locally sourced ingredients, ensuring that every bite reflects<br/>
       vibrant flavors. Our artisanal production methods involve<br/>
       small-batch crafting, allowing us to maintain a personal touch<br/>
-      and a level of care that large manufacturers cannot replicate.",
-    flavourText: "Artisanal production methods`,
+      and a level of care that large manufacturers cannot replicate."`,
+    flavourText: "Artisanal <br/> production methods",
     videoSource: artisanalVideo,
   },
   essence: {
@@ -52,8 +52,8 @@ const dataObject = {
       sauces, and spreads not only taste better but are also healthier<br/>
       options for you and your family. With Dolopia, you can savor the<br/>
       essence of Mediterranean cuisine, bringing authentic flavors to your<br/>
-      table with ease and confidence.",
-    flavourText: "Savor the essence of Mediterranean cuisine`,
+      table with ease and confidence.`,
+    flavourText: "High-quality products,</br>crafted with care",
     videoSource: highQualityProductsVideo,
   },
   distribution: {
@@ -95,7 +95,9 @@ let currentDataObject = ref({});
 watch(
   () => props.sectionId,
   (newSectionId) => {
+    console.log("For SectionId ---->", newSectionId)
     currentDataObject.value = dataObject[newSectionId];
+    console.log("Current data object ->", currentDataObject.value)
   },
   {
     immediate: true,
@@ -119,7 +121,7 @@ watch(
           disableremoteplayback="true"
           class="video"
         />
-        <img v-else :src="essenceImage" alt="The essence of Dolopia ingredients" />
+        <img v-else class="image" :src="essenceImage" alt="The essence of Dolopia ingredients" />
       </div>
       <span
         v-if="side === 'right'"
@@ -183,6 +185,9 @@ watch(
       word-break: keep-all;
       white-space: nowrap;
       padding: 50px;
+      @media(max-width: 1920px){
+        font-size: 65px !important;
+      }
     }
   }
 
@@ -213,6 +218,9 @@ watch(
       text-align: right;
       word-break: keep-all;
       white-space: nowrap;
+      @media(max-width: 1920px){
+        font-size: 65px;
+      }
     }
   }
 
@@ -220,11 +228,15 @@ watch(
 
   .video-container {
     object-fit: contain;
-    video,
-    img {
-    object-fit: cover !important;
+    video {
+      object-fit: cover !important;
       display: block;
-      object-fit: cover;
+    }
+    img{
+      object-fit: contain !important;
+      display: block;
+      // width: 40vw;
+      // height: auto;
     }
   }
 
@@ -265,9 +277,8 @@ watch(
     line-height: 1.1; /* 100% */
     background-color: rgba(230, 246, 246, 0.70);
   }
-  // == PRE-CALCULATED VIDEO SIZES (PLACEHOLDERS) ==
-  // Define fixed width/height for videos in each section here
 
+  // == PRE-CALCULATED VIDEO SIZING ==
   &.passion .video-container .video {
     width: 41vw;
     height: 75vh;
@@ -284,9 +295,9 @@ watch(
     width: 46vw;
     height: 57.5vh;
   }
-  &.distribution .video-container .video {
-    // width: auto;
-    // height: auto;
+  &.distribution .video-container .image {
+    width: 46vw;
+    height: 57.5vh;
   }
   // 1st vid = 41% width, 85h
 

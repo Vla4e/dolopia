@@ -1,4 +1,4 @@
-//Sidebar menu store
+//Menu store includes sidebar(contact form) flags, and navbar configuration when searching.
 
 import { defineStore } from 'pinia';
 import { ref, reactive, computed, watch, toRaw } from 'vue';
@@ -6,6 +6,12 @@ import { ref, reactive, computed, watch, toRaw } from 'vue';
 
 // console.log("subcategory")
 export const useMenuStore = defineStore('menu', () => {
+
+  const isSearchInputActive = ref(false);
+  function setSearchInputFlag(value){
+    console.log("setting search input flag", value)
+    isSearchInputActive.value  = value;
+  }
 
   const showSidebar = ref(null);
   const showContactForm = ref(null);
@@ -20,7 +26,9 @@ export const useMenuStore = defineStore('menu', () => {
   return {
     showSidebar,
     showContactForm,
+    isSearchInputActive,
     setSidebarFlag,
-    setContactFormFlag
+    setContactFormFlag,
+    setSearchInputFlag
   }
 });

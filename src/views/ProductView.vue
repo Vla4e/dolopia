@@ -82,64 +82,68 @@ onUnmounted(() => {
 
 <template>
   <div class="product-page-container">
-    <ProductViewSkeleton v-if="transitionStore.isPageTransitioning"/>
-    
-    <template v-if="!transitionStore.isPageTransitioning">
-      <ArrowButton
-        :routePath="'/catalog'"
-        :buttonText="''"
-        :showArrow="true"
-        :arrowDirection="'left'"
-        v-if="!isMobile"
-        class="catalog-arrow"
+    <template v-if="!isMobile">
+      <ProductViewSkeleton v-if="transitionStore.isPageTransitioning"/>
+      
+      <template v-if="!transitionStore.isPageTransitioning">
+        <ArrowButton
+          :routePath="'/catalog'"
+          :buttonText="''"
+          :showArrow="true"
+          :arrowDirection="'left'"
+          v-if="!isMobile"
+          class="catalog-arrow"
+        />
+
+        <ArrowButton
+          :routePath="'/all-products'"
+          :buttonText="'View other products'"
+          :showArrow="true"
+          :arrowDirection="'right'"
+          v-if="!isMobile"
+          class="all-products-arrow"
+        />
+      </template>
+
+      <div
+        v-if="!transitionStore.isPageTransitioning"
+        :class="!productViewStore.isOverviewActive ? 'inactive' : ''"
+        class="left-panel"
+      >
+        <div @click="productViewStore.toggleOverview()" class="open-panel"></div>
+      </div>
+
+      <Transition name="slide-text" mode="out-in">
+        <SelectionInformationPanel
+          v-if="!transitionStore.isPageTransitioning"
+          v-show="
+            !isMobile &&
+            (productViewStore.currentPhaseName ===
+              productViewStore.PHASES.productDescription ||
+              productViewStore.currentPhaseName === productViewStore.PHASES.overview)
+          "
+        />
+      </Transition>
+
+      <IconScrollDown
+        v-if="!transitionStore.isPageTransitioning"
+        v-show="productViewStore.isOverviewActive"
+        class="icon-scroll-down"
       />
 
-      <ArrowButton
-        :routePath="'/all-products'"
-        :buttonText="'View other products'"
-        :showArrow="true"
-        :arrowDirection="'right'"
-        v-if="!isMobile"
-        class="all-products-arrow"
-      />
+      <div
+        v-if="!transitionStore.isPageTransitioning"
+        @click="productViewStore.toggleOverview()"
+        class="right-panel"
+        :class="productViewStore.isOverviewActive ? 'active' : ''"
+      >
+        <div class="panel-half right">
+          <ProductInformation />
+        </div>
+      </div>
     </template>
 
-    <div
-      v-if="!transitionStore.isPageTransitioning"
-      :class="!productViewStore.isOverviewActive ? 'inactive' : ''"
-      class="left-panel"
-    >
-      <div @click="productViewStore.toggleOverview()" class="open-panel"></div>
-    </div>
-
-    <Transition name="slide-text" mode="out-in">
-      <SelectionInformationPanel
-        v-if="!transitionStore.isPageTransitioning"
-        v-show="
-          !isMobile &&
-          (productViewStore.currentPhaseName ===
-            productViewStore.PHASES.productDescription ||
-            productViewStore.currentPhaseName === productViewStore.PHASES.overview)
-        "
-      />
-    </Transition>
-
-    <IconScrollDown
-      v-if="!transitionStore.isPageTransitioning"
-      v-show="productViewStore.isOverviewActive"
-      class="icon-scroll-down"
-    />
-
-    <div
-      v-if="!transitionStore.isPageTransitioning"
-      @click="productViewStore.toggleOverview()"
-      class="right-panel"
-      :class="productViewStore.isOverviewActive ? 'active' : ''"
-    >
-      <div class="panel-half right">
-        <ProductInformation />
-      </div>
-    </div>
+    <ProductsViewMobile v-else/>
   </div>
 </template>
 
@@ -216,15 +220,18 @@ onUnmounted(() => {
 }
 
 .product-page-container {
+  position: relative;
   width: 100%;
   height: 100vh;
-  max-height: 100vh;
+  @media(min-width: 768px){
+    max-height: 100vh;
+  }
   // display: flex;
-  position: relative;
   @media (max-width: 450px) {
     background-image: url("@/assets/product_overview/background-mobile.png");
     background-size: cover;
     background-repeat: no-repeat;
+    height: 100vh !important;
   }
   .panel-container {
     display: grid;

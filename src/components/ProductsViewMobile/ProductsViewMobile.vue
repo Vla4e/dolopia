@@ -1,4 +1,5 @@
 <script setup>
+//ProductsViewMobile
 import leftChevron from "@/assets/project-catalog/left-chevron.png";
 import rightChevron from "@/assets/project-catalog/right-chevron.png";
 
@@ -7,21 +8,29 @@ import ProductEmbeddedMobile from "./ProductEmbeddedMobile.vue";
 
 import { ref, computed, onMounted } from "vue";
 
-import { useProductStore } from "@/store/product";
-const productStore = useProductStore();
+import { useProductStoreCleanup } from "@/store/productCleanup";
+
+const productStore = useProductStoreCleanup();
+
+// Updated to use new store structure
 let productData = computed(() => {
-  return productStore.productData;
+  return productStore.currentProduct;
 });
+
 let productIdentifiers = computed(() => {
-  return productStore.subcategoryData.productIdentifiers;
+  return productStore.currentSubcategory.productCodes;
 });
+
 let processedProductName = computed(() => {
   return splitIntoParts(productData.value.name);
 });
+
 let iterator = 0;
+
 onMounted(() => {
   iterator = productIdentifiers.value.indexOf(productData.value.code);
 });
+
 function cycleProduct(direction) {
   if (direction === "right") {
     if (iterator === productIdentifiers.value.length - 1) {
@@ -36,7 +45,9 @@ function cycleProduct(direction) {
       iterator--;
     }
   }
-  productStore.productCodeByIdentifier = productIdentifiers.value[iterator];
+  // Use the new store method
+  productStore.selectProduct(productIdentifiers.value[iterator]);
+  iterator = productIdentifiers.value.indexOf(productStore.selectedProductCode);
 }
 
 let currentPhaseName = ref("description");
@@ -63,12 +74,14 @@ function splitIntoParts(newProduct) {
 
   return [firstPart, secondPart];
 }
+
 const localPhases = ["none", "description", "wheel", "data"];
 let currentPhaseIndex = ref(0);
 let isTransitioning = ref(false);
 const Backward = false; //scrollUp
 const Forward = true; //scrollDown
 let test = true;
+
 function cyclePhase(direction) {
   if (test) return;
   if (!props.isOverviewActive) {
@@ -99,12 +112,14 @@ function cyclePhase(direction) {
     isTransitioning.value = true;
   }
 }
+
 function selectedPhaseFromCarousel(phaseIndex) {
   if (test) return;
   currentPhaseIndex = phaseIndex;
   currentPhaseName.value = localPhases[currentPhaseIndex];
   isTransitioning.value = true;
 }
+
 const phasesShownOnCarousel = ["description", "wheel", "data"];
 </script>
 

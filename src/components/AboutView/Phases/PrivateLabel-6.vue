@@ -191,6 +191,9 @@ onUnmounted(() => {});
       height: 70%;
       width: 80%;
       margin: auto;
+      @media(max-width: 1600px){
+        width: 100%;
+      }
     }
 
     .hero-content {

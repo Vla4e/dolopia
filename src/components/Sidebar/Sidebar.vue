@@ -13,7 +13,7 @@
         <span class="link-heading">Categories</span>
       </router-link>
 
-      <router-link @click="handleClick()" class="sidebar-link disabled" disabled to="/about">
+      <router-link @click="handleClick()" class="sidebar-link" to="/about">
         <span class="link-heading">About</span>
       </router-link>
 
@@ -71,6 +71,9 @@ function toggleContactForm(){
   color: black;
   font-size: 40px;
   z-index: 9;
+  @media(max-width: 450px){
+    padding-top: 40px;
+  }
   .background-cover{
     position: absolute;
     top: 0;
@@ -144,6 +147,9 @@ function toggleContactForm(){
   height: 120px;
   margin-top: 50px;
   margin-bottom: 45px;
+  @media(max-width: 450px){
+    margin: 0px 0px 20px 0px;
+  }
 }
 .socials-container{
   display: flex;

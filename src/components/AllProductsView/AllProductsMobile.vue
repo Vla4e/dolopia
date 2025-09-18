@@ -14,8 +14,8 @@ import { updateProjectUrl } from "@/router/updateAllProductsUrl";
 import { useProductStoreCleanup } from "@/store/productCleanup";
 const productStore = useProductStoreCleanup();
 
-import leftChevron from "@/assets/project-catalog/left-chevron.png";
-import rightChevron from "@/assets/project-catalog/right-chevron.png";
+import leftChevron from "@/assets/project-catalog/left-chevron-white.svg";
+import rightChevron from "@/assets/project-catalog/right-chevron-white.svg";
 import cardBackgroundPlaceholder from "@/assets/product_overview/background.png";
 
 const route = useRoute();
@@ -28,8 +28,6 @@ const projects = [
 const selectedProject = ref("tomato-project");
 const selectedSubcategory = ref(null);
 const isLoading = ref(false);
-
-
 
 watch(selectedSubcategory, (newSubcategory, oldSubcategory) => {
   if (newSubcategory !== oldSubcategory) {
@@ -91,18 +89,16 @@ const processedProducts = computed(() => {
     .filter((p) => p !== null);
 });
 
-
 function selectProject(project) {
   if (project === selectedProject.value) return;
 
   selectedProject.value = project;
-  console.log("SELECTED PROJ", project)
+  console.log("SELECTED PROJ", project);
   const subcategories = categoryToSubcategory.get(project) || [];
   selectedSubcategory.value = subcategories.length > 0 ? subcategories[0] : null;
 }
 
-
-let transitionName = ref("slide-project-left")
+let transitionName = ref("slide-project-left");
 function cycleCategory(direction) {
   const currentIndex = projects.indexOf(selectedProject.value);
   let nextIndex;
@@ -110,7 +106,6 @@ function cycleCategory(direction) {
   if (direction === "right") {
     nextIndex = (currentIndex + 1) % projects.length;
     transitionName.value = "slide-project-right";
-    
   } else {
     nextIndex = (currentIndex - 1 + projects.length) % projects.length;
     transitionName.value = "slide-project-left";
@@ -144,13 +139,49 @@ function goToProductDetail(product) {
   <div class="projects-mobile">
     <div class="selection-menu">
       <div class="categories">
-        <img @click="cycleCategory('left')" :src="leftChevron" class="chevron left" />
+
+        <svg
+          @click="cycleCategory('left')"
+          class="chevron left"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g>
+            <path
+              d="M15 6L9 12L15 18"
+              stroke="#000000"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+          </g>
+        </svg>
+
         <Transition :name="transitionName" mode="out-in">
           <span :key="selectedProject" class="category">
             {{ productStore.categoryFullNames[selectedProject] }}
           </span>
         </Transition>
-        <img @click="cycleCategory('right')" :src="rightChevron" class="chevron right" />
+
+        <svg
+          @click="cycleCategory('right')"
+          class="chevron right"
+
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g>
+            <path
+              d="M9 6L15 12L9 18"
+              stroke="#000000"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+          </g>
+        </svg>
       </div>
 
       <ul class="subcategories">
@@ -182,16 +213,19 @@ function goToProductDetail(product) {
       </ul>
     </div>
     <ul class="product-list">
-      <li
-        v-for="product in processedProducts"
-        :key="product.id"
-        class="product-card"
-      >
+      <li v-for="product in processedProducts" :key="product.id" class="product-card">
         <router-link
           :key="product.id"
           class="card-content"
           :class="product.keyToSubcategory"
-          :to="'/projects/' + selectedProject + '/' + product.keyToSubcategory + '/' + product.pathSlug"
+          :to="
+            '/projects/' +
+            selectedProject +
+            '/' +
+            product.keyToSubcategory +
+            '/' +
+            product.pathSlug
+          "
           :title="`View ${product['Product name EN']} from the ${productStore.categoryFullNames[selectedProject]} - ${subcategoryFullNames[subcategoryKey]} category in more detail`"
         >
           <div class="image-container">
@@ -253,12 +287,12 @@ function goToProductDetail(product) {
       justify-content: space-between;
       align-items: center;
       height: 25%;
-      width: 90%;
+      width: 95%;
       margin-left: auto;
       margin-right: auto;
       margin-bottom: 20px;
       .category {
-        color: #000;
+        color: #fff;
         font-family: "Century Gothic";
         font-size: 24px;
         font-style: normal;
@@ -266,14 +300,17 @@ function goToProductDetail(product) {
         text-transform: uppercase;
       }
       .chevron {
-        width: 10px;
-        height: 20px;
+        width: 30px;
+        height: 30px;
         transition: transform 0.3s ease;
+        path{
+          stroke: white;
+        }
         &.left {
         }
         &.right {
         }
-        &:focus {
+        &:focus, &:active {
           transform: scale(110%);
         }
       }
@@ -283,6 +320,7 @@ function goToProductDetail(product) {
       justify-content: space-between;
       align-items: center;
       width: 100%;
+      min-height: 40px;
       padding: 0px;
       padding-left: 2.5%;
       padding-right: 2.5%;
@@ -302,7 +340,7 @@ function goToProductDetail(product) {
           min-width: 120px;
           height: 25px;
           position: absolute;
-          top: -25px;
+          top: -24px;
           display: flex; /* Ensure the SVG is centered within the container */
           justify-content: center;
           align-items: center;
@@ -320,7 +358,7 @@ function goToProductDetail(product) {
         &.selected {
           .selected-indicator {
             opacity: 1;
-          transform: translateY(0%);
+            transform: translateY(0%);
           }
         }
         .text {
@@ -332,6 +370,7 @@ function goToProductDetail(product) {
           line-height: 1.1; /* 83.333% */
           text-transform: uppercase;
           z-index: 3;
+          text-align: center;
         }
       }
     }
@@ -450,52 +489,52 @@ function goToProductDetail(product) {
 /* Slide Project Left Transitions */
 .slide-project-left-enter-active,
 .slide-project-left-leave-active {
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
 }
 
 .slide-project-left-enter-from {
-    transform: translateX(100%);
-    opacity: 0;
+  transform: translateX(100%);
+  opacity: 0;
 }
 
 .slide-project-left-enter-to {
-    transform: translateX(0%);
-    opacity: 1;
+  transform: translateX(0%);
+  opacity: 1;
 }
 
 .slide-project-left-leave-from {
-    transform: translateX(0%);
-    opacity: 1;
+  transform: translateX(0%);
+  opacity: 1;
 }
 
 .slide-project-left-leave-to {
-    transform: translateX(-100%);
-    opacity: 0;
+  transform: translateX(-100%);
+  opacity: 0;
 }
 
 /* Slide Project Right Transitions */
 .slide-project-right-enter-active,
 .slide-project-right-leave-active {
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
 }
 
 .slide-project-right-enter-from {
-    transform: translateX(-100%);
-    opacity: 0;
+  transform: translateX(-100%);
+  opacity: 0;
 }
 
 .slide-project-right-enter-to {
-    transform: translateX(0%);
-    opacity: 1;
+  transform: translateX(0%);
+  opacity: 1;
 }
 
 .slide-project-right-leave-from {
-    transform: translateX(0%);
-    opacity: 1;
+  transform: translateX(0%);
+  opacity: 1;
 }
 
 .slide-project-right-leave-to {
-    transform: translateX(100%);
-    opacity: 0;
+  transform: translateX(100%);
+  opacity: 0;
 }
 </style>

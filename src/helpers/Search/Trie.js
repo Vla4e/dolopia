@@ -211,6 +211,7 @@ class ProductSearchTrie {
 }
 
 //create singleton, export it
+console.log("will create singleton")
 const productSearchTrie = new ProductSearchTrie();
 productSearchTrie.indexProducts(allProductMap);
 

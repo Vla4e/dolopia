@@ -1,3 +1,27 @@
+//
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-enter-from {
+  transform: translateX(100%);
+}
+
+.slide-enter-to {
+  transform: translateX(0%);
+}
+
+.slide-leave-from {
+  transform: translateX(0%);
+}
+
+.slide-leave-to {
+  transform: translateX(-100%);
+}
+
+
+
 //Slide current element up out of viewport, slide next element from bottom to top of viewport
 // slide-up-reusable
 .slide-up-reusable-enter-active,

@@ -8,6 +8,7 @@ let route = useRoute();
 let router = useRouter();
 let isRoutingToAboutView = ref(false);
 router.beforeResolve((to, from) => {
+  console.log("TO META", to.meta)
   if (to.name === "about") {
     isRoutingToAboutView.value = true;
   }
@@ -133,7 +134,7 @@ const onAfterEnter = (el) => {
     </div>
   </main>
 
-  <ProjectCatalogMobile v-if="isMobile && route.name === 'home' && mountFinished" />
+  <!-- <ProjectCatalogMobile v-if="isMobile && route.name === 'home' && mountFinished" /> -->
 
   <Footer />
 </template>
@@ -179,6 +180,9 @@ footer {
   flex-direction: column;
   flex-grow: 1;
   position: relative;
+  @media(max-width: 450px){
+    height: auto !important;
+  }
 }
 
 .floating-footer {

@@ -1,26 +1,46 @@
 <script setup>
+//Search.vue
+
+import searchIconBlack from '@/assets/s-black.svg'
+import searchIconWhite from '@/assets/s-white.svg'
+import { ref, watch, onMounted, inject } from "vue";
+import { useDebounceFn, useEventListener } from "@vueuse/core";
+import { useMenuStore } from "@/store/menu";
+let menuStore =  useMenuStore();
+const { isMobile } = inject("screenSize");
+
+
 defineOptions({
   name: "SearchFunctionality",
 });
 
-import { ref, watch, onMounted, nextTick } from "vue";
+const props = defineProps({
+  navbarTheme: {
+    type: String,
+    required: false,
+    default: 'dark'
+  }
+})
+
 
 import { allProductMap } from "@/assets/products/allProductMap";
 import { subcategoryFullNames } from "@/assets/products/categoryToSubcategory";
+import { productSearchTrie as Trie} from "@/helpers/Search/Trie";
 
-import { useTrieStore } from "@/store/trie";
-import { ProductSearchTrie as TrieTree } from "@/helpers/Search/Trie";
-// const trieStore = useTrieStore();
-// let { TrieTree } = trieStore;
-
-
-import { useDebounceFn, useEventListener } from "@vueuse/core";
 let isSearching = ref(false);
 let showResults = ref(false);
+let showInputField = ref(false);
+function toggleInputFieldVisibility(){
+  showInputField.value = !showInputField.value
+  menuStore.setSearchInputFlag(showInputField.value);
+}
+
 let searchTerm = ref("");
 const minimumSearchTermLength = 3;
+
 let searchResults = ref([]);
 let searchResultsMapped = ref([]);
+
 const debounceDelay = 150; //ms
 const debouncedSearch = useDebounceFn(
   (term) => {
@@ -29,7 +49,7 @@ const debouncedSearch = useDebounceFn(
       searchResultsMapped.value = [];
       return;
     }
-    searchResults.value = TrieTree.findMatches(term);
+    searchResults.value = Trie.findMatches(term);
 
     let tempArray = [];
     searchResults.value.forEach((res) => {
@@ -43,6 +63,7 @@ const debouncedSearch = useDebounceFn(
   debounceDelay,
   { maxWait: 600 }
 );
+
 watch(searchTerm, async (val) => {
   isSearching.value = true;
   debouncedSearch(val);
@@ -53,6 +74,8 @@ onMounted(() => {
   //automatic cleanup on listeners done by vueuse lib via useEventListener
   useEventListener(searchInputContainer, "focusout", () => {
     showResults.value = false;
+    showInputField.value = false;
+    menuStore.setSearchInputFlag(showInputField.value);
   });
   useEventListener(searchInputContainer, "focusin", () => {
     showResults.value = true;
@@ -61,13 +84,14 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="searchInputContainer" class="search-container">
+  <div :class="{ 'searching': showInputField }"  ref="searchInputContainer" class="search-container">
     <div class="input-container">
       <img
-        src="@/assets/search-icon.png"
+        :src="navbarTheme === 'dark' ? searchIconBlack : searchIconWhite"
         :class="isSearching ? 'searching' : ''"
         style="opacity: 1"
         class="search-icon"
+        @click="toggleInputFieldVisibility"
       />
       <input type="text" v-model="searchTerm" class="input-field" placeholder="search" />
       <!-- <span class="clear-input">x</span> -->
@@ -157,6 +181,7 @@ onMounted(() => {
     width: 24px;
     height: 24px;
     margin-right: 5px;
+    cursor: pointer;
     &.searching {
       animation: pulsate 1s linear infinite;
       transform-origin: center;
@@ -182,18 +207,22 @@ onMounted(() => {
       align-items: center;
       // width: 100%;
       cursor: pointer;
+
       &:not(:last-child) {
         margin-bottom: 5px;
       }
+
       .result-link {
         width: 100%;
         display: flex;
         align-items: center;
         justify-content: space-around;
       }
+
       .result-image {
         width: 10%;
       }
+
       .result-name {
         width: 70%;
         color: #000;
@@ -208,11 +237,13 @@ onMounted(() => {
         width: 60%;
         transition: transform 0.3s ease;
       }
+
       &:hover {
         .result-name {
           transform: scale(105%);
         }
       }
+
       .result-subcategory {
         color: #000;
         font-family: "Raleway";
@@ -224,6 +255,19 @@ onMounted(() => {
         text-transform: capitalize;
         width: 20%;
       }
+
+      .result-link-no-result{
+        .result-image{
+          width: 0;
+        }
+        .result-subcategory{
+          width: 0;
+        }
+        .result-name{
+          width: 100%;
+        }
+      }
+
       @media (max-width: 1024px) {
         .result-name {
           font-size: 14px;
@@ -236,15 +280,44 @@ onMounted(() => {
           width: 75px;
         }
       }
-      .result-link-no-result{
-        .result-image{
-          width: 0;
-        }
-        .result-subcategory{
-          width: 0;
-        }
-        .result-name{
-          width: 100%;
+
+    }
+  }
+  
+  @media(max-width: 450px){
+    position: absolute;
+    right: 0;
+    justify-content: center;
+    width: 10vw;
+    flex: none;
+    transition: width 0.5s ease, transform 1s ease;
+    .input-container{
+      width: 100%;
+      justify-content: center;
+      transition: transform 0.5s ease;
+      .input-field{
+        transition: all 0.2s 0s ease;
+        width: 100%;
+        opacity: 0;
+      }
+    }
+    .search-icon{
+      width: 28px;
+      height: 28px;
+    };
+
+    .results{ 
+      width: 100%;
+    };
+
+    &.searching{
+      transform: translateX(-5vw);
+      width: 90%;
+      .input-container{
+        // transform: translateX(-100%);
+        .input-field{
+          opacity: 1;
+          // width: 100% !important;
         }
       }
     }
