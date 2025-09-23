@@ -63,10 +63,9 @@ const panels = [
       v-for="(panel, idx) in panels"
       :key="idx"
       :to="{
-        name: 'catalog',
+        name: 'projects-overview',
         query: {
-          category: panel.category.route,
-          subcategory: panel.category.subcategoryRoute,
+          target: panel.category.route
         },
       }"
     >

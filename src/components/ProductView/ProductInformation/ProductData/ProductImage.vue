@@ -54,8 +54,9 @@ const productData = computed(() => productStoreCleanup.currentProduct);
       height: auto;
     }
     @media (max-width: 390px) {
-      height: 100% !important;
-      width: auto !important;
+      // min-height: 200px;
+      width: 100% !important;
+      height: auto !important;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);

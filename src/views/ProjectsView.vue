@@ -1,11 +1,16 @@
 <script setup>
 //ProjectsView
 import ArrowButton from "@/components/ArrowButton.vue";
-import { inject } from "vue";
+import { inject, ref, onMounted, nextTick, watch } from "vue";
+import { useRoute } from "vue-router";
 
 const { isMobile } = inject("screenSize");
+const route = useRoute();
 
-//TODO: solve with existing data in /src/products
+// get all panel refs
+const panelRefs = ref({});
+
+//TODO: use existing data in /src/products
 const panels = [
   {
     category: {
@@ -24,7 +29,7 @@ const panels = [
       },
       {
         name: "Ketchups",
-        route: "Ketchup",
+        route: "ketchup",
       },
     ],
   },
@@ -93,6 +98,34 @@ const panels = [
     ],
   },
 ];
+
+const scrollToTargetPanel = async () => {
+  if (!route.query?.target) {
+    return;
+  }
+  
+  const targetRoute = route.query.target;
+  
+  if (targetRoute && panelRefs.value[targetRoute]) {
+    await nextTick(); // Ensure DOM is updated
+    panelRefs.value[targetRoute].scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+  }
+};
+
+watch(() => route.query.target, (newTarget) => {
+  if (newTarget) {
+    scrollToTargetPanel();
+  }
+}, { immediate: true });
+
+onMounted(() => {
+  setTimeout(() => {
+    scrollToTargetPanel();
+  }, 600);
+});
 </script>
 
 <template>
@@ -110,6 +143,7 @@ const panels = [
         :key="idx"
         class="panel"
         :class="`panel-${idx}`"
+        :ref="el => panelRefs[panel.category.route] = el"
       >
         <div class="panel-half text-panel">
           <div class="category">
@@ -157,7 +191,7 @@ const panels = [
   width: 100%;
   height: 100%;
   @media (max-width: 450px) {
-    margin-bottom: 40px !important;
+    // margin-bottom: 40px !important;
   }
   .panel-container {
     display: grid;
@@ -171,7 +205,7 @@ const panels = [
       flex-direction: column;
       width: 100vw;
       max-height: 1000vh !important;
-      padding-top: 10vh;
+      // padding-top: 10vh;
     }
     .panel {
       width: 100%;
@@ -182,10 +216,20 @@ const panels = [
       align-items: center;
 
       @media (max-width: 450px) {
-        height: auto;
+        height: 100vh;
         aspect-ratio: 9 / 16;
         background-position: center;
         // padding-bottom: 45%; //move centered text up by 45% of panel height
+      }
+      &:first-child{
+        @media(max-width: 450px){
+          padding-top: 12vh;
+        }
+      }
+      &:not(:first-child){
+        @media(max-width: 450px){
+          padding-top: 5vh;
+        }
       }
       .panel-half {
         width: 100%;
@@ -196,7 +240,6 @@ const panels = [
         align-items: center;
         @media (max-width: 450px){
           justify-content: flex-start;
-          padding-top: 8vh;
         }
         .category-image {
           width: 100%;

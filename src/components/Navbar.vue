@@ -88,6 +88,7 @@ const navbarClasses = computed(() => {
 });
 </script>
 
+
 <template>
   <Transition name="slide-down">
     <header
@@ -127,15 +128,20 @@ const navbarClasses = computed(() => {
   </Transition>
 </template>
 
+
 <style lang="scss" scoped>
 .content-wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100vw;
   transition: transform 0.5s ease;
+  @media(max-width:450px){
+    width: 100vw;
+  }
   &.active {
-    transform: translateX(-100%);
+    @media (max-width: 450px) {
+      transform: translateX(-100%);
+    }
   }
   .menu-icon {
   }
@@ -158,6 +164,7 @@ header {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
+  min-height: 80px;
 }
 
 .nav-wrapper {
@@ -278,24 +285,5 @@ header {
       // }
     }
   }
-}
-
-/* Transitions */
-// Navbar slide down
-.slide-down-enter-active,
-.slide-down-leave-active {
-  transition: transform 0.4s ease-out, opacity 0.2s ease;
-}
-
-.slide-down-enter-from,
-.slide-down-leave-to {
-  transform: translateY(-100%);
-  opacity: 0;
-}
-
-.slide-down-enter-to,
-.slide-down-leave-from {
-  transform: translateY(0);
-  opacity: 1;
 }
 </style>

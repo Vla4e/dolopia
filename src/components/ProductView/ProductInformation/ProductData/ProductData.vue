@@ -180,6 +180,7 @@ let productStatistics = computed(() => [
       width: 100%;
       .chevron-list {
         height: 100% !important;
+        padding-left: 0px !important;
         li {
           margin-bottom: 15px;
         }

@@ -6,6 +6,8 @@ import rightChevron from "@/assets/project-catalog/right-chevron.png";
 import ProductImage from "../ProductView/ProductInformation/ProductData/ProductImage.vue";
 import ProductEmbeddedMobile from "./ProductEmbeddedMobile.vue";
 
+import SelectionMenu from "../SelectionMenu.vue";
+
 import { ref, computed, onMounted } from "vue";
 
 import { useProductStoreCleanup } from "@/store/productCleanup";
@@ -14,15 +16,12 @@ const productStore = useProductStoreCleanup();
 
 // Updated to use new store structure
 let productData = computed(() => {
+  console.log(productStore.currentProduct);
   return productStore.currentProduct;
 });
 
 let productIdentifiers = computed(() => {
   return productStore.currentSubcategory.productCodes;
-});
-
-let processedProductName = computed(() => {
-  return splitIntoParts(productData.value.name);
 });
 
 let iterator = 0;
@@ -50,87 +49,20 @@ function cycleProduct(direction) {
   iterator = productIdentifiers.value.indexOf(productStore.selectedProductCode);
 }
 
-let currentPhaseName = ref("description");
-
-function splitIntoParts(newProduct) {
-  // Check if the product name contains "with" or "*"
-  const withIndex = newProduct.indexOf(" with ");
-  const asteriskIndex = newProduct.indexOf("*");
-  let firstPart = "";
-  let secondPart = "";
-  if (withIndex !== -1) {
-    // split at "with"
-    firstPart = newProduct.slice(0, withIndex).trim();
-    secondPart = newProduct.slice(withIndex).trim();
-  } else if (asteriskIndex !== -1) {
-    // Split at "*"
-    firstPart = newProduct.slice(0, asteriskIndex).trim();
-    secondPart = newProduct.slice(asteriskIndex + 1).trim();
-  } else {
-    // If neither "with" nor "*" is found, put everything in firstPart
-    firstPart = newProduct.trim();
-    secondPart = "";
-  }
-
-  return [firstPart, secondPart];
-}
-
-const localPhases = ["none", "description", "wheel", "data"];
-let currentPhaseIndex = ref(0);
-let isTransitioning = ref(false);
-const Backward = false; //scrollUp
-const Forward = true; //scrollDown
-let test = true;
-
-function cyclePhase(direction) {
-  if (test) return;
-  if (!props.isOverviewActive) {
-    return;
-  }
-  if (!currentPhaseIndex.value) {
-    currentPhaseIndex.value = 1;
-    currentPhaseName.value = localPhases[currentPhaseIndex.value];
-    isTransitioning.value = true;
-    emit("phaseChange", currentPhaseName.value);
-    return;
-  }
-  if (!isTransitioning.value) {
-    if (direction === Forward) {
-      if (currentPhaseIndex.value < localPhases.length - 1) {
-        currentPhaseIndex.value++;
-      } else {
-        currentPhaseIndex.value = 1;
-      }
-    } else {
-      if (currentPhaseIndex.value === 1) {
-        currentPhaseIndex.value = localPhases.length - 1;
-      } else {
-        currentPhaseIndex.value--;
-      }
-    }
-    currentPhaseName.value = localPhases[currentPhaseIndex.value];
-    isTransitioning.value = true;
-  }
-}
-
-function selectedPhaseFromCarousel(phaseIndex) {
-  if (test) return;
-  currentPhaseIndex = phaseIndex;
-  currentPhaseName.value = localPhases[currentPhaseIndex];
-  isTransitioning.value = true;
-}
-
-const phasesShownOnCarousel = ["description", "wheel", "data"];
+let showMenu = ref(true);
 </script>
 
 <template>
-  <div class="products-mobile">
-    <div class="selection-menu">
+  <div :class="showMenu ? '' : 'hidden'" class="products-mobile">
+    <SelectionMenu />
+    <div class="selection-menu-product">
       <div class="products">
         <img @click="cycleProduct('left')" :src="leftChevron" class="chevron left" />
         <span class="product">
-          <span class="large-text">{{ processedProductName[0] }}</span>
-          <span class="small-text">{{ processedProductName[1] }}</span>
+          <span class="large-text">{{ productData.properties.splitName.firstPart }}</span>
+          <span class="small-text">{{
+            productData.properties.splitName.secondPart
+          }}</span>
         </span>
         <img @click="cycleProduct('right')" :src="rightChevron" class="chevron right" />
       </div>
@@ -139,18 +71,14 @@ const phasesShownOnCarousel = ["description", "wheel", "data"];
     <ProductImage class="product-image" />
 
     <div class="dynamic-container">
-      <div
-        v-if="currentPhaseName === 'description'"
-        key="description"
-        class="description"
-      >
+      <div key="description" class="description">
         <p>
           {{ productData.properties["Description EN"] }}
         </p>
       </div>
     </div>
 
-    <ProductEmbeddedMobile />
+    <ProductEmbeddedMobile class="data-menu" />
 
     <!-- <PhaseCarousel 
       @selectedPhaseFromCarousel="selectedPhaseFromCarousel"
@@ -170,19 +98,28 @@ const phasesShownOnCarousel = ["description", "wheel", "data"];
   align-items: center;
   width: 100%;
   height: 100%;
+  transition: transform 0.5s ease;
+  // margin-top: 10vh;
   .product-image {
     width: 90%;
-    height: 40%;
-    min-height: 40%;
+    height: auto;
+    min-height: 50vh;
     max-height: 45%;
   }
   .dynamic-container {
     margin-top: 20px;
     margin-bottom: 20px;
+    @media(min-width: 400px){
+      margin-top: 30px;
+    }
+    @media(min-width: 430px){
+      margin-top: 70px;
+    }
     .description {
       width: 95%;
       margin-left: auto;
       margin-right: auto;
+      margin-bottom: 20px;
       p {
         color: #000;
         text-align: center;
@@ -198,7 +135,7 @@ const phasesShownOnCarousel = ["description", "wheel", "data"];
     }
   }
 }
-.selection-menu {
+.selection-menu-product {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -207,8 +144,9 @@ const phasesShownOnCarousel = ["description", "wheel", "data"];
   min-height: 20%;
   max-height: 25%;
   @media (max-width: 390px) {
-    min-height: 20%;
+    min-height: 15%;
   }
+  margin-top: 30px;
   .products {
     display: flex;
     justify-content: space-between;
@@ -233,6 +171,10 @@ const phasesShownOnCarousel = ["description", "wheel", "data"];
         letter-spacing: 2.88px;
         text-transform: uppercase;
         margin-bottom: 10px;
+        @media (max-width: 365px) {
+          font-size: 20px;
+          margin-bottom: 5px;
+        }
       }
       .small-text {
         color: #000;
@@ -244,6 +186,9 @@ const phasesShownOnCarousel = ["description", "wheel", "data"];
         line-height: 24px; /* 150% */
         letter-spacing: 1.44px;
         text-transform: uppercase;
+        @media (max-width: 365px) {
+          font-size: 14px;
+        }
       }
     }
     .chevron {
@@ -259,5 +204,15 @@ const phasesShownOnCarousel = ["description", "wheel", "data"];
       }
     }
   }
+}
+// .hidden {
+//   transform: translateY(-160px);
+//   .selection-menu {
+//     transform: translateY(-30px);
+//   }
+// }
+.data-menu {
+  position: absolute;
+  bottom: 0%;
 }
 </style>

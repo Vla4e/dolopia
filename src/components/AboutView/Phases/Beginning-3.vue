@@ -18,16 +18,16 @@ const {
   isAtTop,
   isAtBottom,
   initializeScrollablePhase,
-  initializeStaticPhase
+  initializeStaticPhase,
 } = useWithinPhaseScroll({
-  containerSelector: '.phase-8',
+  containerSelector: ".phase-8",
   scrollThreshold: 5,
   onPhaseEnter: (context) => {
-    console.log('Phase scroll initialized:', context);
+    console.log("Phase scroll initialized:", context);
   },
   onPhaseExit: () => {
-    console.log('Phase scroll cleaned up');
-  }
+    console.log("Phase scroll cleaned up");
+  },
 });
 
 watch(
@@ -41,7 +41,7 @@ watch(
     if (newPhaseId === 7) {
       // Static phase - just enable normal phase cycling
       initializeStaticPhase();
-      
+
       setTimeout(() => {
         animateInText.value = true;
       }, 300);
@@ -64,7 +64,7 @@ watch(
           <img :src="howItStarted" class="background" alt="Background" />
         </div>
         <div :class="{ 'animate-in': animateInText }" class="how-it-started-container">
-          <h2>How It All Started</h2>
+          <h2>How it all started</h2>
           <p>bringing unique flavours to the world</p>
         </div>
       </section>
@@ -72,17 +72,27 @@ watch(
       <div v-else-if="props.phaseId === 8" class="phase phase-8" key="phase-8">
         <VideoShowcase :key="'passion'" side="left" sectionId="passion" />
         <VideoShowcase :key="'quality'" side="right" sectionId="quality" />
-        
+
         <!-- Debug info - remove in production -->
-        <div class="debug-info" style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 10px; font-size: 12px;">
-          At Top: {{ isAtTop }}<br>
+        <div
+          class="debug-info"
+          style="
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            font-size: 12px;
+          "
+        >
+          At Top: {{ isAtTop }}<br />
           At Bottom: {{ isAtBottom }}
         </div>
       </div>
     </Transition>
   </div>
 </template>
-
 
 <style lang="scss" scoped>
 .phase-container {
@@ -110,6 +120,10 @@ watch(
   scroll-behavior: smooth;
   .video-showcase:last-child {
     // margin-top: 10vh;
+  }
+  @media(max-width: 450px){
+    // position: static;
+    // padding-top: 30px;
   }
 }
 .image-container {
@@ -150,7 +164,7 @@ watch(
   opacity: 0;
   transform: translate(-50%, -100%);
   transition: opacity 3s 0.2s ease, transform 0.5s ease;
-  z-index: 3; 
+  z-index: 3;
   &.animate-in {
     opacity: 1;
     transform: translate(-50%, -50%);
@@ -180,11 +194,47 @@ watch(
   }
 }
 
-
-
+@media (max-width: 450px) {
+  .phase-8{
+    height: auto !important;
+    position: absolute !important;
+  }
+  .how-it-started-container {
+    // transform: none !important;
+    // position: static;
+    top: 50%;
+    left: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    h2 {
+      color: #fff;
+      text-align: center;
+      text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+      font-family: "Belleza";
+      font-size: 36px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 1.1; /* 66.667% */
+      letter-spacing: 1.44px;
+    }
+    p {
+      color: #fff;
+      text-align: center;
+      text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+      font-family: Kugile;
+      font-size: 26px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 1.3; /* 133.333% */
+    }
+  }
+}
 
 /* slide-up-beginning transitions */
-.slide-up-beginning-enter-active, .slide-up-beginning-leave-active {
+.slide-up-beginning-enter-active,
+.slide-up-beginning-leave-active {
   transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .slide-up-beginning-enter-from {

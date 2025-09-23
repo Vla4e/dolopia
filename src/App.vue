@@ -59,7 +59,6 @@ const onBeforeLeave = (el) => {
   //   // behavior: "smooth",
   // });
   if (isRoutingToAboutView.value) return;
-  console.log("OnBeforeLeave, route ->", route.name);
   if (routerWrapper.value && el) {
     const rect = el.getBoundingClientRect();
 
@@ -67,12 +66,10 @@ const onBeforeLeave = (el) => {
     el.style.top = "0";
     el.style.left = "0";
     el.style.width = "100%";
-    console.log("I set the height -> ", routerWrapper.value.style.minHeight);
   }
 };
 
 const onBeforeEnter = (el) => {
-  console.log("onBeforeEnter, route ->", route.name);
 
   if (route.name !== "about") {
     transitionStore.setTransitioning(false);
@@ -87,12 +84,10 @@ const onBeforeEnter = (el) => {
 };
 
 const onAfterEnter = (el) => {
-  console.log("onAfterEnter, route ->", route.name);
   transitionStore.setTransitioning(false);
 
   if (routerWrapper.value) {
     routerWrapper.value.style.minHeight = "";
-    console.log("Should've set minHeight -> ", routerWrapper.value.style.minHeight);
   }
 
   if (el) {

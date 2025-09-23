@@ -34,6 +34,7 @@ const props = defineProps({
 
 <style lang="scss" scoped>
 .scroll-indicator {
+  width: 100%;
   position: absolute;
   bottom: 10%;
   left: 50%;

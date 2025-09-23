@@ -199,6 +199,9 @@ onMounted(async () => {
   @media (max-width: 450px) {
     width: 80% !important;
   }
+  @media(max-width: 360px){
+    margin-bottom: 30px;
+  }
   .featured-product-section {
     display: flex;
     flex-direction: column;
@@ -534,11 +537,11 @@ onMounted(async () => {
             margin-bottom: 20px;
           }
         }
-        .lt-2 {
+        &.lt-2 {
           @media (max-width: 450px) {
             color: #039ea2;
             font-family: "Century Gothic";
-            font-size: 34px;
+            font-size: 34px !important;
             font-style: normal;
             font-weight: 400;
             line-height: 1.3;
@@ -553,6 +556,12 @@ onMounted(async () => {
               font-style: normal;
               font-weight: 700;
               line-height: 1, 1;
+            }
+          }
+          @media(max-width: 370px){
+            font-size: 30px !important;
+            .small{
+              font-size: 20px !important;
             }
           }
         }
@@ -630,6 +639,9 @@ onMounted(async () => {
             font-style: normal;
             font-weight: 700;
             letter-spacing: 5px;
+            @media(max-width: 360px){
+              font-size: 30px !important;
+            }
           }
 
           .small-text {
@@ -640,6 +652,9 @@ onMounted(async () => {
             line-height: clamp(2.4rem, 3.7vw, 4.8rem);
             font-style: normal;
             font-weight: 700;
+            @media(max-width: 360px){
+              font-size: 34px !important;
+            }
           }
 
           @media (min-width: 1400px) and (max-height: 800px) {
@@ -687,11 +702,19 @@ onMounted(async () => {
       .product-image-link {
         // max-width: 40%;
         // flex: 1;
+        @media (max-width: 370px){
+          display: flex;
+          justify-content: flex-end;
+          width: 100%;
+        }
         .product-image {
           // width: 100%;
           // object-fit: contain;
           @media (max-width: 450px) {
             width: 100%;
+          }
+          @media (max-width: 370px){
+            width: 90%;
           }
         }
       }
@@ -835,6 +858,9 @@ onMounted(async () => {
               font-style: normal;
               font-weight: 700;
               line-height: 1.1;
+            }
+            @media(max-width: 360px){
+              font-size: 45px;
             }
           }
           .small-text {

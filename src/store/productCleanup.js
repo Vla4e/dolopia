@@ -37,6 +37,8 @@ export const useProductStoreCleanup = defineStore('productCleanup', () => {
   const selectedProductCode = ref('');
   const isScrollActive = ref(false);
 
+
+
   // derivatives
   const currentCategory = computed(() => ({
     id: selectedCategoryId.value,
@@ -71,6 +73,8 @@ export const useProductStoreCleanup = defineStore('productCleanup', () => {
     };
   });
 
+
+
   // =====================================
   // VALIDATION COMPUTED
   // =====================================
@@ -90,6 +94,7 @@ export const useProductStoreCleanup = defineStore('productCleanup', () => {
 
 
   function selectCategory(categoryId, preventCascade = false) {
+    console.log("attempting to select -> ", categoryId)
     if (!CATEGORIES.includes(categoryId)) {
       console.warn(`Invalid category: ${categoryId}`);
       return false;

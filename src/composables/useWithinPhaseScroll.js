@@ -53,7 +53,7 @@ export function useWithinPhaseScroll(options = {}) {
     const atBottom = element.scrollHeight - element.scrollTop <= element.clientHeight + scrollThreshold;
     
     // Handle upward scroll at top boundary
-    console.log("scrolling", event.deltaY)
+    console.log("scrolling", event.deltaY, atTop, scrollStore.ignoreScrollCallbacks)
     if (event.deltaY < 0 && atTop) {
       // Only allow callbacks if user has previously touched the top
       if (hasTouchedTop.value) {
@@ -79,6 +79,7 @@ export function useWithinPhaseScroll(options = {}) {
     await nextTick();
     
     const selector = customSelector || containerSelector;
+    console.log("SCROLLABLE INITIATED")
     if (!selector) {
       console.warn('useWithinPhaseScroll: No container selector provided');
       return;

@@ -10,7 +10,11 @@
       </router-link>
 
       <router-link @click="handleClick()" class="sidebar-link" to="/catalog">
-        <span class="link-heading">Categories</span>
+        <span class="link-heading">Projects</span>
+      </router-link>
+
+      <router-link @click="handleClick()" class="sidebar-link" to="/all-products">
+        <span class="link-heading">Products</span>
       </router-link>
 
       <router-link @click="handleClick()" class="sidebar-link" to="/about">
@@ -112,6 +116,9 @@ function toggleContactForm(){
     }
     &:not(:last-child){
       margin-bottom: 40px;
+      @media(max-width: 390px){
+        margin-bottom: 10px;
+      }
     }
     .link-heading{
       color: #000;
@@ -139,6 +146,9 @@ function toggleContactForm(){
           font-weight:400;
         }
       }
+      @media(max-width: 390px){
+        font-size: 24px;
+      }
     }
   }
 }
@@ -149,6 +159,10 @@ function toggleContactForm(){
   margin-bottom: 45px;
   @media(max-width: 450px){
     margin: 0px 0px 20px 0px;
+  }
+  @media(max-width: 390px){
+    width: 90px;
+    height: 90px;
   }
 }
 .socials-container{

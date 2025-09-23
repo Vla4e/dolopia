@@ -104,6 +104,9 @@ const router = createRouter({
       path: '/catalog',
       name: 'catalog',
       component: () => import('../views/ProjectsView.vue'),
+      props: route => ({ 
+        targetPanel: route.query.target
+      }),
       meta: createRouteMeta({
         navbar: {
           desktop: {
@@ -137,19 +140,24 @@ const router = createRouter({
       path: '/projects',
       name: 'projects-overview',
       component: () => import('../views/ProjectsView.vue'),
+      props: route => ({ 
+        targetPanel: route.query.target
+      }),
       meta: createRouteMeta({
         navbar: {
           desktop: {
             show: false,
             floating: true,
             pinned: false,
-            blur: false
+            blur: false,
+            theme: "dark"
           },
           mobile: {
             show: true,
-            floating: false,
+            floating: true,
             pinned: false,
-            blur: true
+            blur: false,
+            theme: "dark"
           }
         },
         footer: {
@@ -264,6 +272,7 @@ const router = createRouter({
             show: true,
             floating: true,
             pinned: false,
+            theme: "light"
           }
         },
       })

@@ -20,21 +20,6 @@ import { useTransitionStore } from "@/store/transition";
 const transitionStore = useTransitionStore();
 const productViewStore = useProductViewStore();
 
-// Handle global scroll for desktop
-const scrollUp = true;
-const scrollDown = false;
-useScrollDirection(
-  () => {
-    // onScrollUp
-    productViewStore.cyclePhase(scrollUp); // false for backward
-  },
-  () => {
-    // onScrollDown
-    productViewStore.cyclePhase(scrollDown); // true for forward
-  }
-);
-
-
 //Staged frame-by-frame rendering for smoothness in transition animation
 async function startStagedRender() {
   const nextFrame = () => new Promise((resolve) => requestAnimationFrame(resolve));
@@ -66,13 +51,29 @@ watch(
   { immediate: true } // Run immediately to handle initial load
 );
 
+// Handle global scroll for desktop
+const scrollUp = true;
+const scrollDown = false;
 
 // lifecycle hooks
 onMounted(async () => {
-    window.scrollTo({
-      top: 0,
-      // behavior: "smooth",
-    });
+  window.scrollTo({
+    top: 0,
+    // behavior: "smooth",
+  });
+
+  if(!isMobile.value){
+    useScrollDirection(
+      () => {
+        // onScrollUp
+        productViewStore.cyclePhase(scrollUp); // false for backward
+      },
+      () => {
+        // onScrollDown
+        productViewStore.cyclePhase(scrollDown); // true for forward
+      }
+    );
+  }
 });
 
 onUnmounted(() => {
@@ -83,8 +84,8 @@ onUnmounted(() => {
 <template>
   <div class="product-page-container">
     <template v-if="!isMobile">
-      <ProductViewSkeleton v-if="transitionStore.isPageTransitioning"/>
-      
+      <ProductViewSkeleton v-if="transitionStore.isPageTransitioning" />
+
       <template v-if="!transitionStore.isPageTransitioning">
         <ArrowButton
           :routePath="'/catalog'"
@@ -143,7 +144,7 @@ onUnmounted(() => {
       </div>
     </template>
 
-    <ProductsViewMobile v-else/>
+    <ProductsViewMobile v-else />
   </div>
 </template>
 
@@ -223,7 +224,7 @@ onUnmounted(() => {
   position: relative;
   width: 100%;
   height: 100vh;
-  @media(min-width: 768px){
+  @media (min-width: 768px) {
     max-height: 100vh;
   }
   // display: flex;
@@ -231,7 +232,8 @@ onUnmounted(() => {
     background-image: url("@/assets/product_overview/background-mobile.png");
     background-size: cover;
     background-repeat: no-repeat;
-    height: 100vh !important;
+    min-height: 100vh !important;
+    // height: auto !important;
   }
   .panel-container {
     display: grid;

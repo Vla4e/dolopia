@@ -1,14 +1,13 @@
 <script setup>
 //Search.vue
 
-import searchIconBlack from '@/assets/s-black.svg'
-import searchIconWhite from '@/assets/s-white.svg'
+import searchIconBlack from "@/assets/s-black.svg";
+import searchIconWhite from "@/assets/s-white.svg";
 import { ref, watch, onMounted, inject } from "vue";
 import { useDebounceFn, useEventListener } from "@vueuse/core";
 import { useMenuStore } from "@/store/menu";
-let menuStore =  useMenuStore();
+let menuStore = useMenuStore();
 const { isMobile } = inject("screenSize");
-
 
 defineOptions({
   name: "SearchFunctionality",
@@ -18,21 +17,30 @@ const props = defineProps({
   navbarTheme: {
     type: String,
     required: false,
-    default: 'dark'
-  }
-})
-
+    default: "dark",
+  },
+});
 
 import { allProductMap } from "@/assets/products/allProductMap";
 import { subcategoryFullNames } from "@/assets/products/categoryToSubcategory";
-import { productSearchTrie as Trie} from "@/helpers/Search/Trie";
+import { productSearchTrie as Trie } from "@/helpers/Search/Trie";
 
 let isSearching = ref(false);
 let showResults = ref(false);
 let showInputField = ref(false);
-function toggleInputFieldVisibility(){
-  showInputField.value = !showInputField.value
-  menuStore.setSearchInputFlag(showInputField.value);
+let playInputFieldAnimation = ref(false);
+function toggleInputFieldVisibility() {
+  if (showInputField.value) {
+    playInputFieldAnimation.value = false;
+    setTimeout(() => {
+      showInputField.value = !showInputField.value;
+      menuStore.setSearchInputFlag(showInputField.value);
+    }, 400);
+  } else {
+    playInputFieldAnimation.value = true;
+    showInputField.value = !showInputField.value;
+    menuStore.setSearchInputFlag(showInputField.value);
+  }
 }
 
 let searchTerm = ref("");
@@ -84,7 +92,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div :class="{ 'searching': showInputField }"  ref="searchInputContainer" class="search-container">
+  <div
+    :class="{ 'searching': playInputFieldAnimation }"
+    ref="searchInputContainer"
+    class="search-container"
+  >
     <div class="input-container">
       <img
         :src="navbarTheme === 'dark' ? searchIconBlack : searchIconWhite"
@@ -93,7 +105,13 @@ onMounted(() => {
         class="search-icon"
         @click="toggleInputFieldVisibility"
       />
-      <input type="text" v-model="searchTerm" class="input-field" placeholder="search" />
+      <input
+        v-if="showInputField"
+        type="text"
+        v-model="searchTerm"
+        class="input-field"
+        placeholder="search"
+      />
       <!-- <span class="clear-input">x</span> -->
       <Transition name="fade-in-out">
         <ul v-show="showResults" class="results">
@@ -146,10 +164,10 @@ onMounted(() => {
   position: relative;
   .input-container {
     display: flex;
-    width: 45%;
+    width: 100%;
     justify-content: flex-end;
     .input-field {
-      width: 35%;
+      width: 0%;
       -webkit-transition: width 0.2s ease-out;
       -moz-transition: width 0.2s ease-out;
       -o-transition: width 0.2s ease-out;
@@ -160,9 +178,14 @@ onMounted(() => {
       outline: none !important;
       &:active,
       &:focus {
-        width: 100%;
+        // width: 60%;
+        @media (min-width: 450px) {
+          width: 500px;
+        }
       }
-
+      &.hidden {
+        display: none;
+      }
       &::placeholder {
         color: #4b4b4b;
         font-family: "Century Gothic";
@@ -175,6 +198,12 @@ onMounted(() => {
       position: absolute;
       color: black;
       right: 4px;
+    }
+  }
+  
+  &.searching{
+    .input-field{
+      width: 60% !important;
     }
   }
   .search-icon {
@@ -192,7 +221,7 @@ onMounted(() => {
     flex-direction: column;
     // width: 100%;
     max-width: 100%;
-    width: 55%;
+    width: 100%;
     max-height: 40vh;
     position: absolute;
     transform: translateY(50px);
@@ -256,14 +285,14 @@ onMounted(() => {
         width: 20%;
       }
 
-      .result-link-no-result{
-        .result-image{
+      .result-link-no-result {
+        .result-image {
           width: 0;
         }
-        .result-subcategory{
+        .result-subcategory {
           width: 0;
         }
-        .result-name{
+        .result-name {
           width: 100%;
         }
       }
@@ -280,42 +309,41 @@ onMounted(() => {
           width: 75px;
         }
       }
-
     }
   }
-  
-  @media(max-width: 450px){
+
+  @media (max-width: 450px) {
     position: absolute;
     right: 0;
     justify-content: center;
     width: 10vw;
     flex: none;
     transition: width 0.5s ease, transform 1s ease;
-    .input-container{
+    .input-container {
       width: 100%;
       justify-content: center;
       transition: transform 0.5s ease;
-      .input-field{
+      .input-field {
         transition: all 0.2s 0s ease;
         width: 100%;
         opacity: 0;
       }
     }
-    .search-icon{
+    .search-icon {
       width: 28px;
       height: 28px;
-    };
+    }
 
-    .results{ 
+    .results {
       width: 100%;
-    };
+    }
 
-    &.searching{
+    &.searching {
       transform: translateX(-5vw);
       width: 90%;
-      .input-container{
+      .input-container {
         // transform: translateX(-100%);
-        .input-field{
+        .input-field {
           opacity: 1;
           // width: 100% !important;
         }
@@ -325,9 +353,17 @@ onMounted(() => {
 }
 
 @keyframes pulsate {
-  0% { transform: scale(100%); }
-  33% { transform: scale(90%); }
-  66% { transform: scale(100%); }
-  100% { transform: scale(110%); }
+  0% {
+    transform: scale(100%);
+  }
+  33% {
+    transform: scale(90%);
+  }
+  66% {
+    transform: scale(100%);
+  }
+  100% {
+    transform: scale(110%);
+  }
 }
 </style>

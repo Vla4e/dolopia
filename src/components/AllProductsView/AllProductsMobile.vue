@@ -1,7 +1,9 @@
 <script setup>
+// import ProductsViewMobile from "../ProductsViewMobile/ProductsViewMobile.vue";
+import SelectionMenu from "../SelectionMenu.vue";
+
 import { ref, computed, watch, nextTick } from "vue";
-import { useRoute } from "vue-router";
-import router from "@/router";
+
 
 import {
   categoryToSubcategory,
@@ -9,75 +11,21 @@ import {
 } from "@/assets/products/categoryToSubcategory";
 import { subcategoryToProductCodes } from "@/assets/products/subcategoryToProducts";
 import { allProductMap } from "@/assets/products/allProductMap";
-import { updateProjectUrl } from "@/router/updateAllProductsUrl";
 
 import { useProductStoreCleanup } from "@/store/productCleanup";
+import { storeToRefs } from "pinia";
 const productStore = useProductStoreCleanup();
-
-import leftChevron from "@/assets/project-catalog/left-chevron-white.svg";
-import rightChevron from "@/assets/project-catalog/right-chevron-white.svg";
-import cardBackgroundPlaceholder from "@/assets/product_overview/background.png";
-
-const route = useRoute();
-const projects = [
-  "tomato-project",
-  "vegetable-project",
-  "pasta-project",
-  "fruit-project",
-];
-const selectedProject = ref("tomato-project");
-const selectedSubcategory = ref(null);
-const isLoading = ref(false);
-
-watch(selectedSubcategory, (newSubcategory, oldSubcategory) => {
-  if (newSubcategory !== oldSubcategory) {
-    updateProjectUrl(selectedProject.value, newSubcategory);
-  }
-});
-
-watch(
-  () => route.params,
-  async (newParams) => {
-    isLoading.value = true;
-    await nextTick();
-
-    const newCategory = newParams.category || "tomato-project";
-    const newSubcategory = newParams.subcategory || null;
-
-    if (newCategory !== selectedProject.value) {
-      selectedProject.value = newCategory;
-      await nextTick(); // Ensure computed properties update before proceeding
-    }
-
-    const currentProjectSubcategories =
-      categoryToSubcategory.get(selectedProject.value) || [];
-
-    if (newSubcategory && currentProjectSubcategories.includes(newSubcategory)) {
-      selectedSubcategory.value = newSubcategory;
-    } else {
-      // If subcategory from URL is invalid or null, default to the first one for the current project
-      selectedSubcategory.value = currentProjectSubcategories[0] || null;
-    }
-
-    // Use a timeout for visual transition
-    setTimeout(() => {
-      isLoading.value = false;
-    }, 200);
-  },
-  { immediate: true }
-);
-
-const subcategoryKeysArray = computed(() =>
-  Array.from(categoryToSubcategory.get(selectedProject.value) || [])
-);
+const {
+  selectedCategoryId: selectedProject,
+  selectedSubcategoryId: selectedSubcategory
+} = storeToRefs(productStore);
 
 const processedProducts = computed(() => {
   if (!selectedSubcategory.value) {
     return [];
   }
   const productCodeArray = subcategoryToProductCodes.get(selectedSubcategory.value) || [];
-
-  return productCodeArray
+  let finalProductArray = productCodeArray
     .map((productCode) => {
       const product = allProductMap.get(productCode);
       if (!product) {
@@ -87,133 +35,21 @@ const processedProducts = computed(() => {
       return { ...product, id: productCode };
     })
     .filter((p) => p !== null);
+    console.log(finalProductArray)
+    
+    return finalProductArray
 });
 
-function selectProject(project) {
-  if (project === selectedProject.value) return;
+let clickedProduct = ref(false);
 
-  selectedProject.value = project;
-  console.log("SELECTED PROJ", project);
-  const subcategories = categoryToSubcategory.get(project) || [];
-  selectedSubcategory.value = subcategories.length > 0 ? subcategories[0] : null;
-}
-
-let transitionName = ref("slide-project-left");
-function cycleCategory(direction) {
-  const currentIndex = projects.indexOf(selectedProject.value);
-  let nextIndex;
-
-  if (direction === "right") {
-    nextIndex = (currentIndex + 1) % projects.length;
-    transitionName.value = "slide-project-right";
-  } else {
-    nextIndex = (currentIndex - 1 + projects.length) % projects.length;
-    transitionName.value = "slide-project-left";
-  }
-
-  selectProject(projects[nextIndex]);
-}
-
-function selectSubcategory(subcategory) {
-  if (subcategory !== selectedSubcategory.value) {
-    selectedSubcategory.value = subcategory;
-  }
-}
-
-// --- Navigation to Product Detail Page ---
-function goToProductDetail(product) {
-  router
-    .push({
-      // This assumes a route exists for product details similar to the desktop's router-link structure
-      path: `/projects/${selectedProject.value}/${selectedSubcategory.value}/${product.path}`,
-    })
-    .catch((err) => {
-      if (err.name !== "NavigationDuplicated") {
-        console.error("Router push failed:", err);
-      }
-    });
-}
 </script>
 
 <template>
   <div class="projects-mobile">
-    <div class="selection-menu">
-      <div class="categories">
-
-        <svg
-          @click="cycleCategory('left')"
-          class="chevron left"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g>
-            <path
-              d="M15 6L9 12L15 18"
-              stroke="#000000"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            ></path>
-          </g>
-        </svg>
-
-        <Transition :name="transitionName" mode="out-in">
-          <span :key="selectedProject" class="category">
-            {{ productStore.categoryFullNames[selectedProject] }}
-          </span>
-        </Transition>
-
-        <svg
-          @click="cycleCategory('right')"
-          class="chevron right"
-
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g>
-            <path
-              d="M9 6L15 12L9 18"
-              stroke="#000000"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            ></path>
-          </g>
-        </svg>
-      </div>
-
-      <ul class="subcategories">
-        <li
-          v-for="subcategory in subcategoryKeysArray"
-          :key="subcategory"
-          class="item"
-          :class="{ selected: subcategory === selectedSubcategory }"
-          @click="selectSubcategory(subcategory)"
-        >
-          <div class="selected-indicator">
-            <svg
-              class="indicator-rectangle"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 142 15.19851"
-              preserveAspectRatio="xMidYMax meet"
-              aria-hidden="true"
-            >
-              <path
-                d="M12.0053 3.80149C13.9018 1.40061 16.793 0 19.8525 0H122.147C125.207 0 128.098 1.40061 129.995 3.80149L142 15.19851H0L12.0053 3.80149Z"
-                fill="#44A0AD"
-              />
-            </svg>
-          </div>
-          <span class="text">
-            {{ subcategoryFullNames[subcategory] }}
-          </span>
-        </li>
-      </ul>
-    </div>
-    <ul class="product-list">
+    <SelectionMenu/>
+    <ul v-if="!clickedProduct" class="product-list">
       <li v-for="product in processedProducts" :key="product.id" class="product-card">
+        <button @click="clickedProduct = true">TRY ME</button>
         <router-link
           :key="product.id"
           class="card-content"
@@ -265,6 +101,8 @@ function goToProductDetail(product) {
         </router-link>
       </li>
     </ul>
+
+    <!-- <ProductsViewMobile v-else /> -->
   </div>
 </template>
 
@@ -303,14 +141,15 @@ function goToProductDetail(product) {
         width: 30px;
         height: 30px;
         transition: transform 0.3s ease;
-        path{
+        path {
           stroke: white;
         }
         &.left {
         }
         &.right {
         }
-        &:focus, &:active {
+        &:focus,
+        &:active {
           transform: scale(110%);
         }
       }

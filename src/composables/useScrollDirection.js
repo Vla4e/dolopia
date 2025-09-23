@@ -1,4 +1,5 @@
 /* 
+Used to Scroll through phases on About page, overriding default scrolling.
 Accepts onScrollUp & onScrollDown callback functions as arguments which trigger based on
 scroll direction.
 */

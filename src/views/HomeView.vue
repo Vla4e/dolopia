@@ -100,10 +100,10 @@ const products = [
       earthy aroma of savory, this sauce turns any pasta into a rustic <br />
       Mediterranean experience.`,
       descriptionMobile: `
-      Dolopia's Tomato Sauce with Feta and Savory brings the<br />
-      warmth of a summer garden straight to your plate. Made<br />
-      with sun-ripened tomatoes, real chunks of Greek Feta,<br />
-      and the earthy aroma of savory, this sauce turns any <br />
+      Dolopia's Tomato Sauce with Feta and Savory brings the 
+      warmth of a summer garden straight to your plate. Made 
+      with sun-ripened tomatoes, real chunks of Greek Feta, 
+      and the earthy aroma of savory, this sauce turns any 
       pasta into a rustic Mediterranean experience.
       `,
       projectInfo: `It's part of our Tomato project - a celebration of authentic traditional tomato sauces. Alongside classic<br />
@@ -131,7 +131,7 @@ const products = [
         opening: { text: 'Smoky, Silky, <br/><b style="font-weight: 700;">Unforgettable</b>', class: 'no-break' , class: "lt-1" },
         closing: { text: '<b style="font-weight: 700;">Rooted in <br />Mediterranean simplicity</b> Crafted with care', class: 'lt-2' },
         openingMobile: { text: 'Smoky, Silky, <b style="font-weight: 700;">Unforgettable</b>', class: 'no-break', class: "lt-1" },
-        closingMobile: { text: '<span style="font-size: 24px; font-weight: 700; text-align: right">Rooted in <br />Mediterranean simplicity</span> Crafted with care', class: 'lt-2' }
+        closingMobile: { text: '<span class="small" style="font-size: 24px; font-weight: 700; text-align: right">Rooted in <br />Mediterranean simplicity</span> Crafted with care', class: 'lt-2' }
       },
       description: `One of Dolopia’s oldest recipes and still our biggest success, this<br />
       aubergine salad redefines tradition. Instead of smoking the <br />
@@ -139,12 +139,12 @@ const products = [
       twist that preserves purity while adding mystery. A hint of garlic, a <br />
       drizzle of extra virgin olive oil, and fresh ingredients only <br />
       - no additives, ever.`,
-      descriptionMobile: `One of Dolopia’s oldest recipes and still our biggest<br />
-      success, this aubergine salad redefines tradition.Instead<br />
-       of smoking the aubergines, we infuse the velvety pulp<br /> 
-      with smoked tea - a subtle twist that preserves purity<br />
-      while adding mystery. A hint of garlic, a drizzle of extra<br />
-      virgin olive oil, and fresh ingredients only <br />
+      descriptionMobile: `One of Dolopia’s oldest recipes and still our biggest 
+      success, this aubergine salad redefines tradition. Instead 
+      of smoking the aubergines, we infuse the velvety pulp
+      with smoked tea - a subtle twist that preserves purity 
+      while adding mystery. A hint of garlic, a drizzle of extra 
+      virgin olive oil, and fresh ingredients only 
       - no additives, ever.`,
       projectInfo: `Part of our Vegetable Project, under the Salads & Spreads subcategory, it shares the spotlight with red pepper
       <br />creations and slow-cooked vegetables in EVO oil.`,
@@ -175,14 +175,14 @@ const products = [
       Part of our Pasta Project, this creation stands alongside traditional pastas <br />
       made with goat or sheep milk, vibrant vegan blends with vegetables and <br />
       spices, and other specialty shapes.`,
-      descriptionMobile: `Dolopia’s Two-Coloured Seafood Orzo brings together<br />
-      two worlds: jet-black orzo with squid ink and golden orzo<br />
-      infused with shellfish essence. It’s a visual and culinary<br />
-      ode to the Greek seaside, where simplicity meets bold<br />
+      descriptionMobile: `Dolopia’s Two-Coloured Seafood Orzo brings together 
+      two worlds: jet-black orzo with squid ink and golden orzo 
+      infused with shellfish essence. It’s a visual and culinary 
+      ode to the Greek seaside, where simplicity meets bold 
       taste.<br/>
-      Part of our Pasta Project, this creation stands alongside<br />
-      traditional pastas made with goat or sheep milk, vibrant<br />
-      vegan blends with vegetables and spices, and other<br />
+      Part of our Pasta Project, this creation stands alongside 
+      traditional pastas made with goat or sheep milk, vibrant 
+      vegan blends with vegetables and spices, and other 
       specialty shapes.`,
       projectInfo: `Every piece of pasta is air-dried slowly, never heat-treated – so the aromas stay locked inside. With no<br />
       added salt and a naturally rough surface for sauces to cling to, it’s designed to carry flavor in every bite. <br />
@@ -216,11 +216,11 @@ const products = [
       vibrant balance of sweet, fresh, and spicy notes. Perfect on its own<br />
       or paired with cheeses, it's equally delicious as a regular jam or a<br />
       creative filling for pastries and desserts.`,
-      descriptionMobile: `Dolopia's Strawberry with Mint and Pepper Jam blends<br />
-      ripe strawberries with fresh mint and a subtle hint<br />
-      of pepper, creating a vibrant balance of sweet, fresh, and<br />
-      spicy notes. Perfect on its own or paired with cheeses, it's<br />
-      equally delicious as a regular jam or a creative filling<br />
+      descriptionMobile: `Dolopia's Strawberry with Mint and Pepper Jam blends 
+      ripe strawberries with fresh mint and a subtle hint 
+      of pepper, creating a vibrant balance of sweet, fresh, and 
+      spicy notes. Perfect on its own or paired with cheeses, it's 
+      equally delicious as a regular jam or a creative filling 
       for pastries and desserts.`,
       projectInfo: `Part of our Fruit Project, this jam joins a family of unique creations like fine cut lemon marmalade with extra<br />
       virgin olive oil and luscious candied cherries with bitter almonds – all made without colours, colour stabilizers,<br />

@@ -1,5 +1,6 @@
 <script setup>
-import { watch, ref, onMounted } from "vue";
+import { watch, ref, onMounted, inject } from "vue";
+const { isMobile } = inject("screenSize")
 
 let dataObjects = {
   tomato: {
@@ -10,7 +11,7 @@ let dataObjects = {
     alt: "pasta sauce, tomato sauces, homemade ketchup",
   },
   fruit: {
-    heading: "Fruit collection",
+    heading: "Fruit Collection",
     paragraph:
       "For those with a sweet tooth, our fruit collection includes jams, marmalades, and candied fruits in syrup, all made from ripe, carefully selected fruits that embody the natural sweetness and richness of Greece’s orchards.",
     imageUrl: new URL("@/assets/about/projects/fruit-project.png", import.meta.url).href,
@@ -70,7 +71,7 @@ onMounted(() => {
         <!-- <span style="color: black;">{{ currentProjectObject }}</span> -->
       </div>
     </Transition>
-    <Transition name="slide-image" mode="out-in">
+    <Transition :name="!isMobile ? 'slide-image' : 'slide'" mode="out-in">
       <div class="image-container" :key="currentProjectObject.imageUrl">
         <img
           :src="currentProjectObject.imageUrl"
@@ -140,6 +141,47 @@ onMounted(() => {
   &.vegetable {
     .image {
       // width:40%;
+    }
+  }
+
+  @media (max-width: 450px) {
+    flex-direction: column;
+    .text-container {
+      width: 90%;
+      max-width: 90%;
+      height: 50vh;
+      padding-top: 5vh;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      // justify-content: center;
+      h2 {
+        color: #fff;
+        text-align: center;
+        font-family: "Belleza";
+        font-size: 36px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 1.25; /* 125% */
+      }
+      p {
+        color: #fff;
+        text-align: center;
+        font-family: "Raleway";
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 1.8; /* 142.857% */
+      }
+    }
+    .image-container {
+      width: 100%;
+      max-width: 100%;
+      height: 50vh;
+      padding-bottom: 5vh;
+      .image {
+        height: 50vh;
+      }
     }
   }
 }
