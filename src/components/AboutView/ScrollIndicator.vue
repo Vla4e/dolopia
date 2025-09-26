@@ -1,6 +1,6 @@
 <template>
   <div :class="phaseId >= disappearAtPhaseId ? 'scrolled' : ''" class="scroll-indicator">
-    <span>Scroll down to continue</span>
+    <span>{{isMobile ? 'Swipe' : 'Scroll'}} down to continue</span>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="#131313"
@@ -16,6 +16,9 @@
 </template>
 
 <script setup>
+import { inject } from 'vue';
+
+const { isMobile } = inject('screenSize');
 
 const props = defineProps({
   disappearAtPhaseId: {

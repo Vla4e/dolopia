@@ -43,7 +43,7 @@ onUnmounted(() => {});
 </script>
 
 <template>
-  <div class="phase-container">
+  <div class="phase-container phase">
     <!-- Phase 0 - Logo -->
     <Transition name="slide-up">
       <div v-if="phaseId === 0" class="phase phase-0" key="phase-0">

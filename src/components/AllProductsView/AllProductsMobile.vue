@@ -1,5 +1,6 @@
 <script setup>
 // import ProductsViewMobile from "../ProductsViewMobile/ProductsViewMobile.vue";
+import cardBackgroundPlaceholder from "@/assets/product_overview/background.png";
 import SelectionMenu from "../SelectionMenu.vue";
 
 import { ref, computed, watch, nextTick } from "vue";
@@ -40,16 +41,14 @@ const processedProducts = computed(() => {
     return finalProductArray
 });
 
-let clickedProduct = ref(false);
 
 </script>
 
 <template>
   <div class="projects-mobile">
     <SelectionMenu/>
-    <ul v-if="!clickedProduct" class="product-list">
+    <ul class="product-list">
       <li v-for="product in processedProducts" :key="product.id" class="product-card">
-        <button @click="clickedProduct = true">TRY ME</button>
         <router-link
           :key="product.id"
           class="card-content"
@@ -180,7 +179,7 @@ let clickedProduct = ref(false);
           height: 25px;
           position: absolute;
           top: -24px;
-          display: flex; /* Ensure the SVG is centered within the container */
+          display: flex;
           justify-content: center;
           align-items: center;
           transition: all 0.3s ease;
@@ -191,8 +190,8 @@ let clickedProduct = ref(false);
         .indicator-rectangle {
           width: 100%;
           height: 100%;
-          max-width: 100%; /* Prevent overflow */
-          max-height: 100%; /* Prevent overflow */
+          max-width: 100%;
+          max-height: 100%;
         }
         &.selected {
           .selected-indicator {
@@ -206,7 +205,7 @@ let clickedProduct = ref(false);
           font-size: 12px;
           font-style: normal;
           font-weight: 400;
-          line-height: 1.1; /* 83.333% */
+          line-height: 1.1;
           text-transform: uppercase;
           z-index: 3;
           text-align: center;

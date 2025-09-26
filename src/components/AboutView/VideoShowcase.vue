@@ -12,7 +12,7 @@ const dataObject = {
   passion: {
     heading: "",
     mobileHeading:
-      "Dolopia Savour Creations began <br/> with our shared love for cooking ",
+      "Dolopia Savour Creations began with our shared love for cooking ",
     paragraph: `Dolopia Savour Creations began with our shared love for cooking and a <br/>
     passion for sharing authentic flavors. As a couple with roots outside of<br/>
     Greece, we spent countless hours experimenting with local ingredients<br/>
@@ -46,7 +46,7 @@ const dataObject = {
   artisanal: {
     heading: "",
     mobileHeading:
-      "At Dolopia Savour Creations, we<br/>take pride in our commitment to<br/>quality, authenticity, and flavor.",
+      "At Dolopia Savour Creations, we take pride in our commitment to quality, authenticity, and flavor.",
     paragraph: `At Dolopia Savour Creations, we take pride in our commitment<br/>
       to quality, authenticity, and flavor. Our products stand out for<br/>
       several reasons. First and foremost, we use only the freshest,<br/>
@@ -71,7 +71,7 @@ const dataObject = {
     paragraphMobile: `We avoid artificial additives, preservatives, and shortcuts, opting instead for time-honored techniques that enhance the natural taste of our ingredients. This dedication to purity means that our pasta, sauces, and spreads not only taste better but are also healthier options for you and your family. With Dolopia, you can savor the essence of Mediterranean cuisine, bringing authentic flavors to your table with ease and confidence.`,
     flavourText: "High-quality products,</br>crafted with care",
     videoSource: highQualityProductsVideo,
-  }
+  },
 };
 
 const props = defineProps({
@@ -154,8 +154,13 @@ watch(
           class="flavour-text"
           v-html="currentDataObject.flavourText"
         ></span>
-        <h2 v-if="currentDataObject.heading" v-html="currentDataObject.heading"></h2>
-        <p v-if="currentDataObject.paragraph" v-html="isMobile ? currentDataObject.paragraphMobile : currentDataObject.paragraph"></p>
+        <h2 v-if="currentDataObject.heading && !isMobile" v-html="currentDataObject.heading"></h2>
+        <p
+          v-if="currentDataObject.paragraph"
+          v-html="
+            isMobile ? currentDataObject.paragraphMobile : currentDataObject.paragraph
+          "
+        ></p>
         <p v-if="currentDataObject.paragraph2" v-html="currentDataObject.paragraph2"></p>
       </div>
     </div>
@@ -171,6 +176,9 @@ watch(
   height: 100vh;
   max-height: 100vh;
   box-sizing: border-box;
+  @media(max-width: 450px){
+    margin-bottom: 25px;
+  }
 
   // Children containers: 50% width, full height, flex column
   .media-wrapper,
@@ -343,7 +351,7 @@ watch(
         color: #039ea2;
         text-align: center;
         font-family: Belleza;
-        font-size: 25px;
+        font-size: 28px;
         font-style: normal;
         font-weight: 400;
         line-height: 26px; /* 104% */
@@ -406,6 +414,24 @@ watch(
         width: 90%;
         margin: auto;
         margin-top: 30px;
+      }
+    }
+  } /* Move these after the 450px query */
+  @media (max-width: 391px) {
+    .mobile-text-container {
+      .flavour-text {
+        font-size: 30px !important;
+      }
+      .mobile-heading{
+        font-size: 26px;
+      }
+    }
+  }
+
+  @media (max-width: 360px) {
+    .mobile-text-container{
+      .flavour-text {
+        font-size: 28px !important;
       }
     }
   }

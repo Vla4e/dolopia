@@ -1,9 +1,11 @@
 <script setup>
 import VideoShowcase from "../VideoShowcase.vue";
 import advantageImage from "@/assets/about/advantage.jpg";
-import { watch, ref } from "vue";
+import advantageImageMobile from "@/assets/about/advantage/mobile.jpg";
+import { watch, ref, inject } from "vue";
 import { useWithinPhaseScroll } from "@/composables/useWithinPhaseScroll";
 
+const { isMobile } = inject("screenSize");
 const animateInText = ref(false);
 
 const props = defineProps({
@@ -64,7 +66,11 @@ watch(
     <Transition name="slide-up-reusable">
       <section v-if="phaseId === 9" class="phase phase-9" key="phase-9">
         <div class="image-container">
-          <img :src="advantageImage" class="logo" alt="Logo" />
+          <img
+            :src="isMobile ? advantageImageMobile : advantageImage"
+            class="logo"
+            alt="Logo"
+          />
         </div>
         <div :class="{ 'animate-in': animateInText }" class="hero-text-container">
           <h2>The Dolopia Advantage</h2>
@@ -92,22 +98,29 @@ watch(
 
                   <div class="right">
                     <p class="highlight-text">
-                      With a dedicated deli section, focusing on<br/>
-                      businesses that prioritize quality over<br/>
-                      price. Our products are designed for<br/>
-                      establishments seeking to offer their<br/>
-                      customers authentic, artisanal flavors,<br/>
-                      enhancing their culinary offerings with<br/>
-                      high-quality, handcrafted ingredients.  
+                      With a dedicated deli section, focusing on<br />
+                      businesses that prioritize quality over<br />
+                      price. Our products are designed for<br />
+                      establishments seeking to offer their<br />
+                      customers authentic, artisanal flavors,<br />
+                      enhancing their culinary offerings with<br />
+                      high-quality, handcrafted ingredients.
                     </p>
                   </div>
                 </div>
 
-                <p class="description">
-                  Whether it’s a local deli looking to provide unique,<br/>
-                  flavorful options or a restaurant wanting to elevate<br/>
-                  their menu with genuine Mediterranean tastes, we<br/>
-                  partner with those who share our commitment to<br/>
+                <p v-if="!isMobile" class="description">
+                  Whether it’s a local deli looking to provide unique,<br />
+                  flavorful options or a restaurant wanting to elevate<br />
+                  their menu with genuine Mediterranean tastes, we<br />
+                  partner with those who share our commitment to<br />
+                  excellence in every bite.
+                </p>
+                <p v-else class="description">
+                  Whether it’s a local deli looking to provide unique, 
+                  flavorful options or a restaurant wanting to elevate 
+                  their menu with genuine Mediterranean tastes, we 
+                  partner with those who share our commitment to 
                   excellence in every bite.
                 </p>
               </div>
@@ -116,31 +129,13 @@ watch(
           <ArrowButton :routePath="'/projects'" :buttonText="'Explore'" />
         </section>
 
-        <!-- Debug info - remove in production -->
-        <div
-          class="debug-info"
-          style="
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 10px;
-            font-size: 12px;
-          "
-        >
-          At Top: {{ isAtTop }}<br />
-          At Bottom: {{ isAtBottom }}<br />
-          Touched Top: {{ hasTouchedTop }}<br />
-          Touched Bottom: {{ hasTouchedBottom }}
-        </div>
       </section>
     </Transition>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.phase-container{
+.phase-container {
   min-height: 100vh;
   width: 100vw;
   // position: relative;
@@ -159,8 +154,8 @@ watch(
   position: absolute;
   background-color: #e6f6f6;
   flex-direction: column;
-  padding-left: 2vw;
-  padding-right: 2vw;
+  padding-left: 3vw;
+  padding-right: 3vw;
   overflow-y: auto;
   overflow-x: hidden;
   scroll-behavior: smooth;
@@ -181,6 +176,12 @@ watch(
       justify-content: center;
       padding: 0 2rem 2rem 2rem;
       width: 100%;
+      @media (max-width: 450px) {
+        padding: 0;
+        min-height: auto;
+        align-items: flex-start;
+        margin-bottom: 60px;
+      }
       // margin-top: -5vh;
       .content-wrapper {
         display: flex;
@@ -189,6 +190,11 @@ watch(
         height: 70%;
         width: 80%;
         margin: auto;
+        @media (max-width: 450px) {
+          width: 100%;
+          height: 100%;
+          margin: 0 !important;
+        }
       }
 
       .hero-content {
@@ -200,10 +206,24 @@ watch(
         // align-items: center;
         justify-content: center;
         // width: 45%;
+
+        @media (max-width: 450px) {
+          width: 100%;
+          align-items: center;
+        }
         .row {
           display: flex;
           justify-content: space-between;
           margin-bottom: 5vh;
+          @media (max-width: 450px) {
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            .right{
+              width: 100%;
+            }
+          }
         }
       }
 
@@ -220,6 +240,9 @@ watch(
         @media (max-width: 1600px) and (max-height: 900px) {
           font-size: 14px;
         }
+        @media(max-width: 450px){
+          text-align: center;
+        }
       }
 
       .main-heading {
@@ -231,6 +254,17 @@ watch(
         line-height: 1.2; /* 120% */
         @media (max-width: 1600px) and (max-height: 900px) {
           font-size: 54px;
+        }
+        @media (max-width: 450px) {
+          color: #039ea2;
+          text-align: center;
+          font-family: Kugile;
+          font-size: 36px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 45px; /* 125% */
+          letter-spacing: 1.44px;
+          margin-bottom: 20px;
         }
       }
 
@@ -245,7 +279,19 @@ watch(
         @media (max-width: 1600px) and (max-height: 900px) {
           font-size: 18px;
         }
+        @media (max-width: 450px) {
+          color: #000;
+          text-align: center;
+          font-family: Belleza;
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 20px; /* 125% */
+          letter-spacing: 0.64px;
+          width: 100%;
+        }
       }
+
     }
     .arrow-button {
       position: absolute;
@@ -305,6 +351,12 @@ watch(
   transform: translate(-50%, -100%);
   transition: opacity 3s 0.2s ease, transform 0.5s ease;
   z-index: 3;
+  @media (max-width: 450px) {
+    top: 50%;
+    height: 100%;
+    align-items: center;
+    justify-content: space-around;
+  }
   &.animate-in {
     opacity: 1;
     transform: translate(-50%, -50%);
@@ -321,6 +373,17 @@ watch(
     line-height: 1;
     letter-spacing: 3.2px;
     margin-bottom: 36px;
+    @media (max-width: 450px) {
+      color: #fff;
+      text-align: center;
+      font-family: "Belleza";
+      font-size: 36px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 45px; /* 125% */
+      text-transform: capitalize;
+      margin-bottom: 0;
+    }
   }
   p {
     color: #fff;
@@ -331,6 +394,19 @@ watch(
     font-style: normal;
     font-weight: 400;
     line-height: 55px; /* 110% */
+    @media (max-width: 450px) {
+      color: #fff;
+      text-align: center;
+      font-family: "Kugile";
+      font-size: 30px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 45px; /* 150% */
+      text-transform: capitalize;
+    }
+    @media (max-width: 390px) {
+      font-size: 20px;
+    }
   }
 }
 

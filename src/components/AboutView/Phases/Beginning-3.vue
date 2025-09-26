@@ -73,22 +73,6 @@ watch(
         <VideoShowcase :key="'passion'" side="left" sectionId="passion" />
         <VideoShowcase :key="'quality'" side="right" sectionId="quality" />
 
-        <!-- Debug info - remove in production -->
-        <div
-          class="debug-info"
-          style="
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 10px;
-            font-size: 12px;
-          "
-        >
-          At Top: {{ isAtTop }}<br />
-          At Bottom: {{ isAtBottom }}
-        </div>
       </div>
     </Transition>
   </div>
@@ -113,8 +97,8 @@ watch(
   position: absolute;
   background-color: #e6f6f6;
   flex-direction: column;
-  padding-left: 2vw;
-  padding-right: 2vw;
+  padding-left: 3vw;
+  padding-right: 3vw;
   overflow-y: auto;
   overflow-x: hidden;
   scroll-behavior: smooth;
@@ -195,9 +179,10 @@ watch(
 }
 
 @media (max-width: 450px) {
-  .phase-8{
-    height: auto !important;
-    position: absolute !important;
+  .phase-8 {
+    height: 100vh !important; // Keep fixed height for scrolling
+    position: fixed !important; // Use fixed instead of absolute
+    overflow-y: auto !important; // Ensure scrolling is enabled
   }
   .how-it-started-container {
     // transform: none !important;
@@ -208,6 +193,7 @@ watch(
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    width: 90%;
     h2 {
       color: #fff;
       text-align: center;

@@ -313,6 +313,7 @@ const products = [
   .home-page-container{
     padding-top: 0px;
     min-height: calc(100vw * 4.334) !important;
+    // margin-bottom: 30px;
     .hero-container{
       position: absolute;
       z-index: 2;

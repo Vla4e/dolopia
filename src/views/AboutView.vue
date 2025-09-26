@@ -3,72 +3,125 @@
 import { ref, computed, defineAsyncComponent, inject, onUnmounted, watch } from "vue";
 import { useScrollDirection } from "@/composables/useScrollDirection";
 
-const phaseId = ref(0);
-const phaseCount = 15;
+const { isMobile } = inject("screenSize");
 
-//In order of appearance // range = range of phases belonging to component
-const phaseMappings = [
-  { name: 'Introduction', range: [0, 2], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/Introduction-1.vue')) },
-  { name: 'Projects', range: [3, 6], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/Projects-2.vue')) },
-  { name: 'Beginning', range: [7, 8], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/Beginning-3.vue')) },
-  { name: 'Advantage', range: [9, 10], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/Advantage-4.vue')) },
-  { name: 'Mission', range: [11, 12], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/Mission-5.vue')) },
-  { name: 'PrivateLabel', range: [13, 14], component: defineAsyncComponent(() => import('@/components/AboutView/Phases/PrivateLabel-6.vue')) },
-];
+const phaseId = ref(0);
+const phaseCount = computed(() => {
+  return isMobile.value ? 17 : 15;
+});
+
+// Cache the async components to avoid recreating them
+const components = {
+  Introduction: defineAsyncComponent(() =>
+    import("@/components/AboutView/Phases/Introduction-1.vue")
+  ),
+  Projects: defineAsyncComponent(() =>
+    import("@/components/AboutView/Phases/Projects-2.vue")
+  ),
+  Beginning: defineAsyncComponent(() =>
+    import("@/components/AboutView/Phases/Beginning-3.vue")
+  ),
+  Advantage: defineAsyncComponent(() =>
+    import("@/components/AboutView/Phases/Advantage-4.vue")
+  ),
+  Mission: defineAsyncComponent(() =>
+    import("@/components/AboutView/Phases/Mission-5.vue")
+  ),
+  PrivateLabel: defineAsyncComponent(() =>
+    import("@/components/AboutView/Phases/PrivateLabel-6.vue")
+  ),
+};
+
+const phaseMappings = computed(() => {
+  const mobile = isMobile.value;
+
+  return [
+    { name: "Introduction", range: [0, 2], component: components.Introduction },
+    { name: "Projects", range: [3, 6], component: components.Projects },
+    { name: "Beginning", range: [7, 8], component: components.Beginning },
+    { name: "Advantage", range: [9, 10], component: components.Advantage },
+    {
+      name: "Mission",
+      range: mobile ? [11, 13] : [11, 12],
+      component: components.Mission,
+    },
+    {
+      name: "PrivateLabel",
+      range: mobile ? [14, 16] : [13, 14],
+      component: components.PrivateLabel,
+    },
+  ];
+});
 
 const currentPhaseComponent = computed(() => {
-  const mapping = phaseMappings.find(m => 
-    phaseId.value >= m.range[0] && phaseId.value <= m.range[1]
-  );
-  // Fallback to the first component if no match is found
-  return mapping ? mapping : phaseMappings[0];
+  const currentPhase = phaseId.value;
+  const mappings = phaseMappings.value;
+
+  for (let i = 0; i < mappings.length; i++) {
+    const mapping = mappings[i];
+    if (currentPhase >= mapping.range[0] && currentPhase <= mapping.range[1]) {
+      return mapping;
+    }
+  }
+
+  //fallback
+  return mappings[0];
 });
+
+let noPaddingPhases = [7, 9, 11, 13];
+let noPaddingPhasesMobile = [7, 9, 11, 14];
+let hasPadding = ref(true);
+watch(
+  () => phaseId.value,
+  (newPhase) => {
+    console.log("newPhase", newPhase, noPaddingPhases.includes(newPhase));
+    if (isMobile.value) {
+      if (noPaddingPhasesMobile.includes(newPhase)) {
+        hasPadding.value = false;
+      } else hasPadding.value = true;
+    } else {
+      if (noPaddingPhases.includes(newPhase)) {
+        hasPadding.value = false;
+      } else hasPadding.value = true;
+    }
+    console.log("Final value of padding:", hasPadding.value);
+  }
+);
 
 let isCycling = false;
 const forward = true;
 const backward = false;
 
 function cyclePhase(direction) {
-  console.log("IsCycling->", isCycling, phaseId)
-  if(phaseId.value === 14 && direction === forward){
-    return
-  }
-  if(isCycling){
-    return
-  }
+  if (isCycling) return;
+  if (phaseId.value === 14 && !isMobile.value && direction === forward) return;
+  else if (phaseId.value === 16 && direction === forward) return;
+
   isCycling = true;
+  const currentPhase = phaseId.value;
+  const maxPhase = phaseCount.value - 1;
+
   if (direction === forward) {
     hasScrolledDown.value = true;
-    if (phaseId.value < phaseCount - 1) {
-      phaseId.value++;
-    } else {
-      phaseId.value = 0;
-    }
+    phaseId.value = currentPhase < maxPhase ? currentPhase + 1 : 0;
   } else {
-    if (phaseId.value > 0) {
-      phaseId.value--;
-    } else {
-      phaseId.value = phaseCount - 1;
-    }
+    phaseId.value = currentPhase > 0 ? currentPhase - 1 : maxPhase;
   }
+
   setTimeout(() => {
-    isCycling = false
-  }, 800) //adjust to transition duration based on currentTransition styling
+    isCycling = false;
+  }, 800); // adjust to transition duration based on currentTransition styling
 }
 
-//Scroll override disabled within Advantage, Beginning.vue via useScrollStore to allow for native scrolling through component.
-let hasScrolledDown = ref(false)
+// Scroll override disabled within Advantage, Beginning.vue via useScrollStore to allow for native scrolling through component.
+let hasScrolledDown = ref(false);
 useScrollDirection(
   () => cyclePhase(backward), // onScrollUp
-  () => cyclePhase(forward),  // onScrollDown
+  () => cyclePhase(forward) // onScrollDown
 );
 
-
-const currentTransition = computed(() => {
-  // if (phaseId.value === 1) return 'fade-in-up';
-  // if (phaseId.value >= 2) return 'slide-up-about';
-  return {name: 'fade-in-up', mode:''}; // Default for phase 0 or others
-});
+// Since this always returns the same value, make it a constant or remove the computed
+const currentTransition = { name: "fade-in-up", mode: "" };
 </script>
 
 <template>
@@ -77,15 +130,16 @@ const currentTransition = computed(() => {
       <Transition :name="currentTransition.name" :mode="currentTransition.mode">
         <component
           :is="currentPhaseComponent.component"
+          :id="hasPadding"
           :key="currentPhaseComponent.name"
           :phaseId="phaseId"
-          class="phase"
+          class="phase-component"
+          :class="{ padding: hasPadding }"
         />
       </Transition>
     </Suspense>
   </div>
-  
-  <!--comment in for testing during development-->
+
   <!-- <div class="controls">
     <button @click="cyclePhase(backward)">PREV</button>
     <span>{{ phaseId }}</span>
@@ -102,46 +156,59 @@ const currentTransition = computed(() => {
   align-items: center;
   position: relative;
 
-  &.container{
-    &-3{
-      background-color: #8AC3C7;
-      .phase{
-        background-color: #8AC3C7;
+  &.container {
+    &-3 {
+      background-color: #8ac3c7;
+      .phase-component {
+        background-color: #8ac3c7;
       }
     }
-    &-4{
-        background-color: #039EA2;
-      .phase{
-        background-color: #039EA2;
+    &-4 {
+      background-color: #039ea2;
+      .phase-component {
+        background-color: #039ea2;
       }
     }
-     &-5, &-6, &-7{
-      background-color: #039EA2;
-      .phase{
-        background-color: #039EA2;
+    &-5,
+    &-6,
+    &-7 {
+      background-color: #039ea2;
+      .phase-component {
+        background-color: #039ea2;
       }
     }
-    &-8, &-9, &-10, &-11{
+    &-8,
+    &-9,
+    &-10,
+    &-11 {
       background-color: #e6f6f6;
-      .phase{
+      .phase-component {
         background-color: #e6f6f6;
       }
     }
-    &-12, &-13, &-14{
-      .phase{
-        background-color: #E6F6F6;
+    &-12,
+    &-13,
+    &-14 {
+      .phase-component {
+        background-color: #e6f6f6;
+      }
+    }
+    &-15,
+    &-16{
+      .phase-component {
+        background-color: #e6f6f6;
       }
     }
   }
 }
 
-.phase {
+.phase-component {
   display: flex;
   width: 100%;
   position: absolute;
   top: 0;
   left: 0;
-  background-color: #8AC3C7;
+  background-color: #8ac3c7;
 }
 
 .controls {
@@ -198,7 +265,8 @@ const currentTransition = computed(() => {
 }
 
 /* slide-up-about transitions */
-.slide-up-about-enter-active, .slide-up-about-leave-active {
+.slide-up-about-enter-active,
+.slide-up-about-leave-active {
   transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .slide-up-about-enter-from {

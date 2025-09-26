@@ -1,54 +1,66 @@
 <script setup>
-import { ref, watch } from "vue";
-
 import AwardShowcase from "@/components/AwardsView/AwardShowcase.vue";
 
-import silver from "@/assets/awards/silver.svg";
-import gta1 from "@/assets/awards/gta1.svg";
-import gta2 from "@/assets/awards/gta2.svg";
+import { gta1, gta2, silver } from "@/assets/products/awardedProducts";
+import { allProductMap } from "@/assets/products/allProductMap";
 
-let awardsConfig = [
+import { ref, watch, inject } from "vue";
+const { isMobile } = inject("screenSize");
+
+let awardsConfig = ref([
   {
     name: "gta2",
     heading: "two golden stars",
     subheading: "Guild of Fine Food | Great Taste",
+    subheadingMobile: "Guild of Fine Food<br/>Great Taste",
     description: `The Great Taste Awards is the world's most trusted food and drink accreditation scheme, celebrating exceptional taste, quality, and craftsmanship. Each product is rigorously blind-tasted by a panel of experts, ensuring only the finest receive recognition. We're proud to showcase our numerous awards, a testament to our commitment to creating products that delight and inspire.`,
-    image: gta2,
+    image: new URL("@/assets/awards/gta2.svg", import.meta.url).href,
     index: 0,
+    show: false,
   },
   {
     name: "gta1",
     heading: "golden star",
     subheading: "Guild of Fine Food | Great Taste awards",
+    subheadingMobile: "Guild of Fine Food</br>Great Taste awards",
     description: `The Great Taste Awards is the world's most trusted food and drink accreditation scheme, celebrating exceptional taste, quality, and craftsmanship. Each product is rigorously blind-tasted by a panel of experts, ensuring only the finest receive recognition. We're proud to showcase our numerous awards, a testament to our commitment to creating products that delight and inspire.`,
-    image: gta1,
+    image: new URL("@/assets/awards/gta1.svg", import.meta.url).href,
     index: 1,
+    show: false,
   },
   {
     name: "silver",
     heading: "silver dalemaine Award",
     subheading: "the Dalemain World Marmalade awards",
+    subheadingMobile: "the Dalemain World</br>Marmalade awards",
     description:
       "This is the culmination of the annual Awards with the competition opening for entries in January each year,  marmalade jars spill out of every part of the house while on display. The new years winner is announced, we have a range of talks and Marmalade panels and tasting of marmalades from around the world. We are joined in our citrus endeavours to further the cause of marmalade everywhere by two sister festivals in Australia and Japan.",
-    image: silver,
+    image: new URL("@/assets/awards/silver.svg", import.meta.url).href,
     index: 2,
+    show: false,
   },
-];
+]);
 
 let isAwardSelected = ref(false);
 let selectedAward = ref({});
-let slideDirection = ref('forward'); // value should be either "forward" or "backward"
-
+let slideDirection = ref("forward"); // value should be either "forward" or "backward"
 
 function selectAward(award) {
-  if (selectedAward.value.index !== undefined && selectedAward.value.name !== award.name) {
-    if (award.index > selectedAward.value.index || (award.index === 0 && selectedAward.value.index === awardsConfig.length - 1)) {
-      slideDirection.value = 'forward';
+  if (isMobile.value) return;
+  if (
+    selectedAward.value.index !== undefined &&
+    selectedAward.value.name !== award.name
+  ) {
+    if (
+      award.index > selectedAward.value.index ||
+      (award.index === 0 && selectedAward.value.index === awardsConfig.value.length - 1)
+    ) {
+      slideDirection.value = "forward";
     } else {
-      slideDirection.value = 'backward';
+      slideDirection.value = "backward";
     }
   } else if (!selectedAward.value.name) {
-    slideDirection.value = 'forward';
+    slideDirection.value = "forward";
   }
 
   if (award.name !== selectedAward.value.name) {
@@ -60,23 +72,41 @@ function selectAward(award) {
 function cycleAward(direction) {
   let awardIndexIterator = selectedAward.value.index;
   if (direction === "back") {
-    slideDirection.value = 'backward';
+    slideDirection.value = "backward";
     if (awardIndexIterator === 0) {
-      awardIndexIterator = awardsConfig.length - 1; // Cycle to last award
+      awardIndexIterator = awardsConfig.value.length - 1; // Cycle to last award
     } else {
       awardIndexIterator--;
     }
-  } else { // direction === "forward"
-    slideDirection.value = 'forward';
-    if (awardIndexIterator === awardsConfig.length - 1) {
+  } else {
+    // direction === "forward"
+    slideDirection.value = "forward";
+    if (awardIndexIterator === awardsConfig.value.length - 1) {
       awardIndexIterator = 0; // Cycle to first award
     } else {
       awardIndexIterator++;
     }
   }
-  selectAward(awardsConfig[awardIndexIterator]);
+  selectAward(awardsConfig.value[awardIndexIterator]);
 }
 
+function getAwardProducts(awardName) {
+  const productArrays = {
+    gta1: gta1,
+    gta2: gta2,
+    silver: silver,
+  };
+  const productList = productArrays[awardName].map((product) => {
+    return allProductMap.get(product);
+  });
+  return productList;
+}
+
+function toggleAwardProducts(award) {
+  if(isMobile.value){
+    award.show = !award.show;
+  }
+}
 </script>
 
 <template>
@@ -98,7 +128,50 @@ function cycleAward(direction) {
             :class="{ selected: selectedAward.name === award.name }"
             @click="selectAward(award)"
           >
-            <img :src="award.image" />
+            <img v-if="!isMobile" class="award-icon" :src="award.image" />
+            <div v-else @click="toggleAwardProducts(award)" class="award-content">
+              <img class="award-icon" :src="award.image" />
+              <div v-if="isMobile" class="award-info">
+                <div class="award-text">
+                  <h3 class="award-name">{{ award.heading }}</h3>
+                  <p class="awarding-body" v-html="award.subheadingMobile"></p>
+                </div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 9 9"
+                  fill="none"
+                  class="plus-icon"
+                >
+                  <rect x="4" width="1" height="9" fill="#231F20" />
+                  <rect
+                    x="9"
+                    y="4"
+                    width="1"
+                    height="9"
+                    transform="rotate(90 9 4)"
+                    fill="#231F20"
+                  />
+                </svg>
+              </div>
+            </div>
+            <Transition v-if="isMobile" name="accordion">
+              <ul
+                v-show="award.show"
+                key="awarded-products"
+                class="awarded-products list"
+              >
+                <router-link
+                  class="product"
+                  v-for="product in getAwardProducts(award.name)"
+                  :key="product"
+                  :to="`/projects/${product.keyToCategory}-project/${product.keyToSubcategory}/${product.pathSlug}`"
+                >
+                  <span class="product-name">{{ product["Product name EN"] }}</span>
+                  <span class="product-award">{{ product["Award"] }}</span>
+                  <span class="product-comments">{{ product["Judges Comments"] }}</span>
+                </router-link>
+              </ul>
+            </Transition>
           </div>
         </div>
       </div>
@@ -112,10 +185,7 @@ function cycleAward(direction) {
             <AwardShowcase :award="selectedAward" />
           </div>
         </Transition>
-        <button
-          @click="cycleAward('back')"
-          class="nav-button prev-button"
-        >
+        <button @click="cycleAward('back')" class="nav-button prev-button">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="#131313"
@@ -128,10 +198,7 @@ function cycleAward(direction) {
             />
           </svg>
         </button>
-        <button
-          @click="cycleAward('forward')"
-          class="nav-button next-button"
-        >
+        <button @click="cycleAward('forward')" class="nav-button next-button">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="#131313"
@@ -159,7 +226,7 @@ function cycleAward(direction) {
   justify-content: center;
   flex-grow: 1;
   background-color: white;
-  position: relative; // Crucial for absolute positioning of children transitions
+  position: relative;
 
   .award-selection {
     width: 100%;
@@ -169,7 +236,9 @@ function cycleAward(direction) {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    // ... (rest of .award-selection styles remain the same)
+    @media (max-width: 450px) {
+      justify-content: flex-start;
+    }
     .text-section {
       background-color: #ceebec;
       height: 55%;
@@ -179,6 +248,9 @@ function cycleAward(direction) {
       justify-content: flex-end;
       align-items: center;
       padding-bottom: 30px;
+      @media (max-width: 450px) {
+        height: 50vh;
+      }
       h2 {
         color: #000;
         text-align: center;
@@ -195,6 +267,17 @@ function cycleAward(direction) {
           letter-spacing: 5.75px;
           margin-bottom: 20px;
         }
+        @media (max-width: 450px) {
+          color: #000;
+          text-align: center;
+          font-family: "Century Gothic";
+          font-size: 36px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 40px; /* 111.111% */
+          letter-spacing: 1.8px;
+          text-transform: uppercase;
+        }
       }
       p {
         color: #000;
@@ -206,6 +289,15 @@ function cycleAward(direction) {
         line-height: 75%; /* 75% */
         @media (min-width: 1400px) and (max-height: 900px) {
           font-size: 28px;
+        }
+        @media (max-width: 450px) {
+          color: #000;
+          text-align: center;
+          font-family: Raleway;
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 18px; /* 112.5% */
         }
       }
     }
@@ -220,39 +312,159 @@ function cycleAward(direction) {
       @media (min-width: 1400px) and (max-height: 900px) {
         padding-top: 1vh;
       }
+      @media (max-width: 450px) {
+        flex-direction: column;
+        align-items: center;
+      }
       .award {
-        display: flex;
-        justify-content: center;
-        min-width: 190px;
-        min-height: 190px;
-        @media (min-width: 1400px) and (max-height: 900px) {
-          max-width: 240px;
-          max-height: 240px;
+        @media(max-width: 450px){
+          width: 90%;
         }
-        &:not(:last-child) {
-          margin-right: 5vw;
+        @media(min-width: 450px){
+          min-width: 190px;
+          min-height: 190px;
         }
-        img {
-          width: 80%;
-          height: 80%;
-          cursor: pointer;
-          transition: transform ease 0.3s;
-          &:hover {
-            transform: scale(1.05);
+          &:not(:last-child) {
+            margin-right: 5vw;
           }
-        }
-        &.selected {
-          transform: scale(1.03);
-          animation: pulse 0.2s 1;
-          @keyframes pulse {
-            0% {
-              transform: scale(1);
-            }
-            50% {
+        .award-content {
+          display: flex;
+          justify-content: center;
+          min-width: 190px;
+          min-height: 190px;
+          @media (min-width: 1400px) and (max-height: 900px) {
+            max-width: 240px;
+            max-height: 240px;
+          }
+          &:not(:last-child) {
+            margin-right: 5vw;
+          }
+          img {
+            width: 80%;
+            height: 80%;
+            cursor: pointer;
+            transition: transform ease 0.3s;
+            &:hover {
               transform: scale(1.05);
             }
-            100% {
-              transform: scale(1.03);
+          }
+          &.selected {
+            transform: scale(1.03);
+            animation: pulse 0.2s 1;
+            @keyframes pulse {
+              0% {
+                transform: scale(1);
+              }
+              50% {
+                transform: scale(1.05);
+              }
+              100% {
+                transform: scale(1.03);
+              }
+            }
+          }
+          @media (max-width: 450px) {
+            justify-content: center;
+            align-items: center;
+            margin-right: 0 !important;
+            width: 100%;
+            height: auto;
+            .award-icon {
+              width: 40%;
+              margin-right: 15px;
+              max-width: 150px;
+              max-height: 150px;
+              // box-shadow: -4px 5px 2px 0 rgba(138, 195, 199, 0.5);
+            }
+            .award-info {
+              display: flex;
+              align-items: center;
+              // flex-direction: column;
+              width: 100%;
+              height: 100%;
+              min-height: 90px;
+              .award-text {
+                display: flex;
+                flex-direction: column;
+                width: 80%;
+                height: 100%;
+                gap: 10px;
+                justify-content: space-around;
+                .award-name {
+                  color: #000;
+                  font-family: "Century Gothic";
+                  font-size: 15px;
+                  font-style: normal;
+                  font-weight: 700;
+                  line-height: 1.6; /* 160% */
+                  letter-spacing: 0.75px;
+                  text-transform: uppercase;
+                  @media (max-width: 390px) {
+                    font-size: 13px;
+                  }
+                }
+
+                .awarding-body {
+                  color: #000;
+                  font-family: "Century Gothic";
+                  font-size: 14px;
+                  font-style: normal;
+                  font-weight: 400;
+                  line-height: 1.2;
+                  letter-spacing: 1.26px;
+                  text-transform: capitalize;
+                  @media (max-width: 390px) {
+                    font-size: 12px;
+                  }
+                }
+              }
+              .plus-icon {
+                // width: 10px;
+                width: 12px;
+                height: 12px;
+                margin-left: 15px;
+              }
+            }
+          }
+        }
+        @media (max-width: 450px) {
+          .awarded-products {
+            padding-left: 5px;
+            .product {
+              display: flex;
+              flex-direction: column;
+              padding-bottom: 20px;
+              margin-bottom: 30px;
+              gap: 10px;
+              border-bottom: 1px solid #8ac3c7;
+              .product-name {
+                color: #000;
+                font-family: "Century Gothic";
+                font-size: 16px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 1.2; /* 156.25% */
+                letter-spacing: 0.8px;
+                text-transform: capitalize;
+              }
+              .product-award {
+                color: #000;
+                font-family: "Century Gothic";
+                font-size: 16px;
+                font-style: normal;
+                font-weight: 700;
+                line-height: 1.2; /* 156.25% */
+                letter-spacing: 0.8px;
+                text-transform: capitalize;
+              }
+              .product-comments {
+                color: #000;
+                font-family: Raleway;
+                font-size: 12px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 1.3; /* 133.333% */
+              }
             }
           }
         }
@@ -281,6 +493,48 @@ function cycleAward(direction) {
       position: absolute; // Make it absolute so it can overlap
       top: 0;
       left: 0;
+    }
+  }
+}
+
+.nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  background-color: none;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  .chevron {
+    width: 30px;
+    height: 30px;
+    stroke: black;
+    transition: transform 0.4s ease;
+  }
+  &.prev-button {
+    left: 0;
+    .chevron {
+      transform: rotate(180deg);
+      &:active {
+        transform: translateX(15px), rotate(180deg);
+      }
+      &:hover {
+        transform: translateX(15px), rotate(180deg);
+      }
+    }
+  }
+  &.next-button {
+    right: 0;
+    .chevron {
+      &:active {
+        transform: translateX(-15px);
+      }
+      &:hover {
+        transform: translateX(-15px);
+      }
     }
   }
 }
@@ -336,50 +590,34 @@ function cycleAward(direction) {
 .slide-backward-leave-to {
   transform: translateX(100%);
 }
+/* Accordion transition for awarded products */
+.accordion-enter-active,
+.accordion-leave-active {
+  transition: all 0.4s ease;
+  transform-origin: top;
+}
 
+.accordion-enter-from {
+  opacity: 0;
+  max-height: 0;
+  transform: scaleY(0);
+}
 
-.nav-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  background-color: none;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  cursor: pointer;
-  z-index: 10;
-  .chevron{
-    width: 30px;
-    height: 30px;
-    stroke: black;
-    transition: transform 0.4s ease;
-  }
-  &.prev-button {
-    left: 0;
-    .chevron{
-      transform: rotate(180deg);
-      &:active{
-        transform: translateX(15px), rotate(180deg);
-      }
-      &:hover{
-        transform: translateX(15px), rotate(180deg);
+.accordion-enter-to {
+  opacity: 1;
+  max-height: 500px; /* Adjust based on your content */
+  transform: scaleY(1);
+}
 
-      }
-    }
-  }
-  &.next-button {
-    right: 0;
-    .chevron{
-      &:active{
-        transform: translateX(-15px);
-        
-      }
-      &:hover{
-        transform: translateX(-15px);
+.accordion-leave-from {
+  opacity: 1;
+  max-height: 500px;
+  transform: scaleY(1);
+}
 
-      }
-    }
-  }
+.accordion-leave-to {
+  opacity: 0;
+  max-height: 0;
+  transform: scaleY(0);
 }
 </style>

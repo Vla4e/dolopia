@@ -3,8 +3,7 @@ import { ref, nextTick, onUnmounted } from 'vue';
 import { useScrollStore } from '@/store/scroll.js';
 
 /**
- * Composable for handling scroll behavior within scrollable phases
- * Manages the transition between phase scrolling and internal content scrolling
+ * Composable manages transition between phase scrolling and internal content scrolling
  */
 export function useWithinPhaseScroll(options = {}) {
   const {
@@ -19,11 +18,20 @@ export function useWithinPhaseScroll(options = {}) {
   const isAtBottom = ref(false);
   const containerElement = ref(null);
   
-  // Track if user has touched boundaries
+  // Track if touched boundaries
   const hasTouchedTop = ref(false);
   const hasTouchedBottom = ref(false);
+  
+  const touchStartY = ref(0);
+  const isTouchScrolling = ref(false);
 
   const handleScroll = (event) => {
+    // Skip scroll handling if currently touch scrolling to avoid duplicates
+    if (isTouchScrolling.value) {
+      return;
+    }
+    
+    console.log("handleScroll")
     const element = event.target;
     
     const atTop = element.scrollTop <= scrollThreshold;
@@ -32,7 +40,6 @@ export function useWithinPhaseScroll(options = {}) {
     isAtTop.value = atTop;
     isAtBottom.value = atBottom;
     
-    // Mark boundaries as touched when reached
     if (atTop) {
       hasTouchedTop.value = true;
     }
@@ -40,46 +47,99 @@ export function useWithinPhaseScroll(options = {}) {
       hasTouchedBottom.value = true;
     }
     
-    // Always disable callbacks when not at boundaries
+    // disable phase transition callbacks when not at top/bottom
     if (!atTop && !atBottom) {
       scrollStore.ignoreScrollCallbacks = true;
     }
   };
 
   const handleWheel = (event) => {
+    // console.log("handleWheel")
     const element = event.currentTarget;
     
     const atTop = element.scrollTop <= scrollThreshold;
     const atBottom = element.scrollHeight - element.scrollTop <= element.clientHeight + scrollThreshold;
     
-    // Handle upward scroll at top boundary
-    console.log("scrolling", event.deltaY, atTop, scrollStore.ignoreScrollCallbacks)
+    // upward scroll at top boundary
+    // console.log("event.deltaY:", event.deltaY,"atTop:", atTop,"ignoreCallbacks", scrollStore.ignoreScrollCallbacks,"hasTouched", hasTouchedTop.value)
     if (event.deltaY < 0 && atTop) {
-      // Only allow callbacks if user has previously touched the top
       if (hasTouchedTop.value) {
         scrollStore.ignoreScrollCallbacks = false;
       }
       return;
     }
     
-    // Handle downward scroll at bottom boundary  
+    // downward scroll at bottom boundary
     if (event.deltaY > 0 && atBottom) {
-      // Only allow callbacks if user has previously touched the bottom
       if (hasTouchedBottom.value) {
         scrollStore.ignoreScrollCallbacks = false;
       }
       return;
     }
     
-    // Scrolling within content
     scrollStore.ignoreScrollCallbacks = true;
+  };
+
+  const handleTouchStart = (event) => {
+    console.log("handleTouchStart")
+    touchStartY.value = event.touches[0].clientY;
+    isTouchScrolling.value = false;
+  };
+
+  const handleTouchMove = (event) => {
+    // console.log("handleTouchMove")
+    const element = event.currentTarget;
+    const currentY = event.touches[0].clientY;
+    const deltaY = touchStartY.value - currentY; // Positive = scrolling down, negative = scrolling up
+    
+    const atTop = element.scrollTop <= scrollThreshold;
+    const atBottom = element.scrollHeight - element.scrollTop <= element.clientHeight + scrollThreshold;
+    
+    // duplicate scroll event handling
+    isTouchScrolling.value = true;
+    
+    isAtTop.value = atTop;
+    isAtBottom.value = atBottom;
+    
+    if (atTop) {
+      hasTouchedTop.value = true;
+    }
+    if (atBottom) {
+      hasTouchedBottom.value = true;
+    }
+    
+    // upward scroll at top boundary
+    // console.log("deltaY:", deltaY, "atTop:", atTop, "ignoreCallbacks", scrollStore.ignoreScrollCallbacks, "hasTouched", hasTouchedTop.value)
+    if (deltaY < 0 && atTop) {
+      if (hasTouchedTop.value) {
+        scrollStore.ignoreScrollCallbacks = false;
+      }
+      return;
+    }
+    
+    // downward scroll at bottom boundary
+    if (deltaY > 0 && atBottom) {
+      if (hasTouchedBottom.value) {
+        scrollStore.ignoreScrollCallbacks = false;
+      }
+      return;
+    }
+    
+    scrollStore.ignoreScrollCallbacks = true;
+  };
+
+  const handleTouchEnd = (event) => {
+    console.log("handleTouchEnd")
+    // Reset touch scrolling flag after a short delay to ensure scroll events are properly ignored
+    setTimeout(() => {
+      isTouchScrolling.value = false;
+    }, 100);
   };
 
   const initializeScrollablePhase = async (customSelector = null) => {
     await nextTick();
     
     const selector = customSelector || containerSelector;
-    console.log("SCROLLABLE INITIATED")
     if (!selector) {
       console.warn('useWithinPhaseScroll: No container selector provided');
       return;
@@ -102,10 +162,17 @@ export function useWithinPhaseScroll(options = {}) {
     hasTouchedTop.value = false;
     hasTouchedBottom.value = false;
     
+    isTouchScrolling.value = false;
+    
     scrollStore.ignoreScrollCallbacks = true;
 
     element.addEventListener('scroll', handleScroll);
     element.addEventListener('wheel', handleWheel, { passive: true });
+    
+    // Add touch event listeners
+    element.addEventListener('touchstart', handleTouchStart, { passive: true });
+    element.addEventListener('touchmove', handleTouchMove, { passive: true });
+    element.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     if (onPhaseEnter) {
       onPhaseEnter({ element, isAtTop, isAtBottom });
@@ -126,12 +193,20 @@ export function useWithinPhaseScroll(options = {}) {
     if (containerElement.value) {
       containerElement.value.removeEventListener('scroll', handleScroll);
       containerElement.value.removeEventListener('wheel', handleWheel);
+      
+      containerElement.value.removeEventListener('touchstart', handleTouchStart);
+      containerElement.value.removeEventListener('touchmove', handleTouchMove);
+      containerElement.value.removeEventListener('touchend', handleTouchEnd);
+      
       containerElement.value = null;
     }
 
     // Reset boundary tracking
     hasTouchedTop.value = false;
     hasTouchedBottom.value = false;
+    
+    // Reset touch state
+    isTouchScrolling.value = false;
     
     scrollStore.ignoreScrollCallbacks = false;
     
@@ -151,6 +226,7 @@ export function useWithinPhaseScroll(options = {}) {
     containerElement,
     hasTouchedTop,
     hasTouchedBottom,
+    isTouchScrolling,
     
     initializeScrollablePhase,
     initializeStaticPhase,

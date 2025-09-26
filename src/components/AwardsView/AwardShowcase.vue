@@ -290,8 +290,8 @@ const breakpoints = {
 
   .product-image {
     max-width: 100%;
-    width: auto !important;
-    height: 300px !important;
+    max-height: 300px !important;
+    // width: auto !important;
     margin-left: -27.5%; // value equal to whitespace between actual product in image and its left edge - added to align image with text above.
     transition: transform 0.3s ease;
     display: block;
@@ -303,7 +303,7 @@ const breakpoints = {
 
     position: absolute;
     left: 0%;
-    top: 300px;
+    top: 250px;
 
     width: 120%;
     padding: 10px;

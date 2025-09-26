@@ -88,3 +88,14 @@ a,
     }
   }
 }
+
+.phase-component {
+  &.padding {
+    .phase{
+      @media(max-width: 450px){
+        padding-left: 4vw;
+        padding-right: 4vw;
+      }
+    }
+  }
+}

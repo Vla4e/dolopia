@@ -1,6 +1,6 @@
 <script setup>
 import { watch, ref, onMounted, inject } from "vue";
-const { isMobile } = inject("screenSize")
+const { isMobile } = inject("screenSize");
 
 let dataObjects = {
   tomato: {
@@ -86,6 +86,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 .about-singular-project {
   display: flex;
+  min-height: 100vh;
   height: 100%;
   width: 100%;
   align-items: center;
@@ -149,9 +150,9 @@ onMounted(() => {
     .text-container {
       width: 90%;
       max-width: 90%;
-      height: 50vh;
+      // height: 50vh;
       padding-top: 5vh;
-      margin: auto;
+      // margin: auto;
       display: flex;
       flex-direction: column;
       // justify-content: center;
@@ -181,6 +182,8 @@ onMounted(() => {
       padding-bottom: 5vh;
       .image {
         height: 50vh;
+        max-width: 100vw !important;
+        // height: auto !important;
       }
     }
   }

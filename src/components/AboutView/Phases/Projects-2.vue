@@ -1,5 +1,5 @@
 <template>
-  <div class="phase-container">
+  <div class="phase-container phase">
     <!-- Phase 3 - 6 | transition handled within AboutProjects-->
       <AboutProjects :project="currentProject"/>
   </div>
@@ -22,6 +22,7 @@ let count = 0;
 
 //Scroll through project array based on phaseId difference to previous int value
 watch(() => props.phaseId, (newPhase, oldPhase) => {
+  console.log("got phaseId PROJECTS", newPhase)
   if(!oldPhase && newPhase !== 6){
     count = 0;
   } 
@@ -50,6 +51,7 @@ onMounted(() => {
 }
 .phase{
   background-color: #039EA2 !important;
+  // background-color: red !important;
   height: 100%;
 }
 </style>

@@ -212,6 +212,9 @@ function cycleCategory(direction) {
       font-style: normal;
       font-weight: 700;
       text-transform: uppercase;
+      @media(max-width: 450px){
+        font-size: 22px;
+      }
     }
     .chevron {
       width: 30px;

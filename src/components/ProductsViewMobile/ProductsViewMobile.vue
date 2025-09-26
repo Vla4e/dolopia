@@ -171,8 +171,12 @@ let showMenu = ref(true);
         letter-spacing: 2.88px;
         text-transform: uppercase;
         margin-bottom: 10px;
+        @media (max-width: 390px) {
+          font-size: 18px;
+          margin-bottom: 5px;
+        }
         @media (max-width: 365px) {
-          font-size: 20px;
+          font-size: 16px;
           margin-bottom: 5px;
         }
       }

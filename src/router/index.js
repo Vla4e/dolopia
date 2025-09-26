@@ -290,7 +290,7 @@ const router = createRouter({
             pinned: false,
           },
           mobile: {
-            show: false,
+            show: true,
             floating: true,
             pinned: false,
           }
