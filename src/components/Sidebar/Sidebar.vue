@@ -45,6 +45,51 @@
           <img src="@/assets/linkedin-icon.png" class="social linkedin" />
         </a>
       </div>
+
+      <div class="contact-info">
+        <a href="mailto:info@dolopia.eu" target="_blank">info@dolopia.eu</a>
+
+        <a href="tel:+302232300874" target="_blank">
+          <svg
+            class="w-6 h-6 text-gray-800 dark:text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="black"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M18.427 14.768 17.2 13.542a1.733 1.733 0 0 0-2.45 0l-.613.613a1.732 1.732 0 0 1-2.45 0l-1.838-1.84a1.735 1.735 0 0 1 0-2.452l.612-.613a1.735 1.735 0 0 0 0-2.452L9.237 5.572a1.6 1.6 0 0 0-2.45 0c-3.223 3.2-1.702 6.896 1.519 10.117 3.22 3.221 6.914 4.745 10.12 1.535a1.601 1.601 0 0 0 0-2.456Z"
+            />
+          </svg>
+          +30 2232300874
+        </a>
+        <a href="tel:+306946042394" target="_blank">
+          <svg
+            class="w-6 h-6 text-gray-800 dark:text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="black"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M18.427 14.768 17.2 13.542a1.733 1.733 0 0 0-2.45 0l-.613.613a1.732 1.732 0 0 1-2.45 0l-1.838-1.84a1.735 1.735 0 0 1 0-2.452l.612-.613a1.735 1.735 0 0 0 0-2.452L9.237 5.572a1.6 1.6 0 0 0-2.45 0c-3.223 3.2-1.702 6.896 1.519 10.117 3.22 3.221 6.914 4.745 10.12 1.535a1.601 1.601 0 0 0 0-2.456Z"
+            />
+          </svg>
+          +30 6946042394
+        </a>
+      </div>
     </div>
   </div>
 </template>
@@ -68,6 +113,34 @@ function toggleContactForm() {
 </script>
 
 <style lang="scss" scoped>
+.contact-info {
+  @media (max-width: 450px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 20px;
+    a {
+      color: #000;
+      font-family: "Raleway";
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 1.28px;
+      // text-transform: capitalize;
+      text-align: center;
+      margin-bottom: 15px;
+      
+      display: flex;
+      align-items: center;
+      svg{
+        margin-right: 5px;
+      }
+    }
+  }
+}
 .sidebar-container {
   position: fixed;
   display: flex;
@@ -120,8 +193,8 @@ function toggleContactForm() {
     }
     &:not(:last-child) {
       margin-bottom: 40px;
-      @media (max-width: 390px) {
-        margin-bottom: 10px;
+      @media (max-width: 450px) {
+        margin-bottom: 25px;
       }
     }
     .link-heading {
@@ -151,8 +224,9 @@ function toggleContactForm() {
           font-weight: 400;
         }
       }
-      @media (max-width: 390px) {
+      @media (max-width: 450px) {
         font-size: 24px;
+        margin-bottom: 0px;
       }
     }
   }
@@ -163,7 +237,7 @@ function toggleContactForm() {
   margin-top: 50px;
   margin-bottom: 45px;
   @media (max-width: 450px) {
-    margin: 0px 0px 20px 0px;
+    margin: 0px 0px -10px 0px;
   }
   @media (max-width: 390px) {
     width: 90px;

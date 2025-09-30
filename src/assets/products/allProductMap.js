@@ -1196,7 +1196,7 @@ export const allProductMap = new Map([
             "null": null,
             "keyToCategory": "vegetable",
             "keyToSubcategory": "vegetable-in-oil",
-            "Product name EN": "Grilled vegetables with herbs",
+            "Product name EN": "Grilled vegetables with herbs in oil",
             "Product name DE": "Gegrilltes Gemüse mit Kräutern",
             "Product name GR": "Λαχανικά στη σχάρα με μυρωδικά",
             "Subtitle EN": null,
@@ -1254,7 +1254,7 @@ export const allProductMap = new Map([
             "pathSlug": "grilled-vegetables-herbs",
             "splitName": {
                 "firstPart": "Grilled vegetables",
-                "secondPart": "with herbs"
+                "secondPart": "with herbs in oil"
             },
             "awardType": null
         }

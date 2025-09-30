@@ -404,8 +404,11 @@ watch(
       line-height: 45px; /* 150% */
       text-transform: capitalize;
     }
-    @media (max-width: 390px) {
-      font-size: 20px;
+    @media(max-width: 400px){
+      font-size: 26px;
+    }
+    @media (max-width: 370px) {
+      font-size: 24px;
     }
   }
 }

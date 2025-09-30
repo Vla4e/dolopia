@@ -39,6 +39,7 @@ const debounceDelay = 150;
 
 // Functions
 function toggleInputFieldVisibility() {
+  console.log("toggle input field visibility")
   if (showInputField.value) {
     playInputFieldAnimation.value = false;
     setTimeout(() => {
@@ -80,6 +81,7 @@ onMounted(() => {
   useEventListener(searchInputContainer, "focusout", () => {
     showResults.value = false;
     showInputField.value = false;
+    playInputFieldAnimation.value = false;
     menuStore.setSearchInputFlag(false);
   });
   
@@ -163,13 +165,13 @@ onMounted(() => {
       
       &.active {
         @media (min-width: 450px) {
-          width: 500px;
+          // width: 500px;
         }
       }
 
       &:focus {
         @media (min-width: 450px) {
-          width: 500px;
+          // width: 500px;
         }
       }
 
@@ -306,10 +308,10 @@ onMounted(() => {
 
     .input-container {
       justify-content: center;
-      transition: transform 0.5s ease;
+      transition: width 0.5s ease, transform 0.5s ease;
 
       .input-field {
-        width: 100%;
+        width: 80% !important;
         opacity: 0;
         transition: opacity 0.3s ease;
       }
@@ -321,13 +323,13 @@ onMounted(() => {
     }
 
     .results {
-      right: -5vw;
-      width: 95vw;
+      right: 5vw;
+      width: 80vw;
     }
 
     &.searching {
-      width: 90vw;
-      transform: translateX(-80vw);
+      width: 100vw;
+      // transform: translateX(-80vw);
 
       .input-field {
         opacity: 1;

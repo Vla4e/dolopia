@@ -172,7 +172,7 @@ export const productMapByCode = new Map([
     [
         "PSL220",
         {
-            "name": "Grilled vegetables with herbs",
+            "name": "Grilled vegetables with herbs in oil",
             "subcategory": "vegetable-in-oil",
             "code": "PSL220",
             "path": "grilled-vegetables-herbs",

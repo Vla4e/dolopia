@@ -350,11 +350,16 @@ const products = [
   font-style: normal;
   font-weight: 700;
   line-height: 0.8; /* 83.333% */
-  z-index: 2000;
+  z-index: 1000;
   pointer-events: none;
   @media(max-width: 1600px){
     font-size: 28px;
     line-height: 28px;
+  }
+  @media(max-width: 450px){
+    font-size: 20px;
+    line-height: 1;
+    padding: 10px 15px;
   }
 }
 

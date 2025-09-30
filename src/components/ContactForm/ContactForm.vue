@@ -2,12 +2,61 @@
   <div class="contact-container">
     <div class="contact-container-bordered">
       <div class="white-box-cover">
-        <div class="gray-line"/>
+        <div class="gray-line" />
       </div>
       <div v-if="!isMobile" class="left-side">
         <div class="header-container">
           <h1 class="header-text">Contact Us</h1>
-          <p class="subheader-text">We're always happy to hear from you! Whether you have a question or feedback, feel free to reach out. Your thoughts and inquiries are important to us, and we're here to assist you in any way we can.</p>
+          <p class="subheader-text">
+            We're always happy to hear from you! Whether you have a question or feedback,
+            feel free to reach out. Your thoughts and inquiries are important to us, and
+            we're here to assist you in any way we can.
+          </p>
+
+          <div class="contact-info">
+            <a href="mailto:info@dolopia.eu" target="_blank">info@dolopia.eu</a>
+
+            <a href="tel:+302232300874" target="_blank">
+              <svg
+                class="w-6 h-6 text-gray-800 dark:text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="black"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M18.427 14.768 17.2 13.542a1.733 1.733 0 0 0-2.45 0l-.613.613a1.732 1.732 0 0 1-2.45 0l-1.838-1.84a1.735 1.735 0 0 1 0-2.452l.612-.613a1.735 1.735 0 0 0 0-2.452L9.237 5.572a1.6 1.6 0 0 0-2.45 0c-3.223 3.2-1.702 6.896 1.519 10.117 3.22 3.221 6.914 4.745 10.12 1.535a1.601 1.601 0 0 0 0-2.456Z"
+                />
+              </svg>
+              +30 2232300874
+            </a>
+            <a href="tel:+306946042394" target="_blank">
+              <svg
+                class="w-6 h-6 text-gray-800 dark:text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="black"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M18.427 14.768 17.2 13.542a1.733 1.733 0 0 0-2.45 0l-.613.613a1.732 1.732 0 0 1-2.45 0l-1.838-1.84a1.735 1.735 0 0 1 0-2.452l.612-.613a1.735 1.735 0 0 0 0-2.452L9.237 5.572a1.6 1.6 0 0 0-2.45 0c-3.223 3.2-1.702 6.896 1.519 10.117 3.22 3.221 6.914 4.745 10.12 1.535a1.601 1.601 0 0 0 0-2.456Z"
+                />
+              </svg>
+              +30 6946042394
+            </a>
+          </div>
         </div>
       </div>
       <div class="right-side">
@@ -16,98 +65,124 @@
             <div class="form-groups-row">
               <div class="form-group">
                 <label for="firstName">First Name</label>
-                <input type="text" id="firstName" v-model="form.firstName">
-                <span v-if="validationResult.firstName.invalid" class="validation">{{ validationResult.firstName.message }}</span>
+                <input type="text" id="firstName" v-model="form.firstName" />
+                <span v-if="validationResult.firstName.invalid" class="validation">{{
+                  validationResult.firstName.message
+                }}</span>
               </div>
               <div class="form-group">
                 <label for="lastName">Last Name</label>
-                <input type="text" id="lastName" v-model="form.lastName">
-                <span v-if="validationResult.lastName.invalid" class="validation">{{ validationResult.lastName.message }}</span>
+                <input type="text" id="lastName" v-model="form.lastName" />
+                <span v-if="validationResult.lastName.invalid" class="validation">{{
+                  validationResult.lastName.message
+                }}</span>
               </div>
             </div>
             <div class="form-group">
               <label for="email">Email</label>
-              <input type="text" id="email" v-model="form.email">
-              <span v-if="validationResult.email.invalid" class="validation">{{ validationResult.email.message }}</span>
+              <input type="text" id="email" v-model="form.email" />
+              <span v-if="validationResult.email.invalid" class="validation">{{
+                validationResult.email.message
+              }}</span>
             </div>
             <div class="form-group radio-group form-group-small">
               <div class="radio-container">
-                <label for="consumer">
-                  Private
-                </label>
-                <input 
-                  type="radio" 
+                <label for="consumer"> Private </label>
+                <input
+                  type="radio"
                   class="radio"
                   id="consumer"
                   value="consumer"
                   v-model="form.customerType"
-                >
+                />
               </div>
 
               <div class="radio-container">
-                <label for="business">
-                  Business
-                </label>
-                <input 
-                  type="radio" 
+                <label for="business"> Business </label>
+                <input
+                  type="radio"
                   class="radio"
                   id="business"
                   value="business"
                   v-model="form.customerType"
-                >
+                />
               </div>
             </div>
-            
+
             <Transition name="expand">
               <div v-show="form.customerType === 'business'" class="business-form">
                 <div class="form-groups-row">
                   <div class="form-group form-group-small">
                     <label for="phoneNumber">Phone Number</label>
-                    <input 
-                      type="tel" 
-                      id="phoneNumber" 
+                    <input
+                      type="tel"
+                      id="phoneNumber"
                       minlength="8"
                       maxlength="20"
                       v-model="form.phoneNumber"
+                    />
+                    <span
+                      v-if="validationResult.phoneNumber.invalid"
+                      class="validation"
+                      >{{ validationResult.phoneNumber.message }}</span
                     >
-                    <span v-if="validationResult.phoneNumber.invalid" class="validation">{{ validationResult.phoneNumber.message }}</span>
                   </div>
-                                    
+
                   <div class="form-group form-group-small">
-                    <CountrySelect v-model="form.location"/>
+                    <CountrySelect v-model="form.location" />
                   </div>
-                </div>
-                
-                <div class="form-group form-group-small">
-                  <label for="company">Company Name</label>
-                  <input type="text" autocomplete="off" id="company" v-model="form.companyName">
-                  <span v-if="validationResult.companyName.invalid" class="validation">{{ validationResult.companyName.message }}</span>
                 </div>
 
+                <div class="form-group form-group-small">
+                  <label for="company">Company Name</label>
+                  <input
+                    type="text"
+                    autocomplete="off"
+                    id="company"
+                    v-model="form.companyName"
+                  />
+                  <span v-if="validationResult.companyName.invalid" class="validation">{{
+                    validationResult.companyName.message
+                  }}</span>
+                </div>
               </div>
             </Transition>
 
             <div class="form-group">
               <label for="subject">Subject</label>
-              <input type="subject" id="subject" v-model="form.subject">
-              <span v-if="validationResult.subject.invalid" class="validation">{{ validationResult.subject.message }}</span>
+              <input type="subject" id="subject" v-model="form.subject" />
+              <span v-if="validationResult.subject.invalid" class="validation">{{
+                validationResult.subject.message
+              }}</span>
             </div>
             <div class="form-group">
               <label for="message">Message</label>
               <textarea id="message" v-model="form.message"></textarea>
-              <span v-if="validationResult.message.invalid" class="validation">{{ validationResult.message.message }}</span>
+              <span v-if="validationResult.message.invalid" class="validation">{{
+                validationResult.message.message
+              }}</span>
             </div>
-            
+
             <div class="form-group newsletter">
-              <input id="newsletter" type="checkbox" v-model="form.newsletter"/>
+              <input id="newsletter" type="checkbox" v-model="form.newsletter" />
               <label for="newsletter">Also subscribe to our newsletter.</label>
             </div>
 
-            <ErrorMessage v-if="showError" :error="responseError"/>
+            <ErrorMessage v-if="showError" :error="responseError" />
 
             <div class="button-recaptcha">
-              <button class="submit-button" :class="isSubmitting ? 'disabled': ''" :disabled="isSubmitting" type="submit">Submit</button>
-              <div class="recaptcha-disclaimer" style="text-align: center; margin-top: 10px;">
+              <button
+                class="submit-button"
+                :class="isSubmitting ? 'disabled' : ''"
+                :disabled="isSubmitting"
+                type="submit"
+              >
+                Submit
+              </button>
+              <div
+                class="recaptcha-disclaimer"
+                style="text-align: center; margin-top: 10px"
+              >
                 <span class="disclaimer-text">
                   This site is protected by reCAPTCHA and the Google
                 </span>
@@ -124,92 +199,105 @@
       </div>
       <!-- close icon (X) -->
 
-      <svg @click="toggleContactForm" class="close-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M6 6L18 18M6 18L18 6" stroke="#131313" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+      <svg
+        @click="toggleContactForm"
+        class="close-icon"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6 6L18 18M6 18L18 6"
+          stroke="#131313"
+          stroke-width="1"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
       </svg>
     </div>
   </div>
 </template>
 
-
 <script setup>
-import { reactive, ref, inject, onMounted, nextTick, watch } from 'vue';
+import { reactive, ref, inject, onMounted, nextTick, watch } from "vue";
 
-import { getCaptchaToken } from '@/helpers/Form/captcha';
-import { validateForm } from '@/helpers/Form/validations';
+import { getCaptchaToken } from "@/helpers/Form/captcha";
+import { validateForm } from "@/helpers/Form/validations";
 
-import CountrySelect from './CountrySelection/CountrySelect.vue';
-import ErrorMessage from '../ErrorPopup/ErrorMessage.vue';
+import CountrySelect from "./CountrySelection/CountrySelect.vue";
+import ErrorMessage from "../ErrorPopup/ErrorMessage.vue";
 
 defineOptions({
-  name: 'ContactForm'
-})
+  name: "ContactForm",
+});
 
-const emitter = inject('emitter')
-const { isMobile } = inject('screenSize')
+const emitter = inject("emitter");
+const { isMobile } = inject("screenSize");
 
 //Form
 const form = reactive({
-  firstName: '',
-  lastName: '',
-  email: '',
-  subject: '',
-  message: '',
+  firstName: "",
+  lastName: "",
+  email: "",
+  subject: "",
+  message: "",
   newsletter: false,
-  customerType: 'consumer',
-  companyName: '',
-  phoneNumber: '',
-  location: ''
+  customerType: "consumer",
+  companyName: "",
+  phoneNumber: "",
+  location: "",
 });
 let validationResult = reactive({
   email: {
     invalid: false,
-    message: ''
+    message: "",
   },
   firstName: {
     invalid: false,
-    message: ''
+    message: "",
   },
   lastName: {
     invalid: false,
-    message: ''
+    message: "",
   },
   location: {
     invalid: false,
-    message: ''
+    message: "",
   },
   companyName: {
     invalid: false,
-    message: ''
+    message: "",
   },
   phoneNumber: {
     invalid: false,
-    message: ''
+    message: "",
   },
   subject: {
     invalid: false,
-    message: '',
-    required: true
+    message: "",
+    required: true,
   },
   message: {
     invalid: false,
-    message: '',
-    required: true
+    message: "",
+    required: true,
+  },
+});
+let responseError = ref(null);
+let showError = ref(false);
+watch(
+  () => form.newsletter,
+  (val) => {
+    // console.log("Val:", val)
   }
-})
-let responseError = ref(null)
-let showError = ref(false)
-watch(() => form.newsletter, (val) => {
-  // console.log("Val:", val)
-})
+);
 
-async function validateInputs(){
-  Object.keys(validationResult).forEach(key => {
+async function validateInputs() {
+  Object.keys(validationResult).forEach((key) => {
     validationResult[key].invalid = false;
-    validationResult[key].message = '';
+    validationResult[key].message = "";
   });
 
-  const { isValid, errors } = validateForm(form, 'contact');
+  const { isValid, errors } = validateForm(form, "contact");
   // console.log("ERRORS:", errors)
   if (!isValid) {
     Object.entries(errors).forEach(([field, message]) => {
@@ -223,86 +311,86 @@ async function validateInputs(){
     });
     // console.log("Valres", validationResult)
     return false;
-  } else return true
+  } else return true;
 }
 
-let isSubmitting = ref(false)
+let isSubmitting = ref(false);
 async function handleSubmit() {
-  try{
+  try {
     // console.log("Attempting submission")
     isSubmitting.value = true;
-    
-    const validity = await validateInputs()
+
+    const validity = await validateInputs();
     // console.log("Validity:", validity)
-    if(!validity) return
-    
+    if (!validity) return;
+
     let captchaToken = await getCaptchaToken();
     await submitForm(captchaToken);
     // console.log("Will return value to false/allow submission")
     isSubmitting.value = false;
-  } catch ( error) {
-    console.error("Error while submitting form:", error)
+  } catch (error) {
+    console.error("Error while submitting form:", error);
   } finally {
-    isSubmitting.value = false
+    isSubmitting.value = false;
   }
 }
 
 async function submitForm(captchaToken) {
   const formData = {
     ...form,
-    forSite: 'dolopia',
-    captchaToken
+    forSite: "dolopia",
+    captchaToken,
   };
 
   // http://localhost:3000/send-email
   // https://api.premiumhoney.gr/send-email
   try {
     // throw new Error('TEST ERROR')
-    const response = await fetch('https://api.premiumhoney.gr/send-email', {
-      method: 'POST',
+    const response = await fetch("https://api.premiumhoney.gr/send-email", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(formData),
     });
     // console.log("Resp from sendMail:", response)
     if (response.ok) {
-      alert('Email sent successfully');
+      alert("Email sent successfully");
       setTimeout(() => {
-        emitter.emit('toggleContactForm');
+        emitter.emit("toggleContactForm");
       }, 1500);
-      return
+      return;
     } else {
-      
-      emitter.emit('showErrorPopup', true)
-      emitter.emit('mountErrorObject', {
-        message: 'Oops, there was a problem sending the email.\nPlease try again or contact us at info@premiumhoney.com'
-      })
-      return
+      emitter.emit("showErrorPopup", true);
+      emitter.emit("mountErrorObject", {
+        message:
+          "Oops, there was a problem sending the email.\nPlease try again or contact us at info@premiumhoney.com",
+      });
+      return;
     }
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error("Error sending email:", error);
     // alert('Error sending email');
-    emitter.emit('showErrorPopup', true)
-    emitter.emit('mountErrorObject', {
-      message: 'Oops, there was a problem sending the email.\nPlease try again or contact us at info@premiumhoney.com'
-    })
-      
-    return
+    emitter.emit("showErrorPopup", true);
+    emitter.emit("mountErrorObject", {
+      message:
+        "Oops, there was a problem sending the email.\nPlease try again or contact us at info@premiumhoney.com",
+    });
+
+    return;
   }
 }
 
-import { useMenuStore } from '@/store/menu';
+import { useMenuStore } from "@/store/menu";
 const menuStore = useMenuStore();
-function toggleContactForm(){
-  console.log("Should toggle cfrom")
-  menuStore.setContactFormFlag(false)
+function toggleContactForm() {
+  console.log("Should toggle cfrom");
+  menuStore.setContactFormFlag(false);
 }
-
 </script>
 
 <style lang="scss" scoped>
-.contact-container{
+.contact-container {
   position: fixed;
   display: flex;
   justify-content: center;
@@ -312,17 +400,17 @@ function toggleContactForm(){
   min-height: 100vh;
   background: white;
   z-index: 1001;
-  .contact-container-bordered{
+  .contact-container-bordered {
     display: flex;
     justify-content: space-around;
     align-items: center;
     width: 95%;
     height: 95%;
     margin: auto;
-    border-right: 1px solid #A7A7A7;
-    border-top: 1px solid #A7A7A7;
-    border-bottom: 1px solid #A7A7A7;
-    border-left: 1px solid #A7A7A7;
+    border-right: 1px solid #a7a7a7;
+    border-top: 1px solid #a7a7a7;
+    border-bottom: 1px solid #a7a7a7;
+    border-left: 1px solid #a7a7a7;
     position: relative;
     .close-icon {
       width: 36px;
@@ -335,7 +423,7 @@ function toggleContactForm(){
       right: 0%;
       cursor: pointer;
     }
-    .white-box-cover{
+    .white-box-cover {
       position: absolute;
       top: 50%;
       left: -5px;
@@ -348,88 +436,116 @@ function toggleContactForm(){
       height: 25%;
       width: 10%;
       padding-left: 10px;
-      .gray-line{
-        background-color: #A7A7A7;
+      .gray-line {
+        background-color: #a7a7a7;
         height: 1px;
         width: 90%;
       }
     }
-    .left-side{
+    .left-side {
       height: 100%;
       width: 50%;
-      color: #131313;
-      font-family: 'Raleway';
-      text-align: left;
       display: flex;
       align-items: center;
       justify-content: center;
-      .header-container{
+      .header-container {
         max-width: 60%;
-        .header-text{
+        .header-text {
+          color: #131313;
+          font-family: "Raleway";
+          text-align: left;
           font-weight: 700;
           text-transform: uppercase;
           margin: 0;
           font-size: 40px;
         }
-        .subheader-text{
+        .subheader-text {
+          color: #131313;
+          font-family: "Raleway";
+          text-align: left;
           font-weight: 400;
           font-size: 14px;
         }
+        .contact-info {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-top: 10px;
+          a {
+            color: #131313;
+            font-family: "Raleway";
+            text-align: left;
+            font-weight: 400;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            text-wrap: nowrap;
+            padding: 0px;
+            cursor: pointer;
+            transition: none;
+            &:hover{
+              transform: scale(105%);
+              color: #2A565D;
+            }
+          }
+        }
       }
     }
-    .right-side{
+    .right-side {
       width: 40%;
       height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      .contact-card{
+      .contact-card {
         // height: 70%;
         box-shadow: 5px 5px 10px 3px #00000026;
         padding: 5%;
-        .contact-form{
+        .contact-form {
           display: flex;
           flex-direction: column;
           height: 100%;
-          .form-group{
+          .form-group {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
             flex: 1;
             margin: 5px;
-            label{
-              font-family: 'Raleway';
+            label {
+              font-family: "Raleway";
               font-weight: 700;
               text-transform: uppercase;
               color: #131313;
               text-align: start;
               font-size: 12px;
             }
-            input{
+            input {
               min-height: 25px;
             }
-            textarea{
+            textarea {
               min-height: 60px;
               resize: none;
             }
-            input, textarea{
+            input,
+            textarea {
               width: 100%;
               box-sizing: border-box;
-              background-color: #F2F2F2;
-              border: 1px solid #C8C5C5;
+              background-color: #f2f2f2;
+              border: 1px solid #c8c5c5;
               color: #131313;
-              &:active, &:focus{
+              &:active,
+              &:focus {
                 border-radius: 0px !important;
                 outline: none !important;
               }
             }
-            &.newsletter{
+            &.newsletter {
               display: flex;
               flex-direction: row;
               // justify-content: center;
               align-items: center;
               margin-bottom: 10px;
-              
+
               label {
                 font-size: 12px;
                 font-weight: 400;
@@ -443,8 +559,8 @@ function toggleContactForm(){
                 width: 15px;
                 margin: 0 15px 0 0;
                 box-sizing: border-box;
-                background-color: #F2F2F2;
-                border: 1px solid #C8C5C5;
+                background-color: #f2f2f2;
+                border: 1px solid #c8c5c5;
                 outline: none;
                 cursor: pointer;
                 display: flex;
@@ -453,7 +569,7 @@ function toggleContactForm(){
 
                 &::after {
                   content: "";
-                  width: 7px; 
+                  width: 7px;
                   height: 7px;
                   background-color: transparent;
                 }
@@ -469,65 +585,66 @@ function toggleContactForm(){
               }
             }
           }
-          .form-groups-row{
+          .form-groups-row {
             display: flex;
             justify-content: space-between;
           }
-          
-          .radio-group{
+
+          .radio-group {
             flex-direction: row;
             justify-content: space-around;
             label {
-                  font-size: 12px;
-                  font-weight: 400;
-                }
-    
-                input {
-                  -webkit-appearance: none;
-                  -moz-appearance: none;
-                  appearance: none;
-                  min-height: 15px;
-                  width: 15px;
-                  margin: 0 15px 0 0;
-                  box-sizing: border-box;
-                  background-color: #F2F2F2;
-                  border: 1px solid #C8C5C5;
-                  outline: none;
-                  cursor: pointer;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-    
-                  &::after {
-                    content: "";
-                    width: 7px; 
-                    height: 7px;
-                    background-color: transparent;
-                  }
-    
-                  &:checked::after {
-                    background-color: black;
-                  }
-    
-                  &:active {
-                    border: 1px solid #131313;
-                  }
-                }
+              font-size: 12px;
+              font-weight: 400;
+            }
+
+            input {
+              -webkit-appearance: none;
+              -moz-appearance: none;
+              appearance: none;
+              min-height: 15px;
+              width: 15px;
+              margin: 0 15px 0 0;
+              box-sizing: border-box;
+              background-color: #f2f2f2;
+              border: 1px solid #c8c5c5;
+              outline: none;
+              cursor: pointer;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+
+              &::after {
+                content: "";
+                width: 7px;
+                height: 7px;
+                background-color: transparent;
+              }
+
+              &:checked::after {
+                background-color: black;
+              }
+
+              &:active {
+                border: 1px solid #131313;
+              }
+            }
           }
-          .submit-button{
+          .submit-button {
             width: 30%;
-            font-family: 'Raleway';
+            font-family: "Raleway";
             font-size: 22px;
             color: #131313;
             text-transform: uppercase;
             background: none;
             padding: 10px;
             border-radius: 0px;
+            cursor: pointer;
             // margin-top: 15px;
-            &:hover{
+            &:hover {
               border-color: #131313;
             }
-            &.disabled{
+            &.disabled {
               opacity: 0.7;
             }
           }
@@ -536,30 +653,30 @@ function toggleContactForm(){
     }
   }
 }
-@media(max-width: 768px){
-  .contact-container{
-    &-bordered{
+@media (max-width: 768px) {
+  .contact-container {
+    &-bordered {
       width: 100%;
       height: 100%;
       border: none !important;
     }
-    .white-box-cover{
+    .white-box-cover {
       display: none !important;
     }
-    .right-side{
+    .right-side {
       width: 100% !important;
-      .contact-card{
+      .contact-card {
         box-shadow: none !important;
-        .contact-form{
-          .form-group{
+        .contact-form {
+          .form-group {
             width: 100% !important;
           }
-          .form-groups-row{
+          .form-groups-row {
             flex-direction: column;
           }
         }
       }
-      .submit-button{
+      .submit-button {
         width: 40% !important;
         align-self: center;
       }
@@ -567,43 +684,43 @@ function toggleContactForm(){
   }
 }
 
-.button-recaptcha{
+.button-recaptcha {
   display: flex;
   width: 100%;
   align-items: center;
   margin: 5px;
-  .recaptcha-disclaimer{
-    display:flex;
+  .recaptcha-disclaimer {
+    display: flex;
     flex-direction: column;
     width: 100%;
     margin-top: 0px;
-    .disclaimer-text{
+    .disclaimer-text {
       font-size: 12px;
       color: black;
     }
-    .links{
+    .links {
       display: flex;
       justify-content: center;
       align-items: center;
       color: black;
       font-size: 12px;
-      a{
+      a {
         text-decoration: underline;
         color: black;
       }
     }
   }
-  @media(max-width:768px){
+  @media (max-width: 768px) {
     flex-direction: column;
-    .recaptcha-disclaimer{
-      .disclaimer-text{
-        font-size:11px;
+    .recaptcha-disclaimer {
+      .disclaimer-text {
+        font-size: 11px;
       }
-      .links{
-        font-size:11px;
+      .links {
+        font-size: 11px;
       }
     }
-    .submit-button{
+    .submit-button {
       padding: 10px;
     }
   }

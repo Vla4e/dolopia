@@ -11,8 +11,7 @@ import essenceImage from "@/assets/about/essence.jpg";
 const dataObject = {
   passion: {
     heading: "",
-    mobileHeading:
-      "Dolopia Savour Creations began with our shared love for cooking ",
+    mobileHeading: "Dolopia Savour Creations began with our shared love for cooking ",
     paragraph: `Dolopia Savour Creations began with our shared love for cooking and a <br/>
     passion for sharing authentic flavors. As a couple with roots outside of<br/>
     Greece, we spent countless hours experimenting with local ingredients<br/>
@@ -154,7 +153,10 @@ watch(
           class="flavour-text"
           v-html="currentDataObject.flavourText"
         ></span>
-        <h2 v-if="currentDataObject.heading && !isMobile" v-html="currentDataObject.heading"></h2>
+        <h2
+          v-if="currentDataObject.heading && !isMobile"
+          v-html="currentDataObject.heading"
+        ></h2>
         <p
           v-if="currentDataObject.paragraph"
           v-html="
@@ -176,7 +178,7 @@ watch(
   height: 100vh;
   max-height: 100vh;
   box-sizing: border-box;
-  @media(max-width: 450px){
+  @media (max-width: 450px) {
     margin-bottom: 25px;
   }
 
@@ -417,19 +419,19 @@ watch(
       }
     }
   } /* Move these after the 450px query */
-  @media (max-width: 391px) {
+  @media (max-width: 400px) {
     .mobile-text-container {
       .flavour-text {
         font-size: 30px !important;
       }
-      .mobile-heading{
+      .mobile-heading {
         font-size: 26px;
       }
     }
   }
 
   @media (max-width: 360px) {
-    .mobile-text-container{
+    .mobile-text-container {
       .flavour-text {
         font-size: 28px !important;
       }

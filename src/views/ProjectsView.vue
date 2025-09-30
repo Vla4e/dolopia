@@ -318,7 +318,7 @@ onMounted(() => {
         background-size: cover;
         background-repeat: no-repeat;
         @media (max-width: 450px) {
-          background-image: url("@/assets/project_showcase_images/mobile/tomato-project.png");
+          background-image: url("@/assets/project_showcase_images/mobile/tomato-project-hq.png");
         }
       }
       &-1 {

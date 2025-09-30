@@ -1269,7 +1269,7 @@ export const subcategoryToProductsMap = new Map([
                 "null": null,
                 "keyToCategory": "vegetable",
                 "keyToSubcategory": "vegetable-in-oil",
-                "Product name EN": "Grilled vegetables with herbs",
+                "Product name EN": "Grilled vegetables with herbs in oil",
                 "Product name DE": "Gegrilltes Gemüse mit Kräutern",
                 "Product name GR": "Λαχανικά στη σχάρα με μυρωδικά",
                 "Subtitle EN": null,

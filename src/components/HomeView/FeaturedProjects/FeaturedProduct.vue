@@ -63,7 +63,7 @@ const positioners = {
 
 onMounted(async () => {
   setTimeout(async () => {
-    if(!isMobile.value){
+    if (!isMobile.value) {
       if (positioners[props.layoutType]) {
         await positioners[props.layoutType]();
       }
@@ -199,7 +199,7 @@ onMounted(async () => {
   @media (max-width: 450px) {
     width: 80% !important;
   }
-  @media(max-width: 360px){
+  @media (max-width: 360px) {
     margin-bottom: 30px;
   }
   .featured-product-section {
@@ -558,9 +558,9 @@ onMounted(async () => {
               line-height: 1, 1;
             }
           }
-          @media(max-width: 370px){
+          @media (max-width: 370px) {
             font-size: 30px !important;
-            .small{
+            .small {
               font-size: 20px !important;
             }
           }
@@ -639,7 +639,7 @@ onMounted(async () => {
             font-style: normal;
             font-weight: 700;
             letter-spacing: 5px;
-            @media(max-width: 360px){
+            @media (max-width: 360px) {
               font-size: 30px !important;
             }
           }
@@ -652,7 +652,7 @@ onMounted(async () => {
             line-height: clamp(2.4rem, 3.7vw, 4.8rem);
             font-style: normal;
             font-weight: 700;
-            @media(max-width: 360px){
+            @media (max-width: 360px) {
               font-size: 34px !important;
             }
           }
@@ -702,7 +702,7 @@ onMounted(async () => {
       .product-image-link {
         // max-width: 40%;
         // flex: 1;
-        @media (max-width: 370px){
+        @media (max-width: 450px) {
           display: flex;
           justify-content: flex-end;
           width: 100%;
@@ -711,9 +711,9 @@ onMounted(async () => {
           // width: 100%;
           // object-fit: contain;
           @media (max-width: 450px) {
-            width: 100%;
+            width: 90%;
           }
-          @media (max-width: 370px){
+          @media (max-width: 370px) {
             width: 90%;
           }
         }
@@ -859,7 +859,7 @@ onMounted(async () => {
               font-weight: 700;
               line-height: 1.1;
             }
-            @media(max-width: 360px){
+            @media (max-width: 360px) {
               font-size: 45px;
             }
           }
@@ -908,10 +908,10 @@ onMounted(async () => {
         .product-image {
           width: 80%;
         }
-        @media(max-width: 450px){
+        @media (max-width: 450px) {
           margin-left: 0px;
           justify-content: center;
-          .product-image{
+          .product-image {
             width: 100%;
           }
         }
@@ -1049,7 +1049,7 @@ onMounted(async () => {
         }
         font-style: normal;
         font-weight: 400;
-        @media(max-width: 450px){
+        @media (max-width: 450px) {
           text-align: right;
         }
       }
