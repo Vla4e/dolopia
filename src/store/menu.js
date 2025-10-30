@@ -8,6 +8,7 @@ import { ref, reactive, computed, watch, toRaw } from 'vue';
 export const useMenuStore = defineStore('menu', () => {
 
   const isSearchInputActive = ref(false);
+  
   function setSearchInputFlag(value){
     console.log("setting search input flag", value)
     isSearchInputActive.value  = value;

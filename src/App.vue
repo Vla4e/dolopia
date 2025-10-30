@@ -5,10 +5,10 @@ import { ref, computed, provide, inject, onBeforeUnmount, nextTick, watch } from
 import { RouterView, useRouter, useRoute } from "vue-router";
 
 let route = useRoute();
+
 let router = useRouter();
 let isRoutingToAboutView = ref(false);
 router.beforeResolve((to, from) => {
-  console.log("TO META", to.meta)
   if (to.name === "about") {
     isRoutingToAboutView.value = true;
   }
@@ -30,6 +30,17 @@ let showSidebar = computed(() => {
 let showContactForm = computed(() => {
   return menuStore.showContactForm;
 });
+
+//Trigger contact form via URL query "contact=bool"
+watch(
+  () => route.query,
+  (val) => {
+    if (val?.contact) {
+      menuStore.setContactFormFlag(true);
+    }
+  },
+  { immediate: true }
+);
 
 //Composables
 import { useScreenSize } from "./composables/useScreenSize";
@@ -70,7 +81,6 @@ const onBeforeLeave = (el) => {
 };
 
 const onBeforeEnter = (el) => {
-
   if (route.name !== "about") {
     transitionStore.setTransitioning(false);
   }
@@ -175,7 +185,7 @@ footer {
   flex-direction: column;
   flex-grow: 1;
   position: relative;
-  @media(max-width: 450px){
+  @media (max-width: 450px) {
     height: auto !important;
   }
 }
